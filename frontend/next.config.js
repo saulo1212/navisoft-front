@@ -1,6 +1,6 @@
 
 const nextConfig = {
-  /* config options here */
+  output: process.env.NEXT_STANDALONE === '1' ? 'standalone' : undefined,
   async redirects() {
     return [{
       source: '/',

@@ -1,0 +1,54 @@
+name: Build Navisoft for deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: navisoft-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          NEXT_STANDALONE: '1'
+          NEXT_PUBLIC_API_BASE_URL: /api/navisoft
+        run: npm run build
+
+      - name: Package Next.js server
+        run: |
+          test -f .next/standalone/server.js
+          cp -R public .next/standalone/public
+          cp -R .next/static .next/standalone/.next/static
+          tar --exclude='./.env' --exclude='./.env.*' -czf ../navisoft-frontend.tar.gz -C .next/standalone .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: navisoft-frontend
+          path: navisoft-frontend.tar.gz
+          if-no-files-found: error
