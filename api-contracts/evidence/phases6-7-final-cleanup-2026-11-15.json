@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-15T22:18:00.506Z",
+  "geoDetails": [
+    {
+      "uid": "69d7359e-34f8-4278-b69c-139779c6dbd1",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "uid": "fce28b1c-2d5e-483d-8e41-630b153bc795",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "uid": "8b06df9f-4525-4f96-a831-135c15c2cda7",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "uid": "a5a3a778-b27e-49aa-a440-5a0b9cb1fa31",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "uid": "2a9322d7-2c36-47d2-aa30-cb07ea382f6e",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "uid": "a9cb92a8-7832-46ce-bcdf-046d856f4f50",
+      "status": 404,
+      "removed": true
+    }
+  ],
+  "routeSearches": [
+    {
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-3",
+      "status": 200,
+      "count": 0
+    },
+    {
+      "name": "QA-GEO-71798cc6-86fe-4a44-a92d-b5d3a83af60f-3",
+      "status": 200,
+      "count": 0
+    }
+  ],
+  "openCustody": {
+    "status": 200,
+    "pendingFixtures": 0
+  }
+}

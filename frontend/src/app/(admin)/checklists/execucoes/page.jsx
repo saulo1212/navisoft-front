@@ -1,0 +1,55 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Alert, Button } from 'react-bootstrap';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
+import ChecklistNavigation from '@/components/admin/ChecklistNavigation';
+import { OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
+import { createChecklistRun, getChecklistRun } from '@/lib/api/endpoints/checklists';
+import { intentKey, requireUid } from '@/lib/domain/technicalOperations';
+import { useSession } from '@/lib/session/SessionContext';
+
+export default function Page() { return <OperationalGate area="checklists"><Runs /></OperationalGate>; }
+function Runs() {
+  const { token, selectedOrganizationUid } = useSession();
+  const router = useRouter();
+  const action = useOperationalAction();
+  const intention = useRef(null);
+  const [driver, setDriver] = useState('');
+  const [lookup, setLookup] = useState('');
+  const create = event => {
+    event.preventDefault();
+    void action.run(async signal => {
+      const driverUid = requireUid(driver, 'motorista');
+      const result = await createChecklistRun({ token, driverUid, signal, idempotencyKey: intentKey(intention, 'create-checklist-run', { uid_driver: driverUid }) });
+      const uid = requireUid((result.item ?? result)?.uid, 'execução criada');
+      // Resolve under the selected context before exposing a newly created run.
+      await getChecklistRun({ token, organizationUid: selectedOrganizationUid, uid, signal });
+      return uid;
+    }, uid => router.push(`/checklists/execucoes/${uid}`));
+  };
+  const open = event => {
+    event.preventDefault();
+    void action.run(async signal => {
+      const uid = requireUid(lookup, 'execução');
+      await getChecklistRun({ token, organizationUid: selectedOrganizationUid, uid, signal });
+      return uid;
+    }, uid => router.push(`/checklists/execucoes/${uid}`));
+  };
+  return <>
+    <PageBreadcrumb title="Execuções de checklist" subTitle1="Operação" /><ChecklistNavigation />
+    {action.error && <Alert variant="danger">{action.error}</Alert>}
+    <div className="row g-3">
+      <div className="col-lg-6"><form className="card panel p-4" onSubmit={create}><h5>Nova execução</h5><fieldset disabled={action.busy}>
+        <OperationField label="UUID do motorista da organização selecionada" required value={driver} onChange={e => setDriver(e.target.value)} />
+        <p className="small text-muted">A execução usará os checklists publicados aplicáveis ao motorista. Você poderá selecionar o ativo na etapa seguinte.</p>
+        <Button type="submit">Iniciar execução</Button>
+      </fieldset></form></div>
+      <div className="col-lg-6"><form className="card panel p-4" onSubmit={open}><h5>Abrir execução existente</h5><fieldset disabled={action.busy}>
+        <OperationField label="UUID da execução" required value={lookup} onChange={e => setLookup(e.target.value)} />
+        <Button type="submit" variant="outline-primary">Consultar execução</Button>
+      </fieldset></form></div>
+    </div>
+  </>;
+}

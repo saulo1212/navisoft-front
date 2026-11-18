@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-15T22:09:41.501Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "cleanup": [
+    {
+      "path": "/v1/admin/geo/geofences/69d7359e-34f8-4278-b69c-139779c6dbd1",
+      "before": {
+        "status": 200
+      },
+      "deletion": {
+        "status": 204,
+        "requestId": "dd11d316-9a6c-4884-942b-8f8bb6c25353"
+      },
+      "after": {
+        "status": 404
+      },
+      "inactive": false
+    },
+    {
+      "path": "/v1/admin/geo/geofences/fce28b1c-2d5e-483d-8e41-630b153bc795",
+      "before": {
+        "status": 200
+      },
+      "deletion": {
+        "status": 204,
+        "requestId": "fea6fa40-c5f9-4c09-8ea1-afba12f3309c"
+      },
+      "after": {
+        "status": 404
+      },
+      "inactive": false
+    },
+    {
+      "path": "/v1/admin/geo/points/8b06df9f-4525-4f96-a831-135c15c2cda7",
+      "before": {
+        "status": 200
+      },
+      "deletion": {
+        "status": 204,
+        "requestId": "dfcdb0e0-09c0-4db8-94dc-d89dedf769b4"
+      },
+      "after": {
+        "status": 404
+      },
+      "inactive": false
+    }
+  ],
+  "routeSearch": {
+    "status": 200,
+    "count": 0,
+    "requestId": "3b56dc61-74da-47a5-b87a-dfad333be219"
+  }
+}

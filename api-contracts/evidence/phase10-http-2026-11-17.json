@@ -1,0 +1,353 @@
+{
+  "date": "2026-11-17T11:58:05.422Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "path": "/v1/users/me/access-context",
+      "method": "GET",
+      "status": 200,
+      "requestId": "6cefe107-7875-490c-a2d6-73d09a28e66b"
+    },
+    {
+      "label": "areas events, event_occurrences and notifications allowed",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/models",
+      "method": "GET",
+      "status": 200,
+      "requestId": "e2d7e08b-73b3-4a40-9c0e-e80bcb57e60b"
+    },
+    {
+      "label": "global event models available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/fields",
+      "method": "GET",
+      "status": 200,
+      "requestId": "14fde061-7eae-4c4a-ba19-50bb761dfe59"
+    },
+    {
+      "label": "condition field catalog available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/models",
+      "method": "GET",
+      "status": 200,
+      "requestId": "92f65912-f980-4bf0-a14d-7cf873151c0a"
+    },
+    {
+      "label": "model name filter accepted",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/models/649c4be3-b52d-4310-bbfb-5556cbaf010e",
+      "method": "GET",
+      "status": 200,
+      "requestId": "58c608f1-8750-4a6e-b3e0-8d128d11c11d"
+    },
+    {
+      "path": "/v1/admin/events/rules",
+      "method": "POST",
+      "status": 201,
+      "requestId": "cbb69494-697c-40e4-8d1d-c0f16ded6b11"
+    },
+    {
+      "label": "inactive rule created",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules",
+      "method": "POST",
+      "status": 200,
+      "requestId": "49749a76-d618-4b6a-a986-ca7f95d79498"
+    },
+    {
+      "label": "rule replay retains UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules",
+      "method": "POST",
+      "status": 409,
+      "code": "event_conflict",
+      "requestId": "37447c94-82e6-42e1-a104-97c2e9fd519b"
+    },
+    {
+      "label": "rule conflicting body rejected",
+      "expectedStatus": 409,
+      "status": 409,
+      "code": "event_conflict",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules/893e1818-62c9-4443-81fc-db06732b0962",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5022fd73-0890-4860-af0f-544f4bfe88f0"
+    },
+    {
+      "path": "/v1/admin/events/rules/893e1818-62c9-4443-81fc-db06732b0962",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "a912f14c-f0ca-4685-8c86-b072ecf37705"
+    },
+    {
+      "path": "/v1/admin/events/rules/893e1818-62c9-4443-81fc-db06732b0962",
+      "method": "GET",
+      "status": 200,
+      "requestId": "ddd66432-f7bc-45ea-99ef-bdd6cbd02661"
+    },
+    {
+      "label": "rule full replacement preserved inactive state and windows",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules",
+      "method": "GET",
+      "status": 200,
+      "requestId": "0f268d3b-2cf2-45f3-9305-c4a9a85e26b9"
+    },
+    {
+      "label": "scoped rule search finds fixture",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules/893e1818-62c9-4443-81fc-db06732b0962",
+      "method": "PUT",
+      "status": 422,
+      "code": "invalid_event_payload",
+      "requestId": "f7b02e09-2187-4462-af60-294f7cdc9b4e"
+    },
+    {
+      "label": "negative delay rejected",
+      "expectedStatus": 422,
+      "status": 422,
+      "code": "invalid_event_payload",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/occurrences",
+      "method": "GET",
+      "status": 200,
+      "requestId": "bcc2676a-4c40-48c6-b2e1-216696db02f8"
+    },
+    {
+      "label": "scoped occurrence list available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/recipients",
+      "method": "POST",
+      "status": 201,
+      "requestId": "35e2e395-7a91-4fa6-9c82-fd1235d8a002"
+    },
+    {
+      "label": "inactive recipient created",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/recipients",
+      "method": "POST",
+      "status": 200,
+      "requestId": "b00e3ae5-90af-44f8-80a6-b3b3b88b62b2"
+    },
+    {
+      "label": "recipient replay retains UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/recipients",
+      "method": "POST",
+      "status": 409,
+      "code": "idempotency_conflict",
+      "requestId": "e8079da1-d416-4c53-85ba-fbb235d19e9b"
+    },
+    {
+      "label": "recipient conflicting body rejected",
+      "expectedStatus": 409,
+      "status": 409,
+      "code": "idempotency_conflict",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/recipients/3c865da7-2102-42ce-9b9b-327aa5f7fba2",
+      "method": "GET",
+      "status": 200,
+      "requestId": "28699c88-89d1-43c5-8229-a934e850e683"
+    },
+    {
+      "path": "/v1/admin/notifications/recipients/3c865da7-2102-42ce-9b9b-327aa5f7fba2",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "bad19028-458d-40c0-bd31-b343da36f611"
+    },
+    {
+      "path": "/v1/admin/notifications/recipients/3c865da7-2102-42ce-9b9b-327aa5f7fba2",
+      "method": "GET",
+      "status": 200,
+      "requestId": "70f6a9e2-dab8-422c-ad3a-3b0d8d1b8dc2"
+    },
+    {
+      "label": "recipient replacement preserves endpoint and organization bindings",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/recipients",
+      "method": "GET",
+      "status": 200,
+      "requestId": "0b6746dd-fc16-4230-a090-5e5a86c28f71"
+    },
+    {
+      "label": "scoped recipient list finds fixture",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/hooks",
+      "method": "GET",
+      "status": 200,
+      "requestId": "4dd98fd8-9bb1-49e9-b237-66e84528cbf8"
+    },
+    {
+      "label": "hooks paginated list available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/notifications/hooks/organizations.insert",
+      "method": "GET",
+      "status": 200,
+      "requestId": "7fd671bc-40b4-4bbf-9794-f33c4007574d"
+    },
+    {
+      "label": "effective organization hook readable without changing default",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/organizations/6f68ea93-7ba5-4dae-b764-f4fe076bfbb8/integration-tokens/autoscale-notifications",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5fec8d2c-8ecd-4807-ab60-40c3ca5adb62"
+    },
+    {
+      "label": "Notify integration returns metadata only",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/events/rules/893e1818-62c9-4443-81fc-db06732b0962",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "2f64d9c9-cf20-41c7-8765-3a88b7e6ad19"
+    },
+    {
+      "path": "/v1/admin/notifications/recipients/3c865da7-2102-42ce-9b9b-327aa5f7fba2",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "18e74c8d-777b-4e55-8276-af6e31d4dc86"
+    },
+    {
+      "path": "/v1/users/logout",
+      "method": "POST",
+      "status": 204,
+      "requestId": "26caf60c-2cc5-4e61-aaf0-6b1bcdfcc2ec"
+    }
+  ],
+  "fixtures": {
+    "rule": "893e1818-62c9-4443-81fc-db06732b0962",
+    "recipient": "3c865da7-2102-42ce-9b9b-327aa5f7fba2"
+  },
+  "cleanup": [
+    {
+      "kind": "rule",
+      "uid": "893e1818-62c9-4443-81fc-db06732b0962",
+      "deleted": true
+    },
+    {
+      "kind": "recipient",
+      "uid": "3c865da7-2102-42ce-9b9b-327aa5f7fba2",
+      "deleted": true
+    }
+  ],
+  "passed": true,
+  "ruleShape": {
+    "fields": [
+      "uid",
+      "name",
+      "active",
+      "target",
+      "targets",
+      "windows",
+      "priority",
+      "uid_model",
+      "conditions",
+      "created_at",
+      "deleted_at",
+      "model_code",
+      "parameters",
+      "recipients",
+      "updated_at",
+      "valid_from",
+      "valid_until",
+      "delayed_seconds",
+      "uid_organization",
+      "uid_user_created",
+      "uid_user_updated",
+      "recovery_for_seconds",
+      "condition_for_seconds",
+      "elapsed_ms"
+    ],
+    "target": {
+      "uid_unit": null,
+      "uid_asset": null,
+      "uid_group": null,
+      "uid_entity": null,
+      "scope_level": "organization",
+      "uid_organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8"
+    },
+    "windows": [
+      {
+        "uid": "49e64815-8b63-4eb8-acee-017a5580b1d5",
+        "end_time": "07:00:00",
+        "uid_rule": "893e1818-62c9-4443-81fc-db06732b0962",
+        "created_at": "2026-11-17T08:58:06.324013-03:00",
+        "end_isodow": 1,
+        "start_time": "14:00:00",
+        "start_isodow": 6
+      }
+    ]
+  },
+  "occurrences": {
+    "total": 0,
+    "treatmentTested": false,
+    "reason": "No authorized treatment fixture; pre-existing occurrences are not changed."
+  },
+  "recipientShape": {
+    "fields": [
+      "uid",
+      "kind",
+      "name",
+      "active",
+      "uid_link",
+      "endpoints",
+      "link_code",
+      "created_at",
+      "updated_at",
+      "uid_contact",
+      "asset_bindings",
+      "entity_bindings",
+      "uid_organization",
+      "organization_bindings",
+      "elapsed_ms"
+    ],
+    "endpointFields": [
+      "uid",
+      "active",
+      "service",
+      "metadata",
+      "destination",
+      "uid_contact_method"
+    ]
+  },
+  "deliveryStatusTested": false
+}

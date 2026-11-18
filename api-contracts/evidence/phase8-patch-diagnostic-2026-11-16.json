@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-16T15:12:51.129Z",
+  "uid": "7d0f934b-1339-4dcf-bc3d-3cb3b642431c",
+  "getStatus": 200,
+  "partial": {
+    "status": 422
+  },
+  "full": {
+    "status": 403
+  },
+  "publish": {}
+}

@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-15T22:13:30.236Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "cleanup": [
+    {
+      "path": "/v1/admin/geo/geofences/a5a3a778-b27e-49aa-a440-5a0b9cb1fa31",
+      "deleteStatus": 204,
+      "getStatus": 404,
+      "requestId": "57142bbd-11a9-427c-af3e-5fbdaeda15a4",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/geo/geofences/2a9322d7-2c36-47d2-aa30-cb07ea382f6e",
+      "deleteStatus": 204,
+      "getStatus": 404,
+      "requestId": "7897f017-2a04-4b08-88d6-cb4153f5e24c",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/geo/points/a9cb92a8-7832-46ce-bcdf-046d856f4f50",
+      "deleteStatus": 204,
+      "getStatus": 404,
+      "requestId": "4d5c275a-647e-4ec0-93e7-31f4e2113be6",
+      "passed": true
+    }
+  ],
+  "route": {
+    "method": "POST",
+    "path": "/v1/admin/geo/routes",
+    "body": {
+      "scope_level": "organization",
+      "uid_organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "description": "Fixture tempor?ria de homologa??o",
+      "active": true,
+      "lateral_margin_meters": 80,
+      "max_speed_kmh": 60,
+      "points": [
+        {
+          "longitude": -46.63,
+          "latitude": -23.55,
+          "max_speed_to_next_kmh": 40
+        },
+        {
+          "longitude": -46.61,
+          "latitude": -23.54
+        }
+      ],
+      "name": "QA-GEO-71798cc6-86fe-4a44-a92d-b5d3a83af60f-3"
+    },
+    "status": 503,
+    "code": "geo_storage_unavailable",
+    "message": "Geographic storage is temporarily unavailable.",
+    "requestId": "9ad517a0-3df0-473a-a5f2-d75c8c8abfea"
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "date": "2026-11-17T11:38:15.990Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "path": "/v1/users/me/access-context",
+      "method": "GET",
+      "status": 200,
+      "requestId": "edb52322-463f-4f8a-8976-9118443376a0"
+    },
+    {
+      "label": "agenda area confirmed, reports has no independent area",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/agenda/entries/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "1ddb29a0-e46b-488a-b061-acb215ce8c92"
+    },
+    {
+      "path": "/v1/admin/agenda/entries/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "1ddb29a0-e46b-488a-b061-acb215ce8c92",
+      "fields": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "total": 0
+    },
+    {
+      "label": "read-only /v1/admin/agenda/entries/search",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/agenda/entries/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "e93f2991-a00f-429b-8243-318e27ae1759"
+    },
+    {
+      "path": "/v1/admin/agenda/entries/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "e93f2991-a00f-429b-8243-318e27ae1759",
+      "fields": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "total": 0
+    },
+    {
+      "label": "read-only /v1/admin/agenda/entries/search",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/agenda/settings",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5e1784ea-91b1-4e0b-b116-7af23c661e3d"
+    },
+    {
+      "path": "/v1/admin/agenda/settings?uid_organization=6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5e1784ea-91b1-4e0b-b116-7af23c661e3d",
+      "fields": [
+        "colors",
+        "overrides",
+        "uid_organization",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "label": "read-only /v1/admin/agenda/settings?uid_organization=6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules",
+      "method": "POST",
+      "status": 201,
+      "requestId": "a44bb27e-ec9a-4b9d-9a87-e44410474d8e"
+    },
+    {
+      "label": "schedule created with UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules",
+      "method": "POST",
+      "status": 422,
+      "code": "invalid_report_request",
+      "requestId": "b6aef1c7-206b-4aaa-ac4f-948ec0d53b9c"
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc/state",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "b7b14f7e-a1e3-435d-a5b1-500a2f37dba0"
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5863565d-feae-49cf-a1ff-fedae086bf3f"
+    },
+    {
+      "label": "schedule paused and timezone derived by backend",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "83df61d9-58fa-4b25-bb1f-99204e69c764"
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "method": "GET",
+      "status": 200,
+      "requestId": "a8b2ba66-5694-4bd8-b46c-34c72ab41c57"
+    },
+    {
+      "label": "replacement preserves cadence and updates time",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc/state",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "867c6f55-ec78-4c2c-b14b-bff0be6fc023"
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "method": "GET",
+      "status": 200,
+      "requestId": "ed2048cd-774c-4e89-aaa1-72cbc3bd03cd"
+    },
+    {
+      "label": "schedule resumed",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc/state",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "eb330072-b2db-49d9-9e02-06e4dbc4f3fe"
+    },
+    {
+      "path": "/v1/reports/schedules",
+      "method": "GET",
+      "status": 200,
+      "requestId": "a58ddece-3482-49f6-a38c-cc7f673c73a3"
+    },
+    {
+      "label": "schedule list is paginated",
+      "passed": true
+    },
+    {
+      "path": "/v1/reports/schedules/b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "method": "DELETE",
+      "status": 200,
+      "requestId": "c0467713-ca46-4be5-9000-6ced23273ae8"
+    },
+    {
+      "path": "/v1/users/logout",
+      "method": "POST",
+      "status": 204,
+      "requestId": "3730a11c-d92c-4487-a33e-c2ebadd21c09"
+    }
+  ],
+  "cleanup": [
+    {
+      "uid": "b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+      "deleted": true
+    }
+  ],
+  "passed": false,
+  "fixture": "b909cd36-793f-4cf7-80e5-fafcdee1a1dc",
+  "replayIssue": {
+    "status": 422,
+    "code": "invalid_report_request",
+    "message": "Same key and body did not replay successfully; continuing fixture lifecycle checks."
+  }
+}

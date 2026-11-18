@@ -1,0 +1,39 @@
+{
+ "total": 315,
+ "methods": {
+  "POST": 116,
+  "GET": 130,
+  "PUT": 41,
+  "PATCH": 19,
+  "DELETE": 9
+ },
+ "get_total": 130,
+ "get_with_response": 107,
+ "mutations": 185,
+ "mutations_with_body": 168,
+ "get_gaps": [
+  "/v1/users/status/stream",
+  "/v1/reports/:uid/download",
+  "/v1/admin/reports/adapters/assets.inventory.v2/json-schema",
+  "/v1/reports/schedules/:uid",
+  "/v1/public/reports/:token",
+  "/v1/public/reports/token-invalido",
+  "/v1/technician/work-orders/:uid",
+  "/v1/admin/billing/accounts",
+  "/v1/admin/organizations/",
+  "/v1/admin/organizations/abc/services",
+  "/v1/admin/notifications/recipients",
+  "/admin/organizations/:uid",
+  "/v1/health/details",
+  "/metrics",
+  "/v1/admin/billing-plans/not-a-uuid/capabilities",
+  "/v1/admin/billing-plans/not-a-uuid/quote",
+  "/v1/public/knowledge/items/:slug/attachments/:uid",
+  "/v1/knowledge/items/:slug/attachments/:uid",
+  "/v1/admin/assets/:uid/valuation",
+  "/v1/admin/document-revisions/:uid/download",
+  "/v1/public/images/:uid",
+  "/v1/admin/contacts/:uid",
+  "/v1/images/:uid"
+ ]
+}

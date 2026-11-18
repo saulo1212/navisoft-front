@@ -1,0 +1,396 @@
+{
+  "date": "2026-11-17T12:44:50.746Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "path": "/v1/admin/documents/catalogs",
+      "method": "GET",
+      "status": 200,
+      "requestId": "e4ba1be7-6eb2-47ed-a105-04f2c15b1746"
+    },
+    {
+      "label": "GED catalogs available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-contracts",
+      "method": "POST",
+      "status": 201,
+      "requestId": "6158d435-edcd-4ef1-aa9d-b6c1ad85b94f"
+    },
+    {
+      "label": "contract created",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-contracts",
+      "method": "POST",
+      "status": 200,
+      "requestId": "1cafb455-1e22-4455-bbf4-39def1e388d5"
+    },
+    {
+      "label": "SYS-GED-01 exact replay returns same contract",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-contracts",
+      "method": "POST",
+      "status": 409,
+      "code": "idempotency_conflict",
+      "requestId": "3202b7e6-badb-4a05-b3ea-fb48c693bf6d"
+    },
+    {
+      "label": "contract conflicting key rejected",
+      "expected": 409,
+      "actual": 409,
+      "code": "idempotency_conflict"
+    },
+    {
+      "path": "/v1/admin/users/functional-groups",
+      "method": "POST",
+      "status": 201,
+      "requestId": "b5004bda-c424-41ca-9b71-941ec8089627"
+    },
+    {
+      "label": "functional group created",
+      "passed": true
+    },
+    {
+      "path": "/v1/users/status",
+      "method": "GET",
+      "status": 200,
+      "requestId": "9a451ad1-bc9d-4bd6-a365-171a53831a57"
+    },
+    {
+      "label": "test session actor available",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/users/functional-group-members",
+      "method": "POST",
+      "status": 201,
+      "requestId": "a8754d0c-4459-43de-828a-ee1a2c7b15da"
+    },
+    {
+      "label": "functional member created without changing user scope",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/users/functional-group-members",
+      "method": "GET",
+      "status": 200,
+      "requestId": "8fa0cfa6-2b1f-4d78-899b-39e17611c1da"
+    },
+    {
+      "label": "functional group members list scoped",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-classes",
+      "method": "POST",
+      "status": 201,
+      "requestId": "82c29fc8-4b5f-4205-a97b-bb1579c3fec1"
+    },
+    {
+      "path": "/v1/admin/document-classes",
+      "method": "POST",
+      "status": 200,
+      "requestId": "54ff5a73-2663-4e51-9f4e-9573286bf287"
+    },
+    {
+      "label": "class replay keeps UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-classes/be204bff-30b6-4f8b-b556-631287436e35",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "f2da65e5-a56a-424f-a0e8-f1ce24e22f9a"
+    },
+    {
+      "path": "/v1/admin/document-classes/be204bff-30b6-4f8b-b556-631287436e35",
+      "method": "GET",
+      "status": 200,
+      "requestId": "46e6996a-ad3e-432d-af4f-ae259a99861c"
+    },
+    {
+      "label": "class read permission does not add other actions",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents",
+      "method": "POST",
+      "status": 201,
+      "requestId": "4895a051-4ae7-4555-a7aa-84218f7ac4e4"
+    },
+    {
+      "path": "/v1/admin/documents",
+      "method": "POST",
+      "status": 200,
+      "requestId": "370beca9-1690-42ce-bcc9-12242e66b63c"
+    },
+    {
+      "label": "document replay keeps UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/class",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "6cf2f714-4b5a-4eea-9c62-0ba336e17d62"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "POST",
+      "status": 201,
+      "requestId": "577bed07-fe96-4f08-9518-9fd1dbcd1564"
+    },
+    {
+      "label": "R00 upload registered",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "POST",
+      "status": 200,
+      "requestId": "6a1e9dc4-7d6f-4533-99c7-71d6881e0543"
+    },
+    {
+      "label": "R00 exact replay keeps UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "POST",
+      "status": 409,
+      "code": "document_revision_unchanged",
+      "requestId": "398e909b-739d-4f70-bcab-9d9a22a3c3db"
+    },
+    {
+      "label": "unchanged revision rejected with new key",
+      "expected": 409,
+      "actual": 409,
+      "code": "document_revision_unchanged"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "POST",
+      "status": 422,
+      "code": "document_revision_summary_required",
+      "requestId": "c8e71a55-afdd-4cb7-b106-7f4a589b609e"
+    },
+    {
+      "label": "R01 missing summary rejected",
+      "expected": 422,
+      "actual": 422,
+      "code": "document_revision_summary_required"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "POST",
+      "status": 201,
+      "requestId": "613d967c-57f7-423f-9cce-8ea1f47ea169"
+    },
+    {
+      "label": "R01 keeps canonical filename and records summary",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-revisions/a1bfef57-5364-5533-b2ab-5bcf29eb9dcc/download",
+      "method": "GET",
+      "status": 200,
+      "requestId": "ac8ff31c-3cf4-4b26-80f7-517b84c67aeb"
+    },
+    {
+      "label": "revision 0 proxy download bytes match upload",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-revisions/a434bfa2-1969-56fc-9d58-f525084b76ca/download",
+      "method": "GET",
+      "status": 200,
+      "requestId": "40c62ba5-7899-4c59-b6a4-a9839a8adb8b"
+    },
+    {
+      "label": "revision 1 proxy download bytes match upload",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3",
+      "method": "GET",
+      "status": 200,
+      "requestId": "f79312c9-5cf4-4143-9458-e34ffe66d3fb"
+    },
+    {
+      "label": "document metadata excludes physical storage keys",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/revisions",
+      "method": "GET",
+      "status": 200,
+      "requestId": "81da7cfe-25a4-4744-9109-b0718576e60f"
+    },
+    {
+      "label": "exactly two revisions",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "834b0004-8f64-4001-8563-f06f59eebb73"
+    },
+    {
+      "label": "document search is tenant/title scoped",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/distributions",
+      "method": "GET",
+      "status": 200,
+      "requestId": "541b0d56-f0c1-40e2-8830-0b0ec2c51d39"
+    },
+    {
+      "label": "owner distribution list available",
+      "passed": true
+    },
+    {
+      "path": "/v1/users/me/organizations",
+      "method": "GET",
+      "status": 200,
+      "requestId": "cfe10c54-584a-4da8-979d-829c77a711fd"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/distributions",
+      "method": "POST",
+      "status": 201,
+      "requestId": "70b55c2e-d843-4b0b-a2d4-8973409067a1"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3/distributions",
+      "method": "POST",
+      "status": 200,
+      "requestId": "31c697d1-24df-4960-8256-a71a28d770f1"
+    },
+    {
+      "label": "distribution exact replay keeps UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-distributions/2c89e374-776a-4a29-9e35-1b847c3435ae",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "94fb74de-b31c-4797-8d5a-f9c3d79beb1d"
+    },
+    {
+      "path": "/v1/admin/documents/b0bea612-5d4a-4b8b-a934-e9370fc175e3",
+      "method": "GET",
+      "status": 200,
+      "requestId": "68ac1c82-b137-44c8-8928-17a1fe713adb"
+    },
+    {
+      "label": "recipient context exposes fixed revision while preserving owner",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/document-distributions/2c89e374-776a-4a29-9e35-1b847c3435ae",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "0254ff20-4d6b-4b4d-ad42-a97d22dc219c"
+    },
+    {
+      "path": "/v1/admin/users/functional-group-members/bfcb4571-191d-4684-800b-f7d95834e5cf",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "178433ee-846c-421a-9a13-3b8f38f0cba1"
+    },
+    {
+      "path": "/v1/admin/document-classes/be204bff-30b6-4f8b-b556-631287436e35",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "d20af83b-39f6-40f3-96b9-ec89f53426fd"
+    },
+    {
+      "path": "/v1/admin/users/functional-groups/2ddce12c-d0fc-4951-8699-97e475e48258",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "14ae99a4-cd94-4bd3-91a7-046bf5d9a94a"
+    },
+    {
+      "path": "/v1/users/logout",
+      "method": "POST",
+      "status": 204,
+      "requestId": "16a48fa1-5910-46e0-91ce-b5660598a327"
+    }
+  ],
+  "fixtures": {
+    "contract": "89c1e046-ee2c-440c-9e5c-739f45334e42",
+    "group": "2ddce12c-d0fc-4951-8699-97e475e48258",
+    "member": "bfcb4571-191d-4684-800b-f7d95834e5cf",
+    "class": "be204bff-30b6-4f8b-b556-631287436e35",
+    "document": "b0bea612-5d4a-4b8b-a934-e9370fc175e3",
+    "r00": "a1bfef57-5364-5533-b2ab-5bcf29eb9dcc",
+    "r01": "a434bfa2-1969-56fc-9d58-f525084b76ca",
+    "distribution": "2c89e374-776a-4a29-9e35-1b847c3435ae"
+  },
+  "cleanup": [
+    {
+      "kind": "distribution",
+      "uid": "2c89e374-776a-4a29-9e35-1b847c3435ae",
+      "completed": true
+    },
+    {
+      "kind": "member",
+      "uid": "bfcb4571-191d-4684-800b-f7d95834e5cf",
+      "completed": true
+    },
+    {
+      "kind": "class",
+      "uid": "be204bff-30b6-4f8b-b556-631287436e35",
+      "completed": true
+    },
+    {
+      "kind": "group",
+      "uid": "2ddce12c-d0fc-4951-8699-97e475e48258",
+      "completed": true
+    }
+  ],
+  "passed": true,
+  "classShape": {
+    "fields": [
+      "uid",
+      "code",
+      "name",
+      "active",
+      "created_at",
+      "updated_at",
+      "description",
+      "permissions",
+      "uid_organization",
+      "uid_user_created",
+      "uid_user_updated",
+      "elapsed_ms"
+    ],
+    "permissions": [
+      {
+        "uid": "5230fd98-00c0-4209-9b90-8005c9ee4a66",
+        "uid_class": "be204bff-30b6-4f8b-b556-631287436e35",
+        "created_at": "2026-11-17T09:44:52.202982-03:00",
+        "action_code": "read",
+        "profile_code": null,
+        "principal_type": "functional_group",
+        "uid_organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+        "uid_user_created": "b0000000-0000-4000-8000-000000000001",
+        "uid_functional_group": "2ddce12c-d0fc-4951-8699-97e475e48258"
+      }
+    ]
+  },
+  "recipientOrganization": "49bc0a91-b0c1-409d-bbb3-41700b0438b3",
+  "preserved": [
+    "contract",
+    "document",
+    "r00",
+    "r01"
+  ]
+}

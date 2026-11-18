@@ -1,0 +1,563 @@
+{
+  "date": "2026-11-16T15:15:01.774Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "prefix": "qa_ck_b34ee314",
+  "checks": [
+    {
+      "path": "/v1/admin/entities/drivers",
+      "method": "POST",
+      "status": 201,
+      "requestId": "0001cac0-27ce-43dc-b8f7-d448d0ddca33"
+    },
+    {
+      "label": "motorista exclusivo criado",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklist-groups",
+      "method": "POST",
+      "status": 201,
+      "requestId": "2dad068c-f28c-48a4-820f-ef60ccf56ec7"
+    },
+    {
+      "path": "/v1/admin/checklist-groups",
+      "method": "POST",
+      "status": 200,
+      "requestId": "4fb70391-5863-46e4-9c05-de79f2f68fb1"
+    },
+    {
+      "label": "grupo criado/replay preserva UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklist-groups",
+      "method": "POST",
+      "status": 409,
+      "code": "idempotency_conflict",
+      "requestId": "55fe85c8-0fae-4e09-9470-5cf2c71fc282"
+    },
+    {
+      "label": "grupo com mesma chave e corpo divergente 409",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklist-groups/5835cca0-c89c-468a-a1ee-f7182eff4aba",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "ba345d61-ae38-4c6b-bacd-deda953e7c0c"
+    },
+    {
+      "path": "/v1/admin/checklist-groups/5835cca0-c89c-468a-a1ee-f7182eff4aba",
+      "method": "GET",
+      "status": 200,
+      "requestId": "ba9c141d-a2f3-4b32-a481-6bc546e42104"
+    },
+    {
+      "label": "detalhe do grupo",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists",
+      "method": "POST",
+      "status": 201,
+      "requestId": "128bf3b1-5d70-483a-bc56-c342ba38a5e9"
+    },
+    {
+      "path": "/v1/admin/checklists",
+      "method": "POST",
+      "status": 200,
+      "requestId": "d59f9a86-c5c8-42d2-bed8-3e4618acf1e2"
+    },
+    {
+      "label": "template replay preserva UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists",
+      "method": "POST",
+      "status": 409,
+      "code": "idempotency_conflict",
+      "requestId": "7e10199d-5ca4-4fab-a3d2-c059eb340aab"
+    },
+    {
+      "label": "template divergente com mesma chave 409",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "GET",
+      "status": 200,
+      "requestId": "0478a762-ee04-41bf-aee2-73b3f3411c7c"
+    },
+    {
+      "label": "assignment selecionado roundtrip do editor",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "68c66ce0-cd6f-4744-a8f6-5605d3fec177"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "GET",
+      "status": 200,
+      "requestId": "b33d733d-5f45-4d8f-baa2-45df153ec6a0"
+    },
+    {
+      "label": "primeira publicação v1",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "489e3f90-079a-43b5-a4d1-69fb238bc020"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "GET",
+      "status": 200,
+      "requestId": "b9abf6c3-6fae-42a0-906d-2b0acfa34d3f"
+    },
+    {
+      "label": "publicação sem alteração não cria v2",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs",
+      "method": "POST",
+      "status": 201,
+      "requestId": "70411db2-8eba-467b-a6c9-8f98749b02e8"
+    },
+    {
+      "path": "/v1/checklists/runs",
+      "method": "POST",
+      "status": 200,
+      "requestId": "248d1343-720c-43f5-b843-e49df8488f30"
+    },
+    {
+      "label": "run replay preserva UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "GET",
+      "status": 200,
+      "requestId": "1260b804-0b81-4240-8ea2-ce27ac29f298"
+    },
+    {
+      "label": "execução fixa v1",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "PUT",
+      "status": 422,
+      "code": "checklist_required_answers_missing",
+      "requestId": "c0df5d75-e07c-4b03-ac6b-ccab4c112406"
+    },
+    {
+      "label": "required ausente retorna 422",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "9f257e96-e941-4fbd-8e51-14aa3097e046"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "8e7b9f98-a3e4-43a0-9abb-4257ecfe8890"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "GET",
+      "status": 200,
+      "requestId": "17f3a2f8-28e0-40d3-b0bb-39325243b3b3"
+    },
+    {
+      "label": "rascunho alterado publica v2",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "GET",
+      "status": 200,
+      "requestId": "8a2a7e26-42f8-4837-a3a3-c0dbc62bd5df"
+    },
+    {
+      "label": "run anterior continua na versão/label original",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "685dd8ef-eb96-48f5-94e6-06d6614b2068"
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "GET",
+      "status": 200,
+      "requestId": "fa7b251a-3470-4870-b695-98272aaffa01"
+    },
+    {
+      "label": "false foi persistido como resposta",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "ea8a214a-6474-42b7-a1d7-d729167750a6"
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "260e11d3-7476-413f-b3f5-9eff685a157f"
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "GET",
+      "status": 200,
+      "requestId": "c944fe84-4e74-4a97-a5b7-98d509faab7e"
+    },
+    {
+      "label": "warning libera sem tornar motorista inapto",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "method": "PUT",
+      "status": 409,
+      "code": "checklist_run_immutable",
+      "requestId": "2ab49a29-9182-4a8e-b000-a961763a3c25"
+    },
+    {
+      "label": "run concluído rejeita alterações",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities",
+      "method": "POST",
+      "status": 201,
+      "requestId": "0e7c9802-e77e-4c92-af04-75d03c1a7455"
+    },
+    {
+      "path": "/v1/admin/assets",
+      "method": "POST",
+      "status": 201,
+      "requestId": "25cdb320-406b-49d3-ab3f-6734c81b1713"
+    },
+    {
+      "path": "/v1/admin/assets",
+      "method": "POST",
+      "status": 201,
+      "requestId": "b612a2be-e145-43d0-9cf5-e6fef13782cf"
+    },
+    {
+      "path": "/v1/admin/checklists",
+      "method": "POST",
+      "status": 201,
+      "requestId": "7fabf58e-8558-4dfd-b3cd-88109c418504"
+    },
+    {
+      "path": "/v1/admin/checklists/7a798022-9e9e-4c51-8fbd-a34e160db4ec/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "93337d80-78ae-4716-acb9-2c909568c158"
+    },
+    {
+      "path": "/v1/checklists/runs",
+      "method": "POST",
+      "status": 201,
+      "requestId": "883ae354-50ee-40bf-b95d-f4fa830af2ab"
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "07e8b91a-be6d-4cf0-9e78-bd1e7cde2558"
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "GET",
+      "status": 200,
+      "requestId": "938cb388-ad10-49af-8cf6-2d39a5fbb75a"
+    },
+    {
+      "label": "novo run fixa driver v2 e descobre ativo",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "88daa970-879e-4b9a-8529-4daf8571619b"
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "PUT",
+      "status": 409,
+      "code": "checklist_asset_locked",
+      "requestId": "51364fd5-92dc-4f77-862e-9e005e692da0"
+    },
+    {
+      "label": "trocar ativo após respostas retorna 409",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "GET",
+      "status": 200,
+      "requestId": "881094e3-b520-4bc9-81f2-ae3323547b26"
+    },
+    {
+      "label": "troca rejeitada preserva ativo, snapshot e respostas",
+      "passed": true
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "bb47015d-7262-4f74-ac96-033468c571b1"
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "PUT",
+      "status": 200,
+      "requestId": "f692131b-0134-41a7-8b60-d0510e24a7e8"
+    },
+    {
+      "path": "/v1/checklists/runs/7cc73b0f-d225-43d0-b42d-bd4ae3262059",
+      "method": "GET",
+      "status": 200,
+      "requestId": "fa20129b-078a-4398-a81f-11a905c53b13"
+    },
+    {
+      "label": "resultado bloqueado vem da API",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "1bf2fbda-117c-4e8d-b4a0-6e493b9ddd85"
+    },
+    {
+      "label": "integração gerou exatamente uma manutenção na fixture",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "f3606d16-54d1-4f51-be10-d409c38f3d5b"
+    },
+    {
+      "path": "/v1/admin/checklists/search",
+      "method": "POST",
+      "status": 200,
+      "requestId": "7726e219-cf3f-4458-8fe8-f4facd757314"
+    },
+    {
+      "label": "listagem por nome e paginação são reais",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "GET",
+      "status": 200,
+      "requestId": "5a47443c-15f4-47a4-8b45-76d0beb02335"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "140eea69-fdf8-414a-bf05-dc07fb5d5d6c"
+    },
+    {
+      "path": "/v1/admin/checklists/7eb2ee35-c53f-48eb-af00-4eb8840a12da/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "0ecc1285-5df1-44fb-99ce-6013669854fc"
+    },
+    {
+      "path": "/v1/admin/checklists/7a798022-9e9e-4c51-8fbd-a34e160db4ec",
+      "method": "GET",
+      "status": 200,
+      "requestId": "a8513ef3-62d8-43f7-b761-c2a298770c40"
+    },
+    {
+      "path": "/v1/admin/checklists/7a798022-9e9e-4c51-8fbd-a34e160db4ec",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "49e90e21-e0a3-4921-a274-7d8d22a85ebb"
+    },
+    {
+      "path": "/v1/admin/checklists/7a798022-9e9e-4c51-8fbd-a34e160db4ec/publish",
+      "method": "POST",
+      "status": 200,
+      "requestId": "a0d09e75-e907-46aa-b407-9377e1a37c36"
+    },
+    {
+      "path": "/v1/admin/checklist-groups/5835cca0-c89c-468a-a1ee-f7182eff4aba",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "2be42abf-9cf8-4ed1-8a56-31ac79b91875"
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/e64a52cf-2c81-46e0-a46b-b8fd51c8c33a",
+      "method": "GET",
+      "status": 200,
+      "requestId": "3e07b98e-9109-4a98-9a53-41a4937aba33"
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/e64a52cf-2c81-46e0-a46b-b8fd51c8c33a/transition",
+      "method": "POST",
+      "status": 201,
+      "requestId": "67c5baa8-8f58-4490-9b66-fd82a9a9553a"
+    },
+    {
+      "path": "/v1/admin/assets/5dd9a72c-3fae-4d62-9991-6cdefbb674fd",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "5e988e41-b074-4e60-9fda-95f6e5037370"
+    },
+    {
+      "path": "/v1/admin/assets/2631f769-7a7d-4813-a599-81457bda7a44",
+      "method": "DELETE",
+      "status": 204,
+      "requestId": "ed59ccc3-d541-4ef7-9fad-fbce23208969"
+    },
+    {
+      "path": "/v1/admin/entities/53f84b23-a635-48f2-8e29-25759898419a/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "92685992-1e5b-460b-bc5e-6b031ef196aa"
+    },
+    {
+      "path": "/v1/admin/entities/drivers/9ee19456-0d9d-42e3-99a8-dfaaf85fdaa7",
+      "method": "PATCH",
+      "status": 200,
+      "requestId": "e9aec237-e8dd-4432-87a3-6eee0454ccab"
+    }
+  ],
+  "fixtures": {
+    "templates": [
+      "7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "7a798022-9e9e-4c51-8fbd-a34e160db4ec"
+    ],
+    "assets": [
+      "5dd9a72c-3fae-4d62-9991-6cdefbb674fd",
+      "2631f769-7a7d-4813-a599-81457bda7a44"
+    ],
+    "runs": [
+      "dafad0df-e112-49c2-ad1e-e0d1fbddcdd5",
+      "7cc73b0f-d225-43d0-b42d-bd4ae3262059"
+    ],
+    "maintenance": [
+      "e64a52cf-2c81-46e0-a46b-b8fd51c8c33a"
+    ],
+    "driver": "9ee19456-0d9d-42e3-99a8-dfaaf85fdaa7",
+    "group": "5835cca0-c89c-468a-a1ee-f7182eff4aba",
+    "entity": "53f84b23-a635-48f2-8e29-25759898419a"
+  },
+  "cleanup": [
+    {
+      "label": "inativar e publicar template 7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "passed": true
+    },
+    {
+      "label": "inativar e publicar template 7a798022-9e9e-4c51-8fbd-a34e160db4ec",
+      "passed": true
+    },
+    {
+      "label": "desativar grupo",
+      "passed": true
+    },
+    {
+      "label": "resolver manutenção de fixture e64a52cf-2c81-46e0-a46b-b8fd51c8c33a",
+      "passed": true
+    },
+    {
+      "label": "excluir ativo de fixture 5dd9a72c-3fae-4d62-9991-6cdefbb674fd",
+      "passed": true
+    },
+    {
+      "label": "excluir ativo de fixture 2631f769-7a7d-4813-a599-81457bda7a44",
+      "passed": true
+    },
+    {
+      "label": "inativar entidade de fixture",
+      "passed": true
+    },
+    {
+      "label": "desativar motorista de fixture",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "templateShape": {
+    "fields": [
+      "uid",
+      "code",
+      "name",
+      "active",
+      "uid_group",
+      "assignment",
+      "created_at",
+      "definition",
+      "updated_at",
+      "description",
+      "published_at",
+      "applicability",
+      "latest_version",
+      "assignment_mode",
+      "uid_organization",
+      "uid_user_created",
+      "uid_user_updated",
+      "elapsed_ms"
+    ],
+    "assignment": {
+      "mode": "selected",
+      "drivers": [
+        "9ee19456-0d9d-42e3-99a8-dfaaf85fdaa7"
+      ]
+    }
+  },
+  "runShape": {
+    "fields": [
+      "uid",
+      "status",
+      "outcome",
+      "complete",
+      "uid_asset",
+      "created_at",
+      "executions",
+      "uid_driver",
+      "updated_at",
+      "asset_result",
+      "completed_at",
+      "driver_result",
+      "uid_organization",
+      "uid_user_created",
+      "uid_user_updated",
+      "elapsed_ms"
+    ],
+    "executionFields": [
+      "uid",
+      "answers",
+      "checklist",
+      "target_type",
+      "version_number",
+      "uid_template_version"
+    ]
+  }
+}

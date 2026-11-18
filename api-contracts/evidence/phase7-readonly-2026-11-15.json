@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-15T21:59:19.019Z",
+  "organization": {
+    "uid": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+    "name": "Admin Homolog Client"
+  },
+  "checks": [
+    {
+      "path": "/v1/admin/entities/technician-capabilities",
+      "status": 200,
+      "total": null,
+      "count": 11,
+      "code": null
+    },
+    {
+      "path": "/v1/admin/entities/technicians/search",
+      "status": 200,
+      "total": 0,
+      "count": 0,
+      "code": null
+    },
+    {
+      "path": "/v1/admin/devices/work-orders/search",
+      "status": 200,
+      "total": 0,
+      "count": 0,
+      "code": null
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/search",
+      "status": 200,
+      "total": 0,
+      "count": 0,
+      "code": null
+    }
+  ]
+}

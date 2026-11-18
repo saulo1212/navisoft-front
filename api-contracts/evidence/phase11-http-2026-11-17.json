@@ -1,0 +1,309 @@
+{
+  "date": "2026-11-17T12:20:06.168Z",
+  "checks": [
+    {
+      "path": "/v1/admin/knowledge/categories",
+      "method": "GET",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "cf7ae202-07b7-474e-8529-0383cc3754ad"
+    },
+    {
+      "label": "category catalog paginated",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/search",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "aa7f3b4b-f55b-4c26-b700-82d1696c62d5"
+    },
+    {
+      "label": "admin list/search no longer returns historical 503",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items",
+      "method": "POST",
+      "status": 201,
+      "authenticated": true,
+      "requestId": "0ef689ac-0797-4996-bd40-c5978cc2932e"
+    },
+    {
+      "label": "item draft created without revision or public exposure",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "f067ef88-1e5f-428a-8222-9e0948169e3f"
+    },
+    {
+      "label": "item replay keeps UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/public/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 404,
+      "code": "knowledge_item_not_found",
+      "authenticated": false,
+      "requestId": "13369f85-e2d6-470e-8aff-f386e07d22b2"
+    },
+    {
+      "label": "draft hidden from anonymous access",
+      "expected": 404,
+      "actual": 404,
+      "code": "knowledge_item_not_found"
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/revisions",
+      "method": "POST",
+      "status": 201,
+      "authenticated": true,
+      "requestId": "db00b2b1-92a0-4839-9410-51ffb7211c05"
+    },
+    {
+      "label": "revision created",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/revisions",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "1bbc37a1-77b6-4754-aed8-f26a0e7519b4"
+    },
+    {
+      "label": "revision replay retains UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/revisions",
+      "method": "POST",
+      "status": 409,
+      "code": "idempotency_conflict",
+      "authenticated": true,
+      "requestId": "851ef0cf-d5d6-4d3c-aa7f-2c36c7313d07"
+    },
+    {
+      "label": "revision key conflicting body rejected",
+      "expected": 409,
+      "actual": 409,
+      "code": "idempotency_conflict"
+    },
+    {
+      "path": "/v1/admin/knowledge/revisions/5e573aaf-1182-4848-923d-c803959e1182/attachments",
+      "method": "PUT",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "d54038ba-cec7-4ba5-aa4a-55fba5da1ebd"
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/publish",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "7e60acf5-8577-40ae-ae9d-31f1a79495df"
+    },
+    {
+      "path": "/v1/public/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 200,
+      "authenticated": false,
+      "requestId": "7db52873-f539-4397-b65a-196d74792ab7"
+    },
+    {
+      "label": "public reader returns explicitly published snapshot anonymously",
+      "passed": true
+    },
+    {
+      "path": "/v1/public/knowledge/items",
+      "method": "GET",
+      "status": 200,
+      "authenticated": false,
+      "requestId": "9c59617a-8de5-4ccf-b42d-092447a684ae"
+    },
+    {
+      "label": "public search finds published fixture",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/revisions",
+      "method": "POST",
+      "status": 201,
+      "authenticated": true,
+      "requestId": "73f247e4-791d-4a15-ae0d-2ab00f92d7d2"
+    },
+    {
+      "path": "/v1/public/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 200,
+      "authenticated": false,
+      "requestId": "a40a8e2f-4f41-4d3e-b335-5066b1180146"
+    },
+    {
+      "label": "new draft leaves published content unchanged",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156",
+      "method": "GET",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "944fdeb0-2984-41fc-94d6-67c8626d2977"
+    },
+    {
+      "label": "admin detail separates latest and published revision",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/revisions",
+      "method": "GET",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "1b0f9708-0c8a-4703-be2a-86801cfbf3d6"
+    },
+    {
+      "label": "revision history has fixed snapshots",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/search",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "5aa9ecc0-936e-412e-9730-b39c1b23ac03"
+    },
+    {
+      "label": "administrative q search finds draft title",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/grants",
+      "method": "PUT",
+      "status": 422,
+      "code": "unclassified_http_422",
+      "authenticated": true,
+      "requestId": "d45d096d-7699-4a97-bead-bd094d97dc20"
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/grants",
+      "method": "PUT",
+      "status": 422,
+      "code": "unclassified_http_422",
+      "authenticated": true,
+      "requestId": "ba326fae-1cf4-424a-af1a-072134ef875f"
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/publish",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "e7348321-9466-47cf-8575-1b4ed2909c32"
+    },
+    {
+      "path": "/v1/public/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 404,
+      "code": "knowledge_item_not_found",
+      "authenticated": false,
+      "requestId": "57911d14-1528-4e73-8f47-b522d5c1c924"
+    },
+    {
+      "label": "authenticated audience hidden from public reader",
+      "expected": 404,
+      "actual": 404,
+      "code": "knowledge_item_not_found"
+    },
+    {
+      "path": "/v1/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "5c862ed6-0bc6-422b-9a1b-89f649767754"
+    },
+    {
+      "label": "authenticated reader receives published revision with tenant context",
+      "passed": true
+    },
+    {
+      "path": "/v1/knowledge/items",
+      "method": "GET",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "20ad74a2-c2bc-4e16-8f21-455deccad353"
+    },
+    {
+      "label": "authenticated catalog search works",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/knowledge/items/90e83ccc-29c2-4476-a104-3ef416d1f156/archive",
+      "method": "POST",
+      "status": 200,
+      "authenticated": true,
+      "requestId": "27fe4015-2a17-4cdd-81b4-2a048bcf9cf0"
+    },
+    {
+      "path": "/v1/public/knowledge/items/qa-phase11-9ba6b00c",
+      "method": "GET",
+      "status": 404,
+      "code": "knowledge_item_not_found",
+      "authenticated": false,
+      "requestId": "400899fe-485a-4506-958f-6fe8106b2af9"
+    },
+    {
+      "path": "/v1/users/logout",
+      "method": "POST",
+      "status": 204,
+      "authenticated": true,
+      "requestId": "ed6fe973-57d5-4763-a1f9-a5a89c4fa6c2"
+    }
+  ],
+  "cleanup": [
+    {
+      "uid": "90e83ccc-29c2-4476-a104-3ef416d1f156",
+      "archived": true
+    },
+    {
+      "publicHidden": true
+    }
+  ],
+  "passed": false,
+  "fixture": {
+    "uid": "90e83ccc-29c2-4476-a104-3ef416d1f156",
+    "slug": "qa-phase11-9ba6b00c"
+  },
+  "firstRevisionShape": {
+    "fields": [
+      "uid",
+      "body",
+      "title",
+      "videos",
+      "summary",
+      "replayed",
+      "uid_item",
+      "created_at",
+      "search_vector",
+      "revision_number",
+      "uid_user_created",
+      "elapsed_ms"
+    ]
+  },
+  "grantIssues": [
+    {
+      "operation": "profile grant",
+      "status": 422,
+      "code": "unclassified_http_422"
+    },
+    {
+      "operation": "clear grants",
+      "status": 422,
+      "code": "unclassified_http_422"
+    }
+  ]
+}

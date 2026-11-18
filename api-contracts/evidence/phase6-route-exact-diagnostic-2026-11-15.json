@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-15T22:15:37.879Z",
+  "method": "POST",
+  "path": "/v1/admin/geo/routes",
+  "body": {
+    "scope_level": "organization",
+    "uid_organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+    "description": "Fixture temporária de homologação",
+    "active": true,
+    "lateral_margin_meters": 80,
+    "max_speed_kmh": 60,
+    "points": [
+      {
+        "longitude": -46.63,
+        "latitude": -23.55,
+        "max_speed_to_next_kmh": 40
+      },
+      {
+        "longitude": -46.61,
+        "latitude": -23.54
+      }
+    ],
+    "name": "QA-GEO-71798cc6-86fe-4a44-a92d-b5d3a83af60f-3"
+  },
+  "key": "b75ed664-eb0b-4a52-b811-78efa4c0a26c",
+  "status": 503,
+  "code": "geo_storage_unavailable",
+  "message": "Geographic storage is temporarily unavailable.",
+  "contentType": "application/json",
+  "requestId": "d6d3e7eb-3d91-4e4d-bcd2-f93844a2db25"
+}

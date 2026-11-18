@@ -1,0 +1,6461 @@
+[
+ {
+  "module": "users/login",
+  "method": "POST",
+  "path": "/v1/users/login",
+  "query": [],
+  "request_body": "{\t\n\t\"identifier\": \"admin.autoscale\",\n\t\"password\": \"Hmtphfx4qt@@\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Login Primary",
+   "01a - Login Primary Externo",
+   "I02 — Login com application explícita"
+  ]
+ },
+ {
+  "module": "users/status",
+  "method": "GET",
+  "path": "/v1/users/status",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "authenticated": "bool",
+   "state": "string",
+   "relogin_required": "bool",
+   "application": "string",
+   "uid_user": "string",
+   "uid_organization": "string",
+   "uid_organization_owner": "string",
+   "organization_code": "string",
+   "organization_name": "string",
+   "branding": {
+    "theme": {
+     "text": "string",
+     "border": "string",
+     "button": {
+      "primary_text": "string",
+      "secondary_text": "string",
+      "primary_background": "string",
+      "secondary_background": "string"
+     },
+     "danger": "string",
+     "header": {
+      "text": "string",
+      "background": "string"
+     },
+     "primary": "string",
+     "success": "string",
+     "surface": "string",
+     "warning": "string",
+     "secondary": "string",
+     "background": "string",
+     "text_muted": "string"
+    },
+    "version": "int",
+    "logo_url": "null"
+   },
+   "uid_session": "string",
+   "expires_at": "string",
+   "authenticated_at": "string",
+   "previous_login_at": "null",
+   "access_period": {
+    "holidays": [
+     "[]"
+    ],
+    "tolerance_minutes": "int",
+    "uid_exception": "null",
+    "exception_ends_at": "null",
+    "mode": "string",
+    "within_period": "bool",
+    "allowed": "bool",
+    "timezone": "string",
+    "weekday": "int",
+    "source": "string",
+    "intervals": [
+     {
+      "start": "string",
+      "end": "string"
+     }
+    ],
+    "checked_at": "string"
+   },
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "I05 — Status da sessão mostra application",
+   "I11 — Sessão revogada continua revogada após reativação",
+   "I10 — Sessão já aberta deve morrer após remover a aplicação"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "GET",
+  "path": "/v1/admin/users/:uid/applications",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid_user": "string",
+   "applications": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "enabled": "bool",
+     "application_enabled": "bool"
+    }
+   ],
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "I06 — Consultar aplicações do usuário",
+   "I13 — Não-Primary não pode administrar aplicações",
+   "I18 — Confirmar atomicidade do PUT inválido"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "PUT",
+  "path": "/v1/admin/users/:uid/applications",
+  "query": [],
+  "request_body": "{\n  \"applications\": [\"navisoft\"]\n}",
+  "response_schema": null,
+  "example_names": [
+   "I07 — Replacement mantendo navisoft",
+   "I09 — Remover navisoft do usuário de homologação",
+   "I09 — Add navisoft do usuário de homologação"
+  ]
+ },
+ {
+  "module": "users/status",
+  "method": "GET",
+  "path": "/v1/users/status/stream",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "I15 — SSE da sessão inclui application",
+   "03a - Status Primary Stream"
+  ]
+ },
+ {
+  "module": "users/logout",
+  "method": "POST",
+  "path": "/v1/users/logout",
+  "query": [],
+  "request_body": "{\n  \"name\": \"TABLECACHE-HOMOLOG-API-20261010\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "05 - Logout",
+   "T5-B — tentar logout com o Redis de sessão indisponível",
+   "T3-A — logout com sessão primada"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "PATCH",
+  "path": "/v1/admin/users/:uid",
+  "query": [],
+  "request_body": "{\n  \"email\": \"admin.power@example.com\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "06 - Change data",
+   "03 - Promote Test User",
+   "03 - Patch With Reseller"
+  ]
+ },
+ {
+  "module": "users/password",
+  "method": "PUT",
+  "path": "/v1/users/password",
+  "query": [],
+  "request_body": "{\n  \"current_password\": \"Hmtphfx4qt@@\",\n  \"new_password\": \"Jb88fwt2q3@@\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "06 - Change Password"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "PUT",
+  "path": "/v1/admin/users/:uid",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"profile_code\": \"secondary_admin\",\n  \"name\": \"Secondary Homolog 0067\",\n  \"login\": \"secondary.homolog.0067\",\n  \"enabled\": true,\n  \"organizations_access\": \"selected\",\n  \"scopes\": [\n    {\n      \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n      \"entities\": []\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "81 — habilitar Secondary",
+   "HTTP-R02 — Habilitar Administrator da Power",
+   "M03D — adicionar email ao Basic"
+  ]
+ },
+ {
+  "module": "reports",
+  "method": "POST",
+  "path": "/v1/reports",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"report_code\": \"assets.inventory\",\n  \"report_version\": 2,\n  \"format\": \"xlsx\",\n  \"visibility\": \"private\",\n  \"filters\": {\n    \"q\": \"\",\n    \"include_inactive\": false,\n    \"filters\": []\n  },\n  \"columns\": [\n    \"identification\",\n    \"organization_name\",\n    \"entity_name\",\n    \"unit_name\",\n    \"created_at\",\n    \"updated_at\"\n  ],\n  \"sort\": [\n    {\n      \"field\": \"identification\",\n      \"direction\": \"asc\"\n    },\n    {\n      \"field\": \"uid\",\n      \"direction\": \"asc\"\n    }\n  ],\n  \"ttl_seconds\": 259200,\n  \"source_screen_id\": \"assets.inventory\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-355 — Gerar relatório com datas nativas",
+   "AST-369 — Criar relatório para testar expiração",
+   "XLSX-04 — Criar a primeira solicitação de exportação"
+  ]
+ },
+ {
+  "module": "reports",
+  "method": "GET",
+  "path": "/v1/reports/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "format": "string",
+   "status": "string",
+   "filters": {
+    "q": "string",
+    "limit": "int",
+    "state": "string",
+    "offset": "int",
+    "filters": [
+     "[]"
+    ],
+    "include_inactive": "bool"
+   },
+   "options": {
+    "sort": [
+     {
+      "field": "string",
+      "direction": "string"
+     }
+    ],
+    "columns": [
+     "string"
+    ]
+   },
+   "failed_at": "null",
+   "created_at": "string",
+   "error_code": "null",
+   "expires_at": "string",
+   "public_url": "null",
+   "started_at": "string",
+   "updated_at": "string",
+   "visibility": "string",
+   "report_code": "string",
+   "completed_at": "string",
+   "requested_at": "string",
+   "download_path": "null",
+   "report_version": "int",
+   "source_screen_id": "string",
+   "uid_organization": "string",
+   "uid_user_requested": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AST-356 — Verificar processamento",
+   "XLSX-05 — Consultar o estado da solicitação",
+   "XLSX-11 — Confirmar conclusão pela API"
+  ]
+ },
+ {
+  "module": "reports",
+  "method": "GET",
+  "path": "/v1/reports/:uid/download",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "AST-357 — Baixar e validar o XLSX",
+   "XLSX-12 — Download do arquivo gerado",
+   "XLSX-14 — Negar download por outro usuário"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "POST",
+  "path": "/v1/reports/schedules",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"report_code\": \"assets.inventory\",\n  \"report_version\": 2,\n  \"format\": \"xlsx\",\n  \"visibility\": \"private\",\n  \"filters\": {\n    \"q\": \"\",\n    \"include_inactive\": false,\n    \"filters\": []\n  },\n  \"columns\": [\n    \"identification\",\n    \"organization_name\",\n    \"created_at\"\n  ],\n  \"sort\": [\n    {\n      \"field\": \"identification\",\n      \"direction\": \"asc\"\n    },\n    {\n      \"field\": \"uid\",\n      \"direction\": \"asc\"\n    }\n  ],\n  \"cadence\": {\n    \"frequency\": \"daily\",\n    \"at\": \"23:55\"\n  },\n  \"period\": {\n    \"mode\": \"none\"\n  },\n  \"retention_seconds\": 259200,\n  \"retention_policy\": \"expire\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-387 — Criar agendamento de homologação",
+   "AST-320 — Criar primeiro agendamento"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "PUT",
+  "path": "/v1/reports/schedules/:uid",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"report_code\": \"assets.inventory\",\n  \"report_version\": 2,\n  \"format\": \"xlsx\",\n  \"visibility\": \"private\",\n  \"filters\": {\n    \"q\": \"\",\n    \"include_inactive\": false,\n    \"filters\": []\n  },\n  \"columns\": [\n    \"identification\",\n    \"organization_name\",\n    \"created_at\"\n  ],\n  \"sort\": [\n    {\n      \"field\": \"identification\",\n      \"direction\": \"asc\"\n    },\n    {\n      \"field\": \"uid\",\n      \"direction\": \"asc\"\n    }\n  ],\n  \"cadence\": {\n    \"frequency\": \"daily\",\n    \"at\": \"22:02\"\n  },\n  \"period\": {\n    \"mode\": \"none\"\n  },\n  \"retention_seconds\": 259200,\n  \"retention_policy\": \"expire\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-394 — Alterar horário do agendamento"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "POST",
+  "path": "/v1/admin/reports/schedule-runs/:uid/retry",
+  "query": [],
+  "request_body": "{\n  \"reason_code\": \"schema_fix_applied\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-431 — Recuperação administrativa"
+  ]
+ },
+ {
+  "module": "reports/organizations",
+  "method": "GET",
+  "path": "/v1/reports/organizations/definition",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "report_code": "string",
+   "report_version": "int",
+   "domain": "string",
+   "columns": [
+    {
+     "field": "string",
+     "type": "string"
+    }
+   ],
+   "json_paths": [
+    "[]"
+   ],
+   "default_columns": [
+    "string"
+   ],
+   "filters": [
+    {
+     "name": "string",
+     "operators": [
+      "string"
+     ],
+     "search": "string",
+     "pattern": "string",
+     "normalize": "string"
+    }
+   ],
+   "sort": {
+    "default": [
+     {
+      "field": "string",
+      "direction": "string"
+     }
+    ],
+    "allowed_fields": [
+     "string"
+    ],
+    "allowed_directions": [
+     "string"
+    ]
+   },
+   "pagination": {
+    "required": "bool",
+    "default_limit": "int",
+    "maximum_limit": "int",
+    "default_offset": "int"
+   },
+   "export_enabled": "bool",
+   "export_formats": [
+    "string"
+   ],
+   "export_limits": {
+    "max_rows": "int",
+    "max_bytes": "int",
+    "timeout_seconds": "int"
+   },
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "REP-ORG-01 — Consultar a definição do relatório",
+   "GEN-REP-10 — Validar definição Organizations pela API atualizada",
+   "GEN-REP-18 — Validar a definição corrigida de Organizations"
+  ]
+ },
+ {
+  "module": "reports/organizations",
+  "method": "POST",
+  "path": "/v1/reports/organizations/search",
+  "query": [],
+  "request_body": "{\n  \"report_code\": \"organizations.list\",\n  \"report_version\": 1,\n  \"columns\": [\n    \"uid\",\n    \"name\",\n    \"code\",\n    \"created_at\"\n  ],\n  \"q\": \"\",\n  \"filters\": [],\n  \"include_inactive\": false,\n  \"sort\": [\n    {\n      \"field\": \"created_at\",\n      \"direction\": \"desc\"\n    }\n  ],\n  \"limit\": 5,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "REP-ORG-02 — Primeira consulta JSON paginada",
+   "REP-ORG-03 — Segunda página",
+   "REP-ORG-04 — Filtrar organizações pelo código"
+  ]
+ },
+ {
+  "module": "reports/search",
+  "method": "POST",
+  "path": "/v1/reports/search",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"7a7eb1f8-79de-498f-a20e-b7ae77adae3a\",\n  \"limit\": 5,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "REP-ORG-24 — Verificar compatibilidade do histórico existente",
+   "AST-310 — Consultar histórico do usuário Primary",
+   "AST-311 — Validar filtro por tela"
+  ]
+ },
+ {
+  "module": "reports/entities",
+  "method": "GET",
+  "path": "/v1/reports/entities/definition",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "report_code": "string",
+   "report_version": "int",
+   "domain": "string",
+   "columns": [
+    {
+     "field": "string",
+     "type": "string"
+    }
+   ],
+   "json_paths": [
+    "[]"
+   ],
+   "default_columns": [
+    "string"
+   ],
+   "filters": [
+    {
+     "name": "string",
+     "operators": [
+      "string"
+     ],
+     "search": "string",
+     "pattern": "string",
+     "normalize": "string"
+    }
+   ],
+   "sort": {
+    "default": [
+     {
+      "field": "string",
+      "direction": "string"
+     }
+    ],
+    "allowed_fields": [
+     "string"
+    ],
+    "allowed_directions": [
+     "string"
+    ]
+   },
+   "pagination": {
+    "required": "bool",
+    "default_limit": "int",
+    "maximum_limit": "int",
+    "default_offset": "int"
+   },
+   "export_enabled": "bool",
+   "export_formats": [
+    "string"
+   ],
+   "export_limits": {
+    "max_rows": "int",
+    "max_bytes": "int",
+    "timeout_seconds": "int"
+   },
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "REP-ENT-01 — Consultar a definição do relatório",
+   "GEN-REP-20 — Validar definição de Entities",
+   "AST-70 — Verificar suporte CSV antes do teste"
+  ]
+ },
+ {
+  "module": "reports/entities",
+  "method": "POST",
+  "path": "/v1/reports/entities/search",
+  "query": [],
+  "request_body": "{\n  \"report_code\": \"entities.list\",\n  \"report_version\": 1,\n  \"columns\": [\n    \"uid\",\n    \"uid_organization\",\n    \"name\",\n    \"organization_name\",\n    \"uid_unit\",\n    \"unit_name\",\n    \"situation_name\",\n    \"effective_lifecycle\",\n    \"entity_types\",\n    \"created_at\"\n  ],\n  \"q\": \"\",\n  \"filters\": [],\n  \"include_inactive\": false,\n  \"sort\": [\n    {\n      \"field\": \"created_at\",\n      \"direction\": \"desc\"\n    }\n  ],\n  \"limit\": 5,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "REP-ENT-02 — Primeira consulta com relacionamentos",
+   "REP-ENT-03 — Consulta com usuário Basic",
+   "REP-ENT-04 — Basic tentando consultar entidade fora do scope"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "POST",
+  "path": "/v1/admin/reports/definitions/publish",
+  "query": [],
+  "request_body": "{\n  \"report_code\": \"assets.inventory\",\n  \"version\": 1,\n  \"source_code\": \"assets.list.v1\",\n  \"title\": \"Inventário de Ativos\",\n  \"description\": \"Inventário autorizado de ativos do Navisoft\",\n  \"columns\": [\n    \"uid\",\n    \"uid_organization\",\n    \"identification\",\n    \"created_at\"\n  ],\n  \"default_columns\": [\n    \"identification\",\n    \"created_at\"\n  ],\n  \"filters\": [\n    {\n      \"field\": \"identification\",\n      \"operators\": [\"eq\", \"prefix\", \"contains\"],\n      \"search_operator\": \"contains\"\n    }\n  ],\n  \"sorts\": [],\n  \"default_sort\": [],\n  \"formats\": [\n    {\n      \"code\": \"csv\",\n      \"visibility\": [\"private\"]\n    }\n  ],\n  \"limits\": {\n    \"max_rows\": 100000,\n    \"max_bytes\": 52428800,\n    \"max_ttl_seconds\": 172800\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEN-REP-33 — Testar publicação sem autenticação",
+   "AST-56 — Publicar o seletor JSON",
+   "AST-273 — Publicar a primeira definição genérica"
+  ]
+ },
+ {
+  "module": "reports/assets",
+  "method": "GET",
+  "path": "/v1/reports/assets/definition",
+  "query": [
+   "version"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "report_code": "string",
+   "report_version": "int",
+   "domain": "string",
+   "columns": [
+    {
+     "field": "string",
+     "type": "string"
+    }
+   ],
+   "json_paths": [
+    {
+     "code": "string",
+     "pattern": "string",
+     "base_code": "string",
+     "name": "string",
+     "type": "string",
+     "multiplicity": "string",
+     "default": "bool",
+     "schema_uid": "string",
+     "root_type": "string"
+    }
+   ],
+   "default_columns": [
+    "string"
+   ],
+   "filters": [
+    {
+     "name": "string",
+     "operators": [
+      "string"
+     ],
+     "search": "string",
+     "pattern": "string",
+     "normalize": "string"
+    }
+   ],
+   "sort": {
+    "default": [
+     {
+      "field": "string",
+      "direction": "string"
+     }
+    ],
+    "allowed_fields": [
+     "string"
+    ],
+    "allowed_directions": [
+     "string"
+    ]
+   },
+   "pagination": {
+    "required": "bool",
+    "default_limit": "int",
+    "maximum_limit": "int",
+    "default_offset": "int"
+   },
+   "export_enabled": "bool",
+   "export_formats": [
+    "string"
+   ],
+   "export_limits": {
+    "max_rows": "int",
+    "max_bytes": "int",
+    "timeout_seconds": "int"
+   },
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AST-05 — Consultar definição completa de Assets",
+   "AST-52 — Consultar definição de Assets",
+   "AST-57 — Verificar a definição publicada"
+  ]
+ },
+ {
+  "module": "reports/assets",
+  "method": "POST",
+  "path": "/v1/reports/assets/search",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"report_code\": \"assets.inventory\",\n  \"report_version\": 2,\n  \"columns\": [\n    \"uid\",\n    \"uid_organization\",\n    \"organization_name\",\n    \"uid_entity\",\n    \"entity_name\",\n    \"uid_unit\",\n    \"unit_name\",\n    \"uid_situations\",\n    \"situation_code\",\n    \"situation_name\",\n    \"effective_lifecycle\",\n    \"identification\",\n    \"uid_group\",\n    \"primary_group\",\n    \"groups\",\n    \"uid_model\",\n    \"model\",\n    \"uid_fuel\",\n    \"fuel\",\n    \"uid_voltage\",\n    \"voltage\",\n    \"uid_technical_package\",\n    \"technical_package\",\n    \"vehicle\",\n    \"linked_devices\",\n    \"device_slots\",\n    \"uid_image_logo\",\n    \"created_at\",\n    \"updated_at\"\n  ],\n  \"q\": \"\",\n  \"filters\": [],\n  \"include_inactive\": false,\n  \"sort\": [\n    {\n      \"field\": \"identification\",\n      \"direction\": \"asc\"\n    }\n  ],\n  \"limit\": 5,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-06 — Consulta completa de Assets",
+   "AST-07 — Validar isolamento com usuário Basic",
+   "AST-58 — Buscar subcampos JSON com Primary"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "GET",
+  "path": "/v1/admin/reports/adapters/assets.inventory.v2/json-schema",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "AST-53 — Consultar o schema JSON do adapter"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "GET",
+  "path": "/v1/admin/reports/templates",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "scope": "string",
+     "revoked": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "report_code": "null",
+     "uid_organization": "null",
+     "uid_active_revision": "string"
+    }
+   ],
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AST-116 — Listar templates com Primary",
+   "AST-117 — Verificar acesso com Basic",
+   "AST-125 — Verificar a listagem administrativa"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "GET",
+  "path": "/v1/admin/reports/templates/effective",
+  "query": [
+   "report_code"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "mode": "string",
+   "template": {
+    "uid": "string",
+    "scope": "string",
+    "sha256": "string",
+    "size_bytes": "int",
+    "report_code": "null",
+    "uid_revision": "string",
+    "revision_number": "int",
+    "contract_version": "string"
+   },
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AST-118 — Consultar a política efetiva de templates",
+   "AST-124 — Confirmar a resolução do template global",
+   "AST-160 — Confirmar o template efetivo"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "POST",
+  "path": "/v1/admin/reports/templates/:uid/revisions",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "AST-119 — Publicar o primeiro template global",
+   "AST-126 — Repetir publicação com a mesma chave",
+   "AST-159 — Publicar Corporate v2"
+  ]
+ },
+ {
+  "module": "admin/reports",
+  "method": "POST",
+  "path": "/v1/admin/reports/sources/publish",
+  "query": [],
+  "request_body": "{\n  \"source_code\": \"entities.entity_types.generic.v1\",\n  \"logical_code\": \"entities.entity_types.generic\",\n  \"revision_number\": 1,\n  \"relation_code\": \"entities.entity_types\",\n  \"authorization_strategy\": \"organization_scope_rls\",\n  \"max_rows\": 10000,\n  \"max_bytes\": 10485760,\n  \"max_ttl_seconds\": 1800,\n  \"fields\": [\n    {\n      \"code\": \"uid_organization\",\n      \"display_name\": \"Organização\",\n      \"selectable\": false,\n      \"filterable\": false,\n      \"operators\": [],\n      \"search_operator\": null,\n      \"sortable\": false,\n      \"directions\": []\n    },\n    {\n      \"code\": \"uid\",\n      \"display_name\": \"UID\",\n      \"selectable\": true,\n      \"filterable\": false,\n      \"operators\": [],\n      \"search_operator\": null,\n      \"sortable\": true,\n      \"directions\": [\"asc\", \"desc\"]\n    },\n    {\n      \"code\": \"uid_entity\",\n      \"display_name\": \"Entidade\",\n      \"selectable\": true,\n      \"filterable\": false,\n      \"operators\": [],\n      \"search_operator\": null,\n      \"sortable\": false,\n      \"directions\": []\n    },\n    {\n      \"code\": \"uid_type\",\n      \"display_name\": \"Tipo\",\n      \"selectable\": true,\n      \"filterable\": false,\n      \"operators\": [],\n      \"search_operator\": null,\n      \"sortable\": false,\n      \"directions\": []\n    }\n  ],\n  \"formats\": [\n    {\n      \"code\": \"xlsx\",\n      \"visibility\": [\"private\"]\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-270 — Publicar capacidade PostgreSQL"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "GET",
+  "path": "/v1/reports/schedules",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "sort": [
+      {
+       "field": "string",
+       "direction": "string"
+      }
+     ],
+     "state": "string",
+     "format": "string",
+     "period": {
+      "mode": "string"
+     },
+     "cadence": {
+      "at": "string",
+      "frequency": "string"
+     },
+     "columns": [
+      "string"
+     ],
+     "filters": {
+      "q": "string",
+      "limit": "int",
+      "state": "string",
+      "offset": "int",
+      "filters": [
+       "[]"
+      ],
+      "include_inactive": "bool"
+     },
+     "timezone": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "visibility": "string",
+     "last_run_at": "string",
+     "next_run_at": "string",
+     "report_code": "string",
+     "report_version": "int",
+     "retention_policy": "string",
+     "source_screen_id": "null",
+     "uid_organization": "string",
+     "retention_seconds": "int"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AST-312 — Verificar listagem de agendamentos",
+   "AST-324 — Validar listagem após reativação"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "GET",
+  "path": "/v1/reports/schedules/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "AST-321 — Consultar agendamento cadastrado"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "PUT",
+  "path": "/v1/reports/schedules/:uid/state",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"state\": \"paused\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AST-322 — Pausar agendamento",
+   "AST-323 — Retomar agendamento"
+  ]
+ },
+ {
+  "module": "reports/schedules",
+  "method": "DELETE",
+  "path": "/v1/reports/schedules/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "AST-325 — Excluir logicamente o agendamento"
+  ]
+ },
+ {
+  "module": "public/reports",
+  "method": "GET",
+  "path": "/v1/public/reports/:token",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "RC09-C — baixar relatório público sem autenticação"
+  ]
+ },
+ {
+  "module": "public/reports",
+  "method": "GET",
+  "path": "/v1/public/reports/token-invalido",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "RC09-D — capability pública inválida"
+  ]
+ },
+ {
+  "module": "reports",
+  "method": "POST",
+  "path": "/v1/reports/:uid/download",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"report_code\": \"assets.list\",\n  \"format\": \"csv\",\n  \"visibility\": \"private\",\n  \"filters\": {\n    \"q\": \"\",\n    \"filters\": [],\n    \"include_inactive\": false,\n    \"limit\": 1\n  },\n  \"columns\": [\n    \"uid\",\n    \"identification\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "RC13-A — rejeitar limit em export"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/models/:uid/signal-mappings",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "state": "string",
+    "active": "bool",
+    "strategy": "string",
+    "end_codes": [
+     "[]"
+    ],
+    "uid_model": "string",
+    "created_at": "string",
+    "parameters": {},
+    "updated_at": "string",
+    "signal_code": "string",
+    "duration_unit": "null",
+    "duration_field": "null",
+    "duration_scale": "null",
+    "duration_offset_seconds": "null"
+   }
+  ],
+  "example_names": [
+   "Teste 01 — Consultar associações existentes"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/models/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "fixed": "bool",
+   "active": "bool",
+   "category": "string",
+   "defaults": {
+    "states": [
+     "string"
+    ]
+   },
+   "periodic": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "activation_only": "bool",
+   "uid_user_created": "null",
+   "uid_user_updated": "null",
+   "allowed_parameters": {
+    "states": "string"
+   },
+   "technical_required": "bool",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "Teste 02 — Consultar o modelo diretamente"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "PUT",
+  "path": "/v1/admin/events/models/:uid/signal-mappings",
+  "query": [],
+  "request_body": "{\n  \"items\": [\n    {\n      \"signal_code\": \"ignition_on\",\n      \"strategy\": \"instant\",\n      \"state\": \"on\",\n      \"parameters\": {},\n      \"active\": true\n    },\n    {\n      \"signal_code\": \"ignition_off\",\n      \"strategy\": \"instant\",\n      \"state\": \"off\",\n      \"parameters\": {},\n      \"active\": true\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "Teste 03 — Associar ignition_on e ignition_off"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/models",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "fixed": "bool",
+     "active": "bool",
+     "category": "string",
+     "defaults": {
+      "threshold_hours": [
+       "int"
+      ]
+     },
+     "periodic": "bool",
+     "activation_only": "bool",
+     "allowed_parameters": {
+      "threshold_hours": "string"
+     }
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-01 — Listar catálogo global de eventos",
+   "EV02-HTTP-08 — Consultar modelos de eventos disponíveis"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/technical-maps",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "draft_revision": "null",
+     "published_revision": "int"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-02 — Listar os mapas técnicos",
+   "EV01-HTTP-36 — Impedir acesso administrativo de não Primary",
+   "EV01-HTTP-36B — Repetir a consulta com usuário não Primary"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/models",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "uid_type": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "requires_simcard": "bool",
+     "uid_manufacturer": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-03 — Consultar um modelo físico para associação",
+   "EV01-HTTP-22 — Identificar um modelo para teste isolado",
+   "97 — listar modelos de device"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "POST",
+  "path": "/v1/admin/events/technical-maps",
+  "query": [],
+  "request_body": "{\n  \"code\": \"homolog_queclink_events\",\n  \"name\": \"Homologação Queclink - Eventos\",\n  \"active\": true,\n  \"rules\": [\n    {\n      \"source_code\": \"ignition_on\",\n      \"uid_event_model\": \"649c4be3-b52d-4310-bbfb-5556cbaf010e\",\n      \"strategy\": \"instant\"\n    }\n  ],\n  \"models\": [\n    {\n      \"uid_model\": \"f67f6ff6-f527-45b8-8d83-5d87e5f18bed\",\n      \"protocol_variant\": \"GV30CAU\",\n      \"valid_from\": \"2026-10-24T00:00:00-03:00\",\n      \"valid_until\": null\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV01-HTTP-04 — Criar o primeiro mapa técnico",
+   "EV01-HTTP-05 — Validar replay idempotente",
+   "EV01-HTTP-06 — Conflito de idempotência"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/technical-maps/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "active": "bool",
+   "revisions": [
+    {
+     "uid": "string",
+     "rules": [
+      {
+       "strategy": "string",
+       "end_codes": [
+        "string"
+       ],
+       "source_code": "string",
+       "uid_event_model": "string"
+      }
+     ],
+     "status": "string",
+     "uid_map": "string",
+     "bindings": [
+      "[]"
+     ],
+     "revision": "int",
+     "created_at": "string",
+     "updated_at": "string",
+     "published_at": "null",
+     "model_bindings": [
+      {
+       "uid_model": "string",
+       "valid_from": "string",
+       "valid_until": "null",
+       "protocol_variant": "string"
+      }
+     ],
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "created_at": "string",
+   "updated_at": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-07 — Consultar o mapa técnico criado",
+   "EV01-HTTP-10 — Validar a preservação do draft após erro",
+   "EV01-HTTP-16 — Validar a preservação da configuração após erro"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "PUT",
+  "path": "/v1/admin/events/technical-maps/:uid",
+  "query": [],
+  "request_body": "{\n  \"code\": \"homolog_queclink_events\",\n  \"name\": \"Homologação Queclink - Eventos Revisados\",\n  \"active\": true,\n  \"rules\": [\n    {\n      \"source_code\": \"ignition_on\",\n      \"uid_event_model\": \"649c4be3-b52d-4310-bbfb-5556cbaf010e\",\n      \"strategy\": \"instant\"\n    }\n  ],\n  \"models\": [\n    {\n      \"uid_model\": \"f67f6ff6-f527-45b8-8d83-5d87e5f18bed\",\n      \"protocol_variant\": \"GV30CAU\",\n      \"valid_from\": \"2026-10-24T00:00:00-03:00\",\n      \"valid_until\": null\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV01-HTTP-08 — Atualizar o mapa técnico em draft",
+   "EV01-HTTP-09 — Rejeitar evento paired sem encerramento",
+   "EV01-HTTP-11 — Rejeitar código de encerramento inexistente"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_model\",\n      \"operator\": \"eq\",\n      \"value\": \"b44513c1-630b-47e0-ad4f-855e928568a9\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV01-HTTP-23 — Verificar dispositivos vinculados ao modelo",
+   "1 — procurar device disponível",
+   "C8 — procurar device disponível"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/types",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-24 — Identificar um tipo de dispositivo para a fixture",
+   "TC17 — primeiro acesso a devices.types"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/models",
+  "query": [],
+  "request_body": "{\n  \"name\": \"EV01-HOMOLOG-MODEL-20261024\",\n  \"uid_type\": \"426fc714-6265-43bb-afe4-b4c7dcea802c\",\n  \"uid_manufacturer\": \"a96af33c-485e-46df-963a-78a1b8c3446f\",\n  \"requires_simcard\": false,\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV01-HTTP-25 — Criar modelo físico exclusivo para testar a publicação",
+   "EV01-HTTP-31 — Criar o segundo modelo de homologação"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "POST",
+  "path": "/v1/admin/events/technical-maps/:uid/publish",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "EV01-HTTP-27 — Publicar o mapa técnico",
+   "EV01-HTTP-29 — Publicar revisão 2",
+   "EV01-HTTP-33 — Publicar revisão 3 com dois modelos"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/models/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "uid_type": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "requires_simcard": "bool",
+   "uid_manufacturer": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV01-HTTP-30 — Criar revisão 3 removendo a associação ao modelo",
+   "CP-84 — Consultar o modelo GV30CAU",
+   "2 — consultar o modelo"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/protocol-variants",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "uid_model": "string",
+     "created_at": "string",
+     "model_name": "string",
+     "uid_user_created": "null"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV02-HTTP-01 — Listar variantes protocolares"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/protocol-variants/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "uid_model": "string",
+   "created_at": "string",
+   "model_name": "string",
+   "uid_user_created": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV02-HTTP-02 — Consultar detalhe com Secondary"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "POST",
+  "path": "/v1/admin/events/protocol-variants",
+  "query": [],
+  "request_body": "{\n  \"uid_model\": \"185cfd21-0bb9-4dec-91d1-8ae5eb32f50f\",\n  \"code\": \"EV02_SECONDARY_DENIED\",\n  \"name\": \"EV02 - Teste de Permissão Secondary\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV02-HTTP-03 — Bloquear criação de variante pelo Secondary",
+   "EV02-HTTP-04 — Criar variante com Primary",
+   "EV02-HTTP-05 — Replay idempotente da variante"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/rules",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "target": {
+      "uid_unit": "null",
+      "uid_asset": "null",
+      "uid_group": "null",
+      "uid_entity": "null",
+      "scope_level": "string",
+      "uid_organization": "string"
+     },
+     "targets": [
+      {
+       "uid_unit": "null",
+       "uid_asset": "null",
+       "uid_group": "null",
+       "uid_entity": "null",
+       "scope_level": "string",
+       "uid_organization": "string"
+      }
+     ],
+     "windows": [
+      "[]"
+     ],
+     "priority": "string",
+     "uid_model": "string",
+     "conditions": [
+      "[]"
+     ],
+     "created_at": "string",
+     "model_code": "string",
+     "parameters": {
+      "states": [
+       "string"
+      ],
+      "uid_point": "string"
+     },
+     "recipients": [
+      "[]"
+     ],
+     "updated_at": "string",
+     "valid_from": "null",
+     "valid_until": "null",
+     "delayed_seconds": "int",
+     "uid_organization": "string",
+     "recovery_for_seconds": "int",
+     "condition_for_seconds": "int"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV02-HTTP-07 — Consultar regras existentes da organização"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "POST",
+  "path": "/v1/admin/events/rules",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_model\": \"649c4be3-b52d-4310-bbfb-5556cbaf010e\",\n  \"name\": \"EV02 - Homologação Mudança de Ignição\",\n  \"priority\": \"normal\",\n  \"parameters\": {\n    \"states\": [\"on\", \"off\"]\n  },\n  \"active\": true,\n  \"targets\": [\n    {\n      \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n      \"scope_level\": \"organization\"\n    }\n  ],\n  \"conditions\": [],\n  \"windows\": [],\n  \"recipients\": []\n}",
+  "response_schema": null,
+  "example_names": [
+   "EV02-HTTP-09 — Criar regra operacional",
+   "EV02-HTTP-10 — Replay idempotente da regra",
+   "EV02-HTTP-11 — Conflito de idempotência da regra"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "GET",
+  "path": "/v1/admin/events/rules/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "target": {
+    "uid_unit": "null",
+    "uid_asset": "null",
+    "uid_group": "null",
+    "uid_entity": "null",
+    "scope_level": "string",
+    "uid_organization": "string"
+   },
+   "targets": [
+    {
+     "uid_unit": "null",
+     "uid_asset": "null",
+     "uid_group": "null",
+     "uid_entity": "null",
+     "scope_level": "string",
+     "uid_organization": "string"
+    }
+   ],
+   "windows": [
+    "[]"
+   ],
+   "priority": "string",
+   "uid_model": "string",
+   "conditions": [
+    "[]"
+   ],
+   "created_at": "string",
+   "deleted_at": "null",
+   "model_code": "string",
+   "parameters": {
+    "states": [
+     "string"
+    ],
+    "uid_point": "string"
+   },
+   "recipients": [
+    "[]"
+   ],
+   "updated_at": "string",
+   "valid_from": "null",
+   "valid_until": "null",
+   "delayed_seconds": "int",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "recovery_for_seconds": "int",
+   "condition_for_seconds": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV02-HTTP-13 — Consultar a regra original",
+   "EV02-HTTP-14 — Impedir acesso à regra de outra organização"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "DELETE",
+  "path": "/v1/admin/events/rules/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "EV02-SEC-05 — Excluir a regra de homologação",
+   "EV02-HTTP-16 — Exclusão isolada da regra",
+   "EV03A-SYNC-09 — Testar remoção automática da regra"
+  ]
+ },
+ {
+  "module": "admin/geo",
+  "method": "GET",
+  "path": "/v1/admin/geo/points",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "geojson": {
+      "type": "string",
+      "coordinates": [
+       "float"
+      ]
+     },
+     "latitude": "float",
+     "longitude": "float",
+     "uid_asset": "null",
+     "created_at": "string",
+     "uid_entity": "null",
+     "updated_at": "string",
+     "description": "string",
+     "scope_level": "string",
+     "radius_meters": "float",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "GEO-HTTP-01 — Listar pontos cadastrados"
+  ]
+ },
+ {
+  "module": "admin/geo",
+  "method": "POST",
+  "path": "/v1/admin/geo/points",
+  "query": [],
+  "request_body": "{\n  \"scope_level\": \"organization\",\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"name\": \"GEO-HOMOLOG - Ponto com Raio\",\n  \"description\": \"Ponto de homologação para evento de entrada e saída\",\n  \"latitude\": -19.931,\n  \"longitude\": -43.938,\n  \"radius_meters\": 500,\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEO-HTTP-02 — Criar ponto com raio de 500 metros"
+  ]
+ },
+ {
+  "module": "admin/geo",
+  "method": "PUT",
+  "path": "/v1/admin/geo/points/:uid",
+  "query": [],
+  "request_body": "{\n  \"scope_level\": \"organization\",\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"name\": \"GEO-HOMOLOG - Ponto com Raio\",\n  \"description\": \"Ponto de homologação para evento de entrada e saída\",\n  \"latitude\": -19.931,\n  \"longitude\": -43.938,\n  \"radius_meters\": 800,\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEO-SYNC-09 — Alterar o raio de 500 para 800 metros"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/protocol-identities",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_device\": \"f003b0ec-5b75-4566-bcc5-035ca298f44b\",\n  \"vendor\": \"suntech\",\n  \"device_number\": \"2290026110\",\n  \"model\": \"229\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-01 — Cadastrar identidade protocolar",
+   "CP-103 — Cadastrar identidade Queclink"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/telemetry-mapping-profiles",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_manufacturer\": \"bed9f48e-2769-4e4a-bf28-494ab1d12055\",\n  \"protocol_model\": \"229\",\n  \"active\": true,\n  \"mappings\": [\n    {\n      \"source\": \"S_ASSIGN1\",\n      \"canonical\": \"extBatteryVoltage\",\n      \"group\": \"hardware\",\n      \"type\": \"number\",\n      \"unit\": \"V\",\n      \"scale\": 1,\n      \"offset\": 0\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-06 — Cadastrar mapping padrão"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/telemetry-mappings",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_manufacturer\": \"bed9f48e-2769-4e4a-bf28-494ab1d12055\",\n  \"protocol_model\": \"229\",\n  \"active\": true,\n  \"mappings\": [\n    {\n      \"source\": \"S_ASSIGN1\",\n      \"canonical\": \"extBatteryVoltage\",\n      \"group\": \"hardware\",\n      \"type\": \"number\",\n      \"unit\": \"V\",\n      \"scale\": 1,\n      \"offset\": 0\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-06 — Cadastrar mapping padrão Suntech 229"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"8682539f-20db-470e-9776-336b49859f08\",\n  \"uid_type\": \"14c309f0-a8c6-4fe1-9e31-7cf2015fa6bb\",\n  \"uid_manufacturer\": \"bed9f48e-2769-4e4a-bf28-494ab1d12055\",\n  \"uid_model\": \"f67f6ff6-f527-45b8-8d83-5d87e5f18bed\",\n  \"device_serial\": \"HOMOLOG-RESOLVER-0217-B\",\n  \"device_imei\": null,\n  \"active\": true,\n  \"transmits\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-19 — Cadastrar dispositivo para o segundo destino",
+   "CP-82 — Criar dispositivo na API Navisoft",
+   "TP-20 — Criar dispositivo de homologação"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/:uid/prepare",
+  "query": [],
+  "request_body": "{}",
+  "response_schema": null,
+  "example_names": [
+   "DR-20 — Preparar dispositivo",
+   "CP-90 — Preparar dispositivo",
+   "TP-21 — Preparar o dispositivo"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/:uid/release",
+  "query": [],
+  "request_body": "{\n  \"inventory_status\": \"available\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-21 — Liberar dispositivo",
+   "DR-26 — Liberar dispositivo para instalação",
+   "CP-91 — Liberar dispositivo para instalação"
+  ]
+ },
+ {
+  "module": "admin/simcards",
+  "method": "POST",
+  "path": "/v1/admin/simcards",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"8682539f-20db-470e-9776-336b49859f08\",\n  \"iccid\": \"89510000000000210217\",\n  \"msisdn\": null,\n  \"operator_name\": \"Operadora Homologacao Resolver\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-24 — Cadastrar SIM Card de homologação",
+   "CP-88 — Cadastrar SIM Card",
+   "C5 — criar SIM do device A"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/linked-simcards",
+  "query": [],
+  "request_body": "{\n  \"uid_device\": \"e06f84c9-4ef2-4429-859a-04fdfdd92503\",\n  \"uid_simcard\": \"2cf3e7fc-570b-4287-83ea-4bf827b666e2\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-25 — Vincular SIM Card ao dispositivo",
+   "CP-86 — Vincular SIM Card ao Queclink",
+   "CP-89 — Vincular SIM ao dispositivo"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/:uid/device-slots",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "uid_asset": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "slot_number": "int",
+     "uid_organization": "string",
+     "uid_user_created": "null",
+     "uid_user_updated": "null"
+    }
+   ],
+   "total": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "DR-27 — Verificar os slots do asset",
+   "CP-93 — Consultar slots do ativo",
+   "96 — estado dos slots do asset"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"8682539f-20db-470e-9776-336b49859f08\",\n  \"uid_unit\": \"57943b6a-e8dd-4650-8f8a-3716ae41c9e1\",\n  \"name\": \"HOMOLOG-RESOLVER-0217-PRESTADORA\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-32 — Cadastrar entidade prestadora",
+   "1 — criar a entidade prestadora",
+   "02 - Create"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "PUT",
+  "path": "/v1/admin/entities/:uid/types",
+  "query": [],
+  "request_body": "{\n  \"types\": [\n    \"832ea1b7-295b-4149-9559-4dc72995b644\",\n    \"fa0e7795-14b0-4920-806d-da46e541faae\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-34 — Habilitar a entidade como prestadora técnica",
+   "3 — adicionar tipo technician",
+   "7 — tentar remover technician com executor vinculado"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/technicians",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"8682539f-20db-470e-9776-336b49859f08\",\n  \"uid_provider_entity\": \"fbaccd60-7501-44d3-a91a-6269f78aeb3f\",\n  \"name\": \"Executor Homologação Resolver 0217\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-35 — Cadastrar executor técnico",
+   "9 — tentar executor com prestadora de outra organização",
+   "4 — criar executor técnico"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "groups": [
+    "string"
+   ],
+   "vehicle": "null",
+   "uid_fuel": "null",
+   "uid_unit": "string",
+   "uid_group": "string",
+   "uid_model": "string",
+   "created_at": "string",
+   "deleted_at": "null",
+   "uid_entity": "string",
+   "updated_at": "string",
+   "uid_voltage": "null",
+   "asset_profile": "string",
+   "identification": "string",
+   "uid_image_logo": "null",
+   "uid_situations": "string",
+   "telemetry_params": {},
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_technical_package": "null",
+   "telemetry_params_model": {},
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "DR-36 — Verificar requisitos técnicos do asset",
+   "M11 — Tentar acessar uma rota de negócio com MFA pendente",
+   "F33 — Consultar o asset rodoviário criado"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/work-orders",
+  "query": [],
+  "request_body": "{\n  \"uid_asset\": \"ee767547-aef6-4b59-9911-a816aef69364\",\n  \"uid_technician\": \"f0047a27-0491-4a36-964f-853b519ddf98\",\n  \"description\": \"Homologação Resolver 1:N - Instalação de dispositivo\",\n  \"items\": [\n    {\n      \"slot_number\": 1,\n      \"operation\": \"install\",\n      \"uid_device_before\": null,\n      \"uid_device_after\": \"e06f84c9-4ef2-4429-859a-04fdfdd92503\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-37 — Criar Ordem de Serviço de instalação",
+   "CP-97 — Criar OS de instalação do Queclink",
+   "TP-26 — Criar OS de instalação com precificação"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/work-orders/:uid/dispatch",
+  "query": [],
+  "request_body": "{\n  \"dispatch_method\": \"courier\",\n  \"dispatch_reference\": \"HOMOLOG-RESOLVER-0217-OS102\",\n  \"dispatch_cost_cents\": 0,\n  \"dispatch_notes\": \"Despacho de homologação do resolver 1:N\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-38 — Despachar Ordem de Serviço 102",
+   "CP-98 — Despachar a OS nº 103",
+   "TP-27 — Despachar a OS e congelar o preço"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/custody",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "status": "string",
+     "purpose": "string",
+     "closed_at": "null",
+     "uid_asset": "string",
+     "created_at": "string",
+     "uid_device": "string",
+     "updated_at": "string",
+     "received_at": "null",
+     "device_serial": "string",
+     "dispatched_at": "string",
+     "uid_technician": "string",
+     "uid_work_order": "string",
+     "technician_name": "string",
+     "uid_organization": "string",
+     "work_order_number": "int",
+     "asset_identification": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "DR-39 — Consultar a custódia do dispositivo",
+   "CP-99 — Localizar a custódia da OS nº 103",
+   "2 — consultar o Custodia"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/custody/:uid/confirm-receipt",
+  "query": [],
+  "request_body": "{}",
+  "response_schema": null,
+  "example_names": [
+   "DR-40 — Confirmar recebimento do dispositivo",
+   "CP-100 — Confirmar recebimento pelo técnico",
+   "11 — confirmar recebimento pelo executor"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/work-orders/:uid/start",
+  "query": [],
+  "request_body": "{}",
+  "response_schema": null,
+  "example_names": [
+   "DR-41 — Iniciar Ordem de Serviço 102",
+   "CP-101 — Iniciar a OS nº 103",
+   "13 — tentar iniciar antes da confirmação"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/work-orders/:uid/complete",
+  "query": [],
+  "request_body": "{\n  \"items\": [\n    {\n      \"uid_item\": \"6e29f1dd-3526-4011-861b-cbc4a680af8b\",\n      \"result_notes\": \"Instalação de homologação do resolver 1:N concluída\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-42 — Concluir instalação da OS 102",
+   "CP-102 — Concluir a instalação do Queclink GV30CAU",
+   "13 — concluir a instalação"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/protocol-identities/:uid/shares",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"8682539f-20db-470e-9776-336b49859f08\",\n  \"uid_device\": \"e06f84c9-4ef2-4429-859a-04fdfdd92503\",\n  \"reason\": \"Compartilhamento autorizado para homologacao do resolver de telemetria 1:N\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "DR-44 — Compartilhar identidade protocolar com a organização B"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "active": "bool",
+   "locked": "bool",
+   "uid_type": "string",
+   "transmits": "bool",
+   "uid_model": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "device_imei": "null",
+   "has_password": "bool",
+   "device_serial": "string",
+   "condition_status": "string",
+   "inventory_status": "string",
+   "uid_manufacturer": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CP-83 — Consultar o dispositivo e suas operações disponíveis",
+   "32 — consultar device recebido",
+   "L5.5 — repetir acesso ao device instalado"
+  ]
+ },
+ {
+  "module": "admin/simcards",
+  "method": "GET",
+  "path": "/v1/admin/simcards",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "iccid": "string",
+     "active": "bool",
+     "msisdn": "null",
+     "created_at": "string",
+     "updated_at": "string",
+     "operator_name": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CP-85 — Consultar SIM Cards disponíveis"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/linked-simcards",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "created_at": "string",
+     "uid_device": "string",
+     "updated_at": "string",
+     "uid_simcard": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "} CP-86 — SIM já vinculado a outro dispositivo."
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "CP-92 — Consultar os ativos da organização A",
+   "M14B — Pesquisar assets com a sessão promovida",
+   "31 — provar assets-only com OR"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/:uid/link_history",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "host": "string",
+     "details": {
+      "after": {
+       "uid": "string",
+       "uid_asset": "string",
+       "created_at": "string",
+       "uid_device": "string",
+       "updated_at": "string",
+       "slot_number": "int",
+       "uid_organization": "string",
+       "uid_user_created": "string",
+       "uid_user_updated": "string"
+      },
+      "before": "null",
+      "uid_asset": "string",
+      "uid_device": "string",
+      "slot_number": "int",
+      "uid_work_order": "string",
+      "uid_asset_after": "string",
+      "uid_asset_before": "null"
+     },
+     "uid_actor": "string",
+     "event_type": "string",
+     "request_id": "string",
+     "occurred_at": "string",
+     "server_name": "string",
+     "slot_number": "int",
+     "uid_technician": "string",
+     "uid_work_order": "string",
+     "uid_device_after": "string",
+     "uid_device_before": "null",
+     "uid_provider_entity": "string",
+     "provider_name_snapshot": "string",
+     "technician_name_snapshot": "string"
+    }
+   ],
+   "total": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CP-94 — Consultar dispositivos vinculados ao ativo",
+   "17 — histórico do device",
+   "15 — histórico de vínculos do asset"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/linked-devices/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    },\n    {\n      \"field\": \"uid_asset\",\n      \"operator\": \"eq\",\n      \"value\": \"3fde142d-5331-4c1f-a356-faf0aaa4c8e2\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "CP-95 — Consultar vínculos ativos do ativo"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/technicians/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "CP-96 — Consultar técnicos da organização A",
+   "5 — pesquisar executores da organização"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "PUT",
+  "path": "/v1/admin/devices/:uid",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_type\": \"426fc714-6265-43bb-afe4-b4c7dcea802c\",\n  \"uid_manufacturer\": \"a96af33c-485e-46df-963a-78a1b8c3446f\",\n  \"uid_model\": \"b44513c1-630b-47e0-ad4f-855e928568a9\",\n  \"device_serial\": \"HOMOLOG-PRICING-0206-CAM-001\",\n  \"device_imei\": null,\n  \"active\": true,\n  \"transmits\": false\n}",
+  "response_schema": null,
+  "example_names": [
+   "TP-24 — Verificar o contrato de alteração do dispositivo"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "PUT",
+  "path": "/v1/admin/entities/technicians/:uid/prices",
+  "query": [],
+  "request_body": "{\n  \"items\": [\n    {\n      \"capability_code\": \"vehicle_cameras\",\n      \"operation\": \"install\",\n      \"technician_cost_cents\": 13000,\n      \"markup_percent\": 40,\n      \"currency_code\": \"BRL\"\n    },\n    {\n      \"capability_code\": \"vehicle_cameras\",\n      \"operation\": \"remove\",\n      \"technician_cost_cents\": 4000,\n      \"markup_percent\": 50,\n      \"currency_code\": \"BRL\"\n    },\n    {\n      \"capability_code\": \"vehicle_cameras\",\n      \"operation\": \"replace\",\n      \"technician_cost_cents\": 12000,\n      \"markup_percent\": 35,\n      \"currency_code\": \"BRL\"\n    },\n    {\n      \"capability_code\": \"telemetry\",\n      \"operation\": \"install\",\n      \"technician_cost_cents\": 7000,\n      \"markup_percent\": 40,\n      \"currency_code\": \"BRL\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "TP-29 — Reajustar novamente a tabela do técnico",
+   "TP-10 — Cadastrar preços do técnico",
+   "TP-11 — Verificar PUT idempotente (no-op)"
+  ]
+ },
+ {
+  "module": "technician/work-orders",
+  "method": "GET",
+  "path": "/v1/technician/work-orders/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "TP-31 — Verificar acesso do executor à OS",
+   "C22A — o executor ainda consegue ler a OS #40?"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities/technicians/:uid/prices",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "version": "int",
+     "operation": "string",
+     "effective_at": "string",
+     "currency_code": "string",
+     "markup_percent": "float",
+     "capability_code": "string",
+     "client_price_cents": "int",
+     "technician_cost_cents": "int"
+    }
+   ],
+   "uid_technician": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "TP-32 — Verificar isolamento da tabela de preços",
+   "TP-33 — Verificar uma operação sem preço cadastrado",
+   "TP-06 — Consultar tabela de preços do técnico"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid",
+  "query": [],
+  "request_body": "{\n  \"reseller_enabled\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "HTTP-R01 — Primary habilitar uma organização como revenda",
+   "HTTP-R06 — Primary revoga autorização de revenda da Power",
+   "HTTP-R09 — Power tenta alterar a própria autorização de revenda"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "POST",
+  "path": "/v1/admin/organizations",
+  "query": [],
+  "request_body": "{\n  \"code\": \"automega-power-homolog\",\n  \"name\": \"Automega Power Homologação\",\n  \"email\": \"admin@automega-power-homolog.example\",\n  \"admin_name\": \"Administrador Automega Power\",\n  \"admin_login\": \"admin.automega.power\",\n  \"uid_billing_plan\": \"c0320000-0000-4000-8000-000000000001\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "HTTP-R04 — Power cria organização cliente",
+   "HTTP-R05 — Replay da criação pela Power",
+   "HTTP-R07 — Replay após revogação da Power"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PATCH",
+  "path": "/v1/admin/organizations/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"Automega Power Homologação - Atualizada\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "HTTP-R10 — Administrar cliente existente após revogação",
+   "NC09P — testar sincronização de alteração de nome",
+   "NC10H — fazer o Core desejar exatamente o estado que já existe no Notify"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/billing-account",
+  "query": [],
+  "request_body": "{\n  \"uid_payer_organization\": \"a0000000-0000-4000-8000-000000000002\",\n  \"uid_commercial_origin_organization\": \"a0000000-0000-4000-8000-000000000001\",\n  \"reason\": \"Estabelecimento inicial da conta financeira da revenda Power - Fase 2\",\n  \"confirm_transfer\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-01 — Estabelecer a Power como própria pagadora",
+   "B201-02 — Validar idempotência da associação",
+   "B201-03 — Associar Automega à Billing Account da Power"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "DELETE",
+  "path": "/v1/admin/organizations/:uid/billing-account",
+  "query": [],
+  "request_body": "{\n  \"reason\": \"Homologacao 0201: validar protecao do pagador principal da conta Power\",\n  \"confirm_removal\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-13 — Impedir a remoção financeira da Power"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "GET",
+  "path": "/v1/admin/billing/statements",
+  "query": [
+   "uid_billing_account"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "state": "string",
+     "currency": "string",
+     "closed_at": "string",
+     "competence": "string",
+     "entry_count": "int",
+     "total_cents": "int",
+     "uid_billing_account": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "B201-15 — Consultar o demonstrativo consolidado da Power",
+   "B201-15C — Verificar se a listagem ignora o filtro",
+   "B201-15D — Listagem sem filtro com Bearer da Power"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "GET",
+  "path": "/v1/admin/billing/statements/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "items": [
+    {
+     "due_date": "string",
+     "quantity": "float",
+     "uid_entry": "string",
+     "competence": "string",
+     "calculation": {
+      "amount_cents": "int",
+      "billable_days": "int",
+      "days_in_period": "int",
+      "proration_policy": "string",
+      "gross_monthly_cents": "int"
+     },
+     "description": "string",
+     "amount_cents": "int",
+     "reference_to": "string",
+     "service_code": "string",
+     "uid_currency": "string",
+     "billing_basis": "string",
+     "reference_from": "string",
+     "proration_policy": "string",
+     "uid_organization": "string",
+     "unit_price_cents": "int"
+    }
+   ],
+   "state": "string",
+   "currency": "string",
+   "snapshot": {
+    "competence": "string",
+    "entry_count": "int",
+    "total_cents": "int",
+    "uid_currency": "string",
+    "uid_billing_account": "string"
+   },
+   "closed_at": "string",
+   "competence": "string",
+   "entry_count": "int",
+   "total_cents": "int",
+   "uid_currency": "string",
+   "uid_user_closed": "string",
+   "uid_billing_account": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "B201-15B — Testar acesso direto ao demonstrativo da Autoscale",
+   "HTTP-B21 — Validar isolamento do Billing Statement"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "GET",
+  "path": "/v1/admin/billing/entries",
+  "query": [
+   "uid_billing_account"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "status": "string",
+     "currency": "string",
+     "due_date": "string",
+     "quantity": "null",
+     "competence": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "description": "string",
+     "reference_to": "string",
+     "service_code": "string",
+     "billing_basis": "string",
+     "reference_from": "string",
+     "proration_policy": "string",
+     "uid_organization": "string",
+     "unit_price_cents": "int",
+     "uid_billing_account": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "B201-16 — Consultar lançamentos financeiros pela Power",
+   "B201-17 — Verificar isolamento financeiro da Autoscale"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "POST",
+  "path": "/v1/admin/billing/entries",
+  "query": [],
+  "request_body": "{\n  \"uid_billing_account\": \"6f0db72e-826f-44a9-8189-5cf937e7e161\",\n  \"uid_organization\": \"b5c64f64-b8dc-418b-8893-d6dd3635df5b\",\n  \"service_code\": \"gateway\",\n  \"description\": \"HOMOLOGACAO 0201 - Gateway Automega Power\",\n  \"competence\": \"2026-10\",\n  \"reference_from\": \"2026-10-01\",\n  \"reference_to\": \"2026-11-01\",\n  \"due_date\": \"2026-11-10\",\n  \"quantity\": 1,\n  \"unit_price_cents\": 1000,\n  \"currency\": \"BRL\",\n  \"billing_basis\": \"monthly_unique_usage\",\n  \"proration_policy\": \"none\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-18 — Criar lançamento financeiro da Automega",
+   "HTTP-B01 — Criar primeiro lançamento manual",
+   "HTTP-B03 — Criar lançamento com pró-rata"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "GET",
+  "path": "/v1/admin/billing/entries/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "status": "string",
+   "currency": "string",
+   "due_date": "string",
+   "quantity": "float",
+   "competence": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "description": "string",
+   "reference_to": "string",
+   "service_code": "string",
+   "uid_currency": "string",
+   "billing_basis": "string",
+   "uid_statement": "null",
+   "reference_from": "string",
+   "proration_policy": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "unit_price_cents": "int",
+   "uid_billing_account": "string",
+   "calculation_snapshot": {
+    "amount_cents": "int",
+    "billable_days": "int",
+    "days_in_period": "int",
+    "proration_policy": "string",
+    "gross_monthly_cents": "int"
+   },
+   "uid_commercial_order": "null",
+   "uid_billing_agreement": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "B201-19 — Power consultando o lançamento da Automega",
+   "B201-23 — Conferir integridade final do lançamento",
+   "HTTP-B07 — Consultar lançamento após replay"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "PATCH",
+  "path": "/v1/admin/billing/entries/:uid",
+  "query": [],
+  "request_body": "{\n  \"quantity\": 2\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-20 — Power tentando alterar o lançamento da Automega",
+   "B201-21 — Cancelar o lançamento de homologação",
+   "B201-22 — Impedir alteração de lançamento cancelado"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid_organization_owner": "string",
+   "reseller_enabled": "bool",
+   "uid_user_created": "string",
+   "uid_billing_plan": "string",
+   "uid_valuation_currency": "string",
+   "uid_timezone": "string",
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "email": "string",
+   "uid_situations": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "Situação da Fase 2 — Reseller Billing Accounts",
+   "COM-0188-04H — Confirmar isolamento em outra rota protegida",
+   "SVC-0186-26B — Secondary tentando ler a organização Autoscale diretamente"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "POST",
+  "path": "/v1/admin/billing/entries/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_billing_account\",\n      \"operator\": \"eq\",\n      \"value\": \"6f0db72e-826f-44a9-8189-5cf937e7e161\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-24 — Listagem financeira com filtro estruturado",
+   "Próximo passo — B201-25",
+   "HTTP-B17 — Pesquisar lançamentos por status"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "POST",
+  "path": "/v1/admin/billing/statements/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_billing_account\",\n      \"operator\": \"eq\",\n      \"value\": \"6ed6d071-48bc-4689-95eb-38283d4dd393\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "B201-28 — Validar filtro estruturado de demonstrativos",
+   "B201-29 — Consultar demonstrativos da própria Power",
+   "HTTP-B18 — Pesquisar statements fechados"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "POST",
+  "path": "/v1/admin/knowledge/items/:uid/revisions",
+  "query": [],
+  "request_body": "{\n  \"title\": \"Instalação e retirada de câmera veicular\",\n  \"summary\": \"Procedimentos técnicos para instalação e retirada.\",\n  \"body\": \"Este artigo apresenta os procedimentos de instalação, retirada e verificação de câmeras veiculares.\",\n  \"videos\": [\n    {\n      \"url\": \"https://www.youtube.com/watch?v=jNQXAC9IVRw\",\n      \"title\": \"Vídeo de homologação 1\",\n      \"description\": \"Teste do formato watch.\",\n      \"sort_order\": 1\n    },\n    {\n      \"url\": \"https://youtu.be/9bZkp7q19f0\",\n      \"title\": \"Vídeo de homologação 2\",\n      \"description\": \"Teste do formato curto.\",\n      \"sort_order\": 2\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2D-07 — Criar revisão com dois vídeos",
+   "K2D-12 — Validar idempotência",
+   "K2D-18 — Validar conflito de idempotência"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "GET",
+  "path": "/v1/admin/knowledge/items/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "slug": "string",
+   "grants": [
+    "[]"
+   ],
+   "contexts": [
+    "[]"
+   ],
+   "categories": [
+    "[]"
+   ],
+   "created_at": "string",
+   "updated_at": "string",
+   "attachments": [
+    {
+     "created_at": "string",
+     "uid_document": "string",
+     "uid_user_created": "string",
+     "uid_document_revision": "string",
+     "uid_knowledge_revision": "string"
+    }
+   ],
+   "published_at": "string",
+   "audience_mode": "string",
+   "latest_revision": {
+    "uid": "string",
+    "body": "string",
+    "title": "string",
+    "videos": [
+     {
+      "url": "string",
+      "title": "string",
+      "sort_order": "int",
+      "description": "string",
+      "youtube_video_id": "string"
+     }
+    ],
+    "summary": "string",
+    "uid_item": "string",
+    "created_at": "string",
+    "search_vector": "string",
+    "revision_number": "int",
+    "uid_user_created": "string"
+   },
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "publication_status": "string",
+   "published_revision": {
+    "uid": "string",
+    "body": "string",
+    "title": "string",
+    "videos": [
+     {
+      "url": "string",
+      "title": "string",
+      "sort_order": "int",
+      "description": "string",
+      "youtube_video_id": "string"
+     }
+    ],
+    "summary": "string",
+    "uid_item": "string",
+    "created_at": "string",
+    "search_vector": "string",
+    "revision_number": "int",
+    "uid_user_created": "string"
+   },
+   "published_revision_uid": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "K2D-11 — Consultar um artigo existente",
+   "K2D-14 — Verificar publicação e vídeos"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "POST",
+  "path": "/v1/admin/knowledge/items/:uid/publish",
+  "query": [],
+  "request_body": "{\n  \"uid_revision\": \"c267125a-0671-431c-93ea-eea408443a9f\",\n  \"audience_mode\": \"selected\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2D-13 — Publicar a revisão com vídeos",
+   "K2D-13B — Publicar para usuários autenticados",
+   "K2C02 — Publicar a revisão com attachment"
+  ]
+ },
+ {
+  "module": "knowledge/items",
+  "method": "GET",
+  "path": "/v1/knowledge/items/:slug",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "body": "string",
+   "slug": "string",
+   "title": "string",
+   "videos": [
+    {
+     "url": "string",
+     "title": "string",
+     "sort_order": "int",
+     "description": "string",
+     "youtube_video_id": "string"
+    }
+   ],
+   "summary": "string",
+   "contexts": [
+    "[]"
+   ],
+   "categories": [
+    "[]"
+   ],
+   "attachments": [
+    "[]"
+   ],
+   "published_at": "string",
+   "revision_number": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "K2D-15 — Leitura consumer autenticada"
+  ]
+ },
+ {
+  "module": "public/knowledge",
+  "method": "GET",
+  "path": "/v1/public/knowledge/items/:slug",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "body": "string",
+   "slug": "string",
+   "title": "string",
+   "videos": [
+    "[]"
+   ],
+   "summary": "string",
+   "contexts": [
+    "[]"
+   ],
+   "categories": [
+    "[]"
+   ],
+   "attachments": [
+    {
+     "uid": "string",
+     "download_url": "string"
+    }
+   ],
+   "published_at": "string",
+   "revision_number": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "K2D-16 — Verificar proteção da rota pública",
+   "K2C03 — Item público expõe somente o attachment Knowledge",
+   "K2C10A — Item arquivado não pode mais ser lido publicamente"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "GET",
+  "path": "/v1/admin/knowledge/items/:uid/revisions",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "body": "string",
+     "title": "string",
+     "summary": "string",
+     "uid_item": "string",
+     "created_at": "string",
+     "search_vector": "string",
+     "revision_number": "int",
+     "uid_user_created": "string"
+    }
+   ],
+   "total": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "Próximo teste — K2D-17: verificar listagem sem vídeos"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities/technicians/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "uid_user": "string",
+   "birth_date": "string",
+   "created_at": "string",
+   "deleted_at": "null",
+   "updated_at": "string",
+   "capabilities": [
+    {
+     "code": "string",
+     "kind": "string",
+     "name": "string"
+    }
+   ],
+   "open_custody": "int",
+   "provider_name": "string",
+   "open_work_orders": "int",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_provider_entity": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "TP-07 — Consultar as capacidades do técnico",
+   "6 — consultar executor individual"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities/technician-capabilities",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "code": "string",
+    "kind": "string",
+    "name": "string",
+    "active": "bool",
+    "sort_order": "int"
+   }
+  ],
+  "example_names": [
+   "TP-08 — Consultar catálogo de capacidades"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "PATCH",
+  "path": "/v1/admin/entities/technicians/:uid",
+  "query": [],
+  "request_body": "{\n  \"capabilities\": [\n    \"installation\",\n    \"removal\",\n    \"maintenance\",\n    \"telemetry\",\n    \"vehicle_cameras\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "TP-09 — Vincular capacidades ao técnico"
+  ]
+ },
+ {
+  "module": "commercial/overview",
+  "method": "GET",
+  "path": "/v1/commercial/overview",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "offers": [
+    {
+     "terms": [
+      "[]"
+     ],
+     "services": [
+      {
+       "code": "string",
+       "default_enabled": "bool"
+      }
+     ],
+     "plan_code": "string",
+     "plan_name": "string",
+     "billing_mode": "string",
+     "uid_plan_version": "string"
+    }
+   ],
+   "billing_account": {
+    "uid": "string",
+    "payer_kind": "string",
+    "external_legal_name": "null",
+    "external_country_code": "null",
+    "external_tax_identifier_type": "null"
+   },
+   "uid_organization": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "HTTP-B01 — Criar lançamento manual",
+   "COM-0188-03 — Overview comercial da Autoscale",
+   "COM-0188-04 — Secondary não pode consultar Commercial da Autoscale"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "GET",
+  "path": "/v1/admin/billing/accounts",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "HTTP-B02 — Consultar contas de faturamento"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "POST",
+  "path": "/v1/admin/billing/entries/:uid/duplicate",
+  "query": [],
+  "request_body": "{\n  \"count\": 6,\n  \"first_competence\": \"2026-11\",\n  \"due_day\": 10,\n  \"copy_quantity\": false\n}",
+  "response_schema": null,
+  "example_names": [
+   "HTTP-B04 — Duplicar lançamento para seis meses",
+   "HTTP-B06 — Repetir a duplicação com a mesma chave",
+   "HTTP-B34 — Rejeitar duplicação com quantidade de competências acima do limite"
+  ]
+ },
+ {
+  "module": "admin/billing",
+  "method": "POST",
+  "path": "/v1/admin/billing/statements",
+  "query": [],
+  "request_body": "{\n  \"uid_billing_account\": \"6ed6d071-48bc-4689-95eb-38283d4dd393\",\n  \"competence\": \"2026-11\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "HTTP-B08 — Fechar faturamento de novembro/2026",
+   "HTTP-B10 — Repetir fechamento com a mesma Idempotency-Key",
+   "HTTP-B11 — Impedir segundo fechamento da mesma competência"
+  ]
+ },
+ {
+  "module": "commercial/orders",
+  "method": "POST",
+  "path": "/v1/commercial/orders",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"a0000000-0000-4000-8000-000000000001\",\n  \"uid_plan_version\": \"935e0e0a-e52a-407c-b377-3b192036d711\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "COM-0188-06 — Criar primeira Commercial Order postpaid",
+   "COM-0188-07 — Replay idempotente da criação da Order",
+   "COM-0188-13 — Criar nova Commercial Order usando a V4"
+  ]
+ },
+ {
+  "module": "commercial/orders",
+  "method": "POST",
+  "path": "/v1/commercial/orders/:uid/transition",
+  "query": [],
+  "request_body": "{\n  \"action\": \"accept\",\n  \"expected_state_version\": 1\n}",
+  "response_schema": null,
+  "example_names": [
+   "COM-0188-08 — Aceitar Order postpaid",
+   "COM-0188-14 — Aceitar a ordem V4",
+   "COM-0188-15 — Replay exato do aceite"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "tiers": [
+    {
+     "uid": "string",
+     "quantity_to": "int",
+     "quantity_from": "int",
+     "uid_billing_plan": "string",
+     "unit_price_cents": "int"
+    }
+   ],
+   "active": "bool",
+   "currency": "string",
+   "created_at": "string",
+   "unit_label": "string",
+   "updated_at": "string",
+   "description": "string",
+   "billing_mode": "string",
+   "uid_user_created": "null",
+   "uid_user_updated": "string",
+   "uid_current_version": "string",
+   "negative_adjustment_policy": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "COM-0188-09 — Conferir estado atual do demo_postpaid",
+   "PB53-E — GET individual do mesmo billing plan como Basic",
+   "PB61 — Consultar o plano criado"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "PUT",
+  "path": "/v1/admin/billing-plans/:uid",
+  "query": [],
+  "request_body": "{\n  \"code\": \"demo_postpaid\",\n  \"name\": \"DEMO pós-pago\",\n  \"description\": \"Dados fictícios para homologação\",\n  \"billing_mode\": \"postpaid\",\n  \"unit_label\": \"unidade\",\n  \"active\": true,\n  \"negative_adjustment_policy\": \"floor_at_zero\",\n  \"tiers\": [\n    {\n      \"quantity_from\": 1,\n      \"quantity_to\": 10,\n      \"unit_price_cents\": 1000\n    },\n    {\n      \"quantity_from\": 11,\n      \"quantity_to\": 30,\n      \"unit_price_cents\": 800\n    },\n    {\n      \"quantity_from\": 31,\n      \"quantity_to\": 50,\n      \"unit_price_cents\": 700\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "COM-0188-10 — Definir floor_at_zero no demo_postpaid",
+   "COM-0188-18 — Confirmar que a Order concluída é terminal",
+   "02 - Update"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "POST",
+  "path": "/v1/admin/organizations/:uid/services/geocode/tokens",
+  "query": [],
+  "request_body": "{\n  \"name\": \"geocode-homolog\",\n  \"rate_limit_rps\": 25\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEO-PROV-25 — Criar novo token ativo e provocar version 9",
+   "SVC-0186-10 — Criar token do serviço geocode",
+   "SVC-0186-11 — Replay idempotente da criação do token"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PATCH",
+  "path": "/v1/admin/organizations/:uid/services/geocode/tokens/:uid",
+  "query": [],
+  "request_body": "{\n  \"rate_limit_rps\": 50\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEO-PROV-28 — Alterar rate limit do token",
+   "SVC-0186-14 — Alterar rate limit do token",
+   "SVC-0186-26J — Secondary tentando alterar token da Autoscale"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/services/geocode",
+  "query": [],
+  "request_body": "{\n  \"desired_status\": \"suspended\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "GEO-PROV-31 — Suspender o serviço Geocode",
+   "GEO-PROV-35 — Reativar o serviço Geocode",
+   "GEO-PROV-55 — Gerar nova versão após falha terminal"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid/services/geocode/tokens",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "version": "int",
+     "created_at": "string",
+     "revoked_at": "string",
+     "token_hint": "string",
+     "last_used_at": "null",
+     "rate_limit_rps": "int"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "GEO-PROV-34 — Confirmar que o token continua ativo no Core",
+   "SVC-0186-12 — Listar tokens sem expor segredo",
+   "SVC-0186-16 — Listar token após revogação"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "DELETE",
+  "path": "/v1/admin/organizations/:uid/services/geocode/tokens/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "GEO-PROV-38 — Revogar o token ativo",
+   "SVC-0186-15 — Revogar token",
+   "SVC-0186-26K — Secondary tentando revogar token da Autoscale"
+  ]
+ },
+ {
+  "module": "admin/services",
+  "method": "GET",
+  "path": "/v1/admin/services",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "description": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "SVC-0186-04 — Listar catálogo de Services"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid/services",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "version": "int",
+     "created_at": "string",
+     "updated_at": "string",
+     "uid_service": "string",
+     "desired_status": "string",
+     "uid_organization": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "SVC-0186-05 — Listar serviços da organização",
+   "SVC-0186-09 — Listar serviços da organização após ativação",
+   "SVC-0186-17 — Listar serviços de organização inexistente"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/services/:uid",
+  "query": [],
+  "request_body": "{\n  \"desired_status\": \"active\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "SVC-0186-06A — Ativar Geocode usando o UID do serviço"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "SVC-0186-07A — Validar o uidAutoscale usado no teste"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/abc/services",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "SVC-0186-25 — UID de organização malformado"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "POST",
+  "path": "/v1/admin/users",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"9c16286b-d7c4-40b5-8f3f-22744be4c46d\",\n  \"profile_code\": \"administrator\",\n  \"name\": \"FB01 Login Inválido\",\n  \"login\": \"fb01.usuario@example.com\",\n  \"enabled\": false,\n  \"organizations_access\": \"selected\",\n  \"scopes\": [\n    {\n      \"uid_organization\": \"9c16286b-d7c4-40b5-8f3f-22744be4c46d\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "FB01 — login inválido deve retornar invalid_login_name",
+   "FB01-R1 — login inválido com scope estruturalmente válido",
+   "FB02 — Email inválido deve retornar invalid_email"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "GET",
+  "path": "/v1/admin/notifications/recipients",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "FB05 — Sanitização de erro no Notifications Core"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "POST",
+  "path": "/v1/admin/notifications/recipients",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"kind\": \"external\",\n  \"name\": \"FB05 Sanitização\",\n  \"active\": true,\n  \"endpoints\": [\n    {\n      \"service\": \"email\",\n      \"destination\": \"fb05@example.test\",\n      \"active\": true\n    }\n  ],\n  \"organization_bindings\": [\n    {\n      \"uid_organization\": \"VALOR_SECRETO_SENTINELA_123\"\n    }\n  ],\n  \"entity_bindings\": [],\n  \"asset_bindings\": []\n}",
+  "response_schema": null,
+  "example_names": [
+   "FB05-R1 — Forçar erro interno de validação no Notifications Core",
+   "NC11A — criar Recipient externo",
+   "NC11C — conflito de idempotência"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PATCH",
+  "path": "/v1/admin/organizations/:uid/branding",
+  "query": [],
+  "request_body": "{\n  \"theme\": {\n    \"primary\": \"VALOR_SECRETO_SENTINELA_123\"\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "FB06 — Sanitização do Branding"
+  ]
+ },
+ {
+  "module": "admin/settings",
+  "method": "POST",
+  "path": "/v1/admin/settings/filters/reload",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "FB09 — Reload inválido não pode vazar detalhe interno"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/fuels",
+  "query": [
+   "q"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "fipe_fuel_code": "null",
+     "uid_user_created": "null",
+     "uid_user_updated": "null"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "FB10 — Provar que o snapshot anterior continua funcional",
+   "TC21 — medir um HIT contra esse statement",
+   "TC23 — provar que HIT elimina a query pesada"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/admin/organizations/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "NC09M-A — identificar o serviço atrás do baseUrl",
+   "NC10F — provar o estado remoto depois da recuperação",
+   "NC10J — conferir updatedAt remoto"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/admin/organizations/:uid",
+  "query": [],
+  "request_body": "{\n  \"companyName\": \"Notify Sync Remote Drift\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "NC10G — preparar teste de “Notify executou, Core não sabe”"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "GET",
+  "path": "/v1/admin/notifications/hooks",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "scope": "string",
+     "active": "bool",
+     "payload": {
+      "to": [
+       "string"
+      ],
+      "message": "string",
+      "service": "string",
+      "subject": "string"
+     },
+     "version": "int",
+     "created_at": "string",
+     "updated_at": "string",
+     "uid_organization": "null"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "NC05 — listar hooks do Notifications Core"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "PUT",
+  "path": "/v1/admin/notifications/hooks/organizations.insert",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"active\": true,\n  \"payload\": {\n    \"service\": \"email\",\n    \"to\": \"wesleylacerda@gmail.ocm\",\n    \"subject\": \"Organização Autoscale criada\",\n    \"message\": \"Código 1426000001\"\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "NC06 — criar hook default organizations.insert",
+   "NC06A — atualizar o mesmo hook com placeholders",
+   "NC07B — desativar temporariamente o hook"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "GET",
+  "path": "/v1/admin/notifications/deliveries/:uid/status",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "action_index": "int",
+   "attempts": "int",
+   "claim_token": "null",
+   "created_at": "string",
+   "destination_snapshot": [
+    "string"
+   ],
+   "hook_version": "int",
+   "http_status": "int",
+   "lease_until": "null",
+   "next_attempt_at": "string",
+   "notify_response_code": "string",
+   "notify_status": "null",
+   "notify_status_checked_at": "null",
+   "notify_status_snapshot": "null",
+   "notify_uid": "null",
+   "payload_snapshot": {
+    "message": "string",
+    "service": "string",
+    "subject": "string",
+    "to": [
+     "string"
+    ]
+   },
+   "recipient_name_snapshot": [
+    "[]"
+   ],
+   "responded_at": "string",
+   "send_authorized_at": "null",
+   "service": "string",
+   "status": "string",
+   "submitted_at": "null",
+   "suppressed_at": "null",
+   "suppression_reason": "null",
+   "uid": "string",
+   "uid_intent": "string",
+   "uid_organization": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "NC07Y — consultar a delivery pela API",
+   "NC08 — verificar se a delivery chegou ao Autoscale Notify",
+   "NC08A — validar a mesma credencial diretamente contra o Notify"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/integration-tokens/autoscale-notifications",
+  "query": [],
+  "request_body": "{\n  \"token\": \"TOKEN_EMITIDO_PELO_AUTOSCALE_NOTIFY_PARA_ESTA_ORGANIZACAO\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "NC07Z — importar a credencial Notify da organização",
+   "M04C — Cadastrar a credencial Autoscale Notifications"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid/integration-tokens/autoscale-notifications",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "enabled": "bool",
+     "provider": "string",
+     "created_at": "string",
+     "revoked_at": "null",
+     "updated_at": "string",
+     "uid_organization": "string"
+    }
+   ],
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "NC09H — confirmar que o token retornado pelo Notify foi persistido no Core",
+   "NC12I — Confirmar credencial Autoscale Notifications da organização",
+   "M04 — Solicitar verificação de e-mail pelo novo fluxo direto"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PATCH",
+  "path": "/v1/admin/organizations/:uid/lifecycle",
+  "query": [],
+  "request_body": "{\n  \"state\": \"blocked\",\n  \"reason\": \"Homologação sync Notify 0179\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "NC09K — testar lifecycle → Notify",
+   "NC09N — reativar a organização no Core",
+   "NC12T — Desativar a organização"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "GET",
+  "path": "/v1/admin/notifications/recipients/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "kind": "string",
+   "name": "string",
+   "active": "bool",
+   "uid_link": "null",
+   "endpoints": [
+    {
+     "uid": "string",
+     "active": "bool",
+     "service": "string",
+     "metadata": {},
+     "destination": "string",
+     "uid_contact_method": "null"
+    }
+   ],
+   "link_code": "null",
+   "created_at": "string",
+   "updated_at": "string",
+   "uid_contact": "null",
+   "asset_bindings": [
+    "[]"
+   ],
+   "entity_bindings": [
+    "[]"
+   ],
+   "uid_organization": "string",
+   "organization_bindings": [
+    {
+     "uid_organization": "string"
+    }
+   ],
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "NC11D — tentar ler o recipient pelo tenant errado",
+   "NC11E — ler o recipient no tenant correto",
+   "NC11H — confirmar soft-delete"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "PUT",
+  "path": "/v1/admin/notifications/recipients/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"kind\": \"external\",\n  \"name\": \"Responsável Homologação Notify Atualizado\",\n  \"active\": true,\n  \"endpoints\": [\n    {\n      \"service\": \"email\",\n      \"destination\": \"responsavel.notify0177@example.test\",\n      \"active\": true\n    }\n  ],\n  \"organization_bindings\": [\n    {\n      \"uid_organization\": \"e09d3738-513d-4877-8f18-7cdb42166df6\"\n    }\n  ],\n  \"entity_bindings\": [],\n  \"asset_bindings\": []\n}",
+  "response_schema": null,
+  "example_names": [
+   "NC11F — atualizar o recipient"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "DELETE",
+  "path": "/v1/admin/notifications/recipients/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "NC11G — desativar o recipient",
+   "NC12P — Desativar o Notification Recipient"
+  ]
+ },
+ {
+  "module": "admin/notifications",
+  "method": "GET",
+  "path": "/v1/admin/notifications/hooks/organizations.insert",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "code": "string",
+   "scope": "string",
+   "active": "bool",
+   "payload": {
+    "to": [
+     "string"
+    ],
+    "message": "string",
+    "service": "string",
+    "subject": "string"
+   },
+   "version": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "NC12A — consultar o hook efetivo da organização"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "POST",
+  "path": "/v1/admin/agenda/entries/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    },\n    {\n      \"field\": \"source_uid\",\n      \"operator\": \"eq\",\n      \"value\": \"221f12d9-7870-46e6-94ba-c14be52e68e9\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG04 — localizar na Agenda a OS originada pelo Checklist",
+   "AG20A — localizar uma entry não terminal",
+   "AG20C — localizar a nova entry da Agenda"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "GET",
+  "path": "/v1/admin/agenda/entries/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "title": "string",
+   "due_at": "null",
+   "pinned": "bool",
+   "summary": "null",
+   "notified": "bool",
+   "priority": "string",
+   "terminal": "bool",
+   "uid_asset": "string",
+   "created_at": "string",
+   "source_uid": "string",
+   "uid_device": "null",
+   "updated_at": "string",
+   "notified_at": "string",
+   "occurred_at": "string",
+   "source_state": "string",
+   "scheduled_end": "null",
+   "snoozed_until": "null",
+   "source_domain": "string",
+   "next_contact_at": "null",
+   "scheduled_start": "null",
+   "source_resource": "string",
+   "controls_version": "int",
+   "uid_organization": "string",
+   "source_created_at": "string",
+   "source_updated_at": "string",
+   "attention_required": "bool",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AG06 — GET individual da entry",
+   "AG13 — conferir a sincronização automática na Agenda",
+   "AG14 — Basic sem agenda.access"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "PATCH",
+  "path": "/v1/admin/agenda/entries/:uid/controls",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"controls_version\": 1,\n  \"priority\": \"high\",\n  \"pinned\": true,\n  \"notified\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG07 — alterar somente os controles da Agenda",
+   "AG08 — controls_version antigo deve conflitar",
+   "AG20 — PATCH efetivo com múltiplos controles"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "GET",
+  "path": "/v1/admin/agenda/settings",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "colors": {
+    "states": {
+     "maintenance.open": "string",
+     "maintenance.cancelled": "string",
+     "maintenance.completed": "string",
+     "maintenance.in_progress": "string"
+    },
+    "controls": {
+     "pinned": "string",
+     "overdue": "string",
+     "snoozed": "string",
+     "notified": "string",
+     "attention_required": "string"
+    },
+    "priorities": {
+     "low": "string",
+     "high": "string",
+     "normal": "string",
+     "critical": "string"
+    }
+   },
+   "overrides": {
+    "states": {},
+    "controls": {},
+    "priorities": {}
+   },
+   "uid_organization": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AG09 — consultar cores efetivas da Agenda"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "PATCH",
+  "path": "/v1/admin/agenda/settings",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"colors\": {\n    \"states\": {\n      \"maintenance.open\": \"#112233\"\n    }\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG10 — criar override de cor na organização",
+   "AG11 — remover override e voltar à herança"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "POST",
+  "path": "/v1/admin/maintenance/orders/:uid/transition",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"status\": \"completed\",\n  \"resolve_conditions\": [\n    \"27c9e647-76e2-4fc0-a8b5-fa05f034426d\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG12 — concluir a Maintenance e deixar a Agenda sincronizar",
+   "AG28 — Maintenance open → in_progress",
+   "AG36 — concluir a Maintenance fonte"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "GET",
+  "path": "/v1/admin/maintenance/orders/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "items": [
+    "[]"
+   ],
+   "status": "string",
+   "uid_asset": "string",
+   "conditions": [
+    {
+     "uid": "string",
+     "status": "string",
+     "blocking": "bool",
+     "opened_at": "string",
+     "uid_asset": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "description": "string",
+     "resolved_at": "string",
+     "uid_work_order": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string",
+     "uid_checklist_run": "string",
+     "source_question_code": "string",
+     "uid_checklist_execution": "string"
+    }
+   ],
+   "created_at": "string",
+   "updated_at": "string",
+   "description": "string",
+   "origin_kind": "string",
+   "cancelled_at": "null",
+   "completed_at": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_checklist_run": "string",
+   "asset_identification": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AG15A — conferir a Maintenance com o MESMO secondaryToken",
+   "MT07 — consultar a OS criada",
+   "MI09 — consultar a OS completa"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "GET",
+  "path": "/v1/admin/agenda/entries/:uid/analyses",
+  "query": [
+   "limit",
+   "offset",
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    "[]"
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "AG19 — listar histórico da entry",
+   "AG20E — consultar timeline após o PATCH",
+   "AG21A — confirmar timeline inalterada"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "POST",
+  "path": "/v1/admin/maintenance/orders",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_asset\": \"bc8d08ba-9b30-42f5-9faf-ac94dbb69769\",\n  \"description\": \"Homologação Agenda Fase 2\",\n  \"items\": [\n    {\n      \"description\": \"Validar timeline e controles da Agenda\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG20B — criar Maintenance ativa para a Agenda Fase 2",
+   "MT04 — criar a primeira OS de Maintenance",
+   "MT05 — replay idempotente da criação"
+  ]
+ },
+ {
+  "module": "admin/agenda",
+  "method": "POST",
+  "path": "/v1/admin/agenda/entries/:uid/analyses",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"description\": \"Liguei para o cliente e não obtive retorno.\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG23 — criar análise manual",
+   "AG24 — replay idempotente da análise manual",
+   "AG25 — mesma Idempotency-Key com outra intenção"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "POST",
+  "path": "/v1/admin/documents/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ],\n  \"limit\": 10,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "AG33 — localizar um documento GED utilizável",
+   "G21 — documento distribuído aparece na listagem do destinatário"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "GET",
+  "path": "/v1/admin/documents/:uid/revisions",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "sha256": "string",
+    "extension": "string",
+    "mime_type": "string",
+    "created_at": "string",
+    "size_bytes": "int",
+    "uid_document": "string",
+    "revision_code": "string",
+    "change_summary": "null",
+    "revision_number": "int",
+    "uid_organization": "string",
+    "uid_user_created": "string",
+    "original_filename": "string"
+   }
+  ],
+  "example_names": [
+   "AG33A — consultar a revisão fixa do documento",
+   "G22 — listar revisões como destinatário em follow_latest",
+   "C35 — consultar revisões do documento limpo"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "GET",
+  "path": "/v1/admin/maintenance/assets/:uid/status",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid_asset": "string",
+   "open_conditions": [
+    {
+     "uid": "string",
+     "blocking": "bool",
+     "opened_at": "string",
+     "description": "string",
+     "uid_work_order": "string"
+    }
+   ],
+   "uid_organization": "string",
+   "operational_available": "bool",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "MT08 — consultar status operacional do asset",
+   "MT12 — disponibilidade após resolução da condição bloqueante",
+   "MI10 — confirmar indisponibilidade operacional do asset"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "PATCH",
+  "path": "/v1/admin/maintenance/orders/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"items\": [\n    {\n      \"uid\": \"4379651c-8861-4e76-800d-3cadd5efc7bd\",\n      \"description\": \"Inspecionar equipamento e conexões\",\n      \"notes\": \"Item atualizado durante a homologação\"\n    },\n    {\n      \"description\": \"Verificar fixação do equipamento\",\n      \"notes\": \"Novo item da OS\"\n    }\n  ],\n  \"conditions\": [\n    {\n      \"description\": \"Ruído observado sem impacto operacional\",\n      \"blocking\": false\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "MT09 — PATCH agregado: atualizar item + adicionar item + condição não bloqueante",
+   "MT10 — tentar alterar o asset da OS",
+   "MT14 — tentar alterar uma OS terminal"
+  ]
+ },
+ {
+  "module": "checklists/runs",
+  "method": "POST",
+  "path": "/v1/checklists/runs",
+  "query": [],
+  "request_body": "{\n  \"uid_driver\": \"e96dcfa8-6c71-4852-b4bb-14cee1b8bd3d\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "MI04 — criar um novo Checklist Run para a integração",
+   "CK35 — criar o primeiro Run",
+   "CK36 — replay exato da criação do Run"
+  ]
+ },
+ {
+  "module": "checklists/runs",
+  "method": "PUT",
+  "path": "/v1/checklists/runs/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_asset\": \"bc8d08ba-9b30-42f5-9faf-ac94dbb69769\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "MI05 — selecionar o asset",
+   "MI06 — responder os campos obrigatórios e ativar asset_not_fit",
+   "MI07 — concluir o Checklist e disparar Maintenance"
+  ]
+ },
+ {
+  "module": "admin/maintenance",
+  "method": "POST",
+  "path": "/v1/admin/maintenance/orders/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    },\n    {\n      \"field\": \"uid_checklist_run\",\n      \"operator\": \"eq\",\n      \"value\": \"3799aad3-1bbd-4756-a61c-8305258be89f\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "MI08 — localizar a OS criada automaticamente"
+  ]
+ },
+ {
+  "module": "admin/checklist-groups",
+  "method": "POST",
+  "path": "/v1/admin/checklist-groups",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"code\": \"homolog_group\",\n  \"name\": \"Checklist homologation\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK03 — subir API e criar o primeiro grupo",
+   "CK04 — replay idempotente"
+  ]
+ },
+ {
+  "module": "admin/checklists",
+  "method": "POST",
+  "path": "/v1/admin/checklists",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_group\": \"929ec7fa-fd42-40a7-b518-f49d333e6929\",\n  \"code\": \"pre_use_asset\",\n  \"name\": \"Inspeção antes do uso\",\n  \"applicability\": \"asset\",\n  \"assignment\": {\n    \"mode\": \"all\"\n  },\n  \"definition\": {\n    \"questions\": [\n      {\n        \"code\": \"tires_worn\",\n        \"label\": \"Os pneus estão carecas?\",\n        \"type\": \"boolean\",\n        \"required\": true,\n        \"effect\": \"asset_not_fit\"\n      },\n      {\n        \"code\": \"fuel_ok\",\n        \"label\": \"O tanque está em nível adequado?\",\n        \"type\": \"boolean\",\n        \"required\": true,\n        \"effect\": \"warning\"\n      }\n    ]\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK05 — criar o primeiro checklist agregado",
+   "CK12 — checklist asset com assignment selected",
+   "CK15 — rejeitar assignment cross-organization"
+  ]
+ },
+ {
+  "module": "admin/checklists",
+  "method": "POST",
+  "path": "/v1/admin/checklists/:uid/publish",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "CK06 — publicar a primeira versão",
+   "CK07 — repetir publish sem alterar nada",
+   "CK09 — publicar a V2"
+  ]
+ },
+ {
+  "module": "admin/checklists",
+  "method": "PATCH",
+  "path": "/v1/admin/checklists/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_group\": \"929ec7fa-fd42-40a7-b518-f49d333e6929\",\n  \"code\": \"pre_use_asset\",\n  \"name\": \"Inspeção antes do uso\",\n  \"description\": \"Checklist pré-operacional do ativo\",\n  \"active\": true,\n  \"applicability\": \"asset\",\n  \"assignment\": {\n    \"mode\": \"all\"\n  },\n  \"definition\": {\n    \"questions\": [\n      {\n        \"code\": \"tires_worn\",\n        \"label\": \"Os pneus estão carecas?\",\n        \"type\": \"boolean\",\n        \"required\": true,\n        \"effect\": \"asset_not_fit\"\n      },\n      {\n        \"code\": \"fuel_ok\",\n        \"label\": \"O tanque está em nível adequado?\",\n        \"type\": \"boolean\",\n        \"required\": true,\n        \"effect\": \"warning\"\n      },\n      {\n        \"code\": \"notes\",\n        \"label\": \"Observações da inspeção\",\n        \"type\": \"text\",\n        \"required\": false\n      }\n    ]\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK08 — alterar o agregado depois da publicação",
+   "CK08-B — PATCH com agregado completo"
+  ]
+ },
+ {
+  "module": "admin/checklists",
+  "method": "GET",
+  "path": "/v1/admin/checklists/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "active": "bool",
+   "uid_group": "string",
+   "assignment": {
+    "mode": "string"
+   },
+   "created_at": "string",
+   "definition": {
+    "questions": [
+     {
+      "code": "string",
+      "type": "string",
+      "label": "string",
+      "effect": "string",
+      "required": "bool"
+     }
+    ]
+   },
+   "updated_at": "string",
+   "description": "string",
+   "published_at": "string",
+   "applicability": "string",
+   "latest_version": "int",
+   "assignment_mode": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CK16 — GET do checklist agregado atual",
+   "CK22 — isolamento pelo uid_organization no GET",
+   "CK28 — Basic não administra Checklist"
+  ]
+ },
+ {
+  "module": "admin/checklists",
+  "method": "POST",
+  "path": "/v1/admin/checklists/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK21 — pesquisar checklists da organização"
+  ]
+ },
+ {
+  "module": "admin/checklist-groups",
+  "method": "PATCH",
+  "path": "/v1/admin/checklist-groups/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"description\": \"Grupo de checklists utilizado na homologação da Fase 1\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK24 — PATCH do grupo"
+  ]
+ },
+ {
+  "module": "admin/checklist-groups",
+  "method": "GET",
+  "path": "/v1/admin/checklist-groups/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "active": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "description": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CK25 — GET individual do grupo"
+  ]
+ },
+ {
+  "module": "admin/checklist-groups",
+  "method": "POST",
+  "path": "/v1/admin/checklist-groups/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "CK26 — pesquisar grupos da organização",
+   "CK27 — busca sem organização-alvo"
+  ]
+ },
+ {
+  "module": "checklists/runs",
+  "method": "GET",
+  "path": "/v1/checklists/runs/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "status": "string",
+   "outcome": "string",
+   "complete": "bool",
+   "uid_asset": "string",
+   "created_at": "string",
+   "executions": [
+    {
+     "uid": "string",
+     "answers": [
+      "[]"
+     ],
+     "checklist": {
+      "code": "string",
+      "name": "string",
+      "group": {
+       "uid": "string",
+       "code": "string",
+       "name": "string"
+      },
+      "active": "bool",
+      "uid_group": "string",
+      "definition": {
+       "questions": [
+        {
+         "code": "...",
+         "type": "...",
+         "label": "...",
+         "required": "..."
+        }
+       ]
+      },
+      "description": "null",
+      "uid_template": "string",
+      "applicability": "string",
+      "uid_organization": "string"
+     },
+     "target_type": "string",
+     "version_number": "int",
+     "uid_template_version": "string"
+    }
+   ],
+   "uid_driver": "string",
+   "updated_at": "string",
+   "asset_result": "string",
+   "completed_at": "string",
+   "driver_result": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "CK38 — GET do Run e confirmação dos snapshots fixados"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/fuels/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "fipe_fuel_code": "null",
+   "uid_user_created": "null",
+   "uid_user_updated": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV11-D — gerar novo access event",
+   "LD09-A — homologar novo stream de access",
+   "LD09-C — validar busca por request_id"
+  ]
+ },
+ {
+  "module": "health/details",
+  "method": "GET",
+  "path": "/v1/health/details",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "EV11-E — conferir métricas do eventstream",
+   "T5-A — derrubar somente o Redis de sessão",
+   "T5-R — restaurar Redis de sessão"
+  ]
+ },
+ {
+  "module": "users/profile",
+  "method": "GET",
+  "path": "/v1/users/profile",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "bio": "string",
+   "uid": "string",
+   "city": "string",
+   "theme": "string",
+   "locale": "string",
+   "website": "string",
+   "headline": "string",
+   "uid_user": "string",
+   "interests": [
+    "[]"
+   ],
+   "job_title": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "accent_color": "string",
+   "display_name": "string",
+   "uid_image_cover": "null",
+   "uid_image_avatar": "null",
+   "uid_organization": "string",
+   "uid_user_created": "null",
+   "uid_user_updated": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "T4-D — testar tokenA",
+   "T4-E — validar tokenB",
+   "T2-H — tentar rota protegida com pendingToken"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/session-policy",
+  "query": [],
+  "request_body": "{\n  \"allow_concurrent_sessions\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "T4-R — restaurar sessões concorrentes",
+   "T2-A — habilitar MFA obrigatório na organização",
+   "T2-R — restaurar require_mfa=false"
+  ]
+ },
+ {
+  "module": "health/ready",
+  "method": "GET",
+  "path": "/v1/health/ready",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "server_name": "string",
+   "status": "string",
+   "uptime_seconds": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "EV09-F — readiness com Redpanda indisponível",
+   "K2C22B — Knowledge DOWN não pode derrubar o Core"
+  ]
+ },
+ {
+  "module": "metrics",
+  "method": "GET",
+  "path": "/metrics",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "EV06 — acessar /metrics sem credencial técnica"
+  ]
+ },
+ {
+  "module": "users/login",
+  "method": "POST",
+  "path": "/v1/users/login/challenge",
+  "query": [],
+  "request_body": "{\n  \"code\": \"765474\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "T2-J — confirmar o desafio MFA",
+   "M12 — Confirmar o MFA com o código recebido",
+   "M15 — Replay do código MFA já consumido"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/voltages/search",
+  "query": [],
+  "request_body": "{\n  \"q\": \"220\",\n  \"filters\": [\n    {\n      \"field\": \"active\",\n      \"operator\": \"eq\",\n      \"value\": \"true\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "TC13 — primeiro acesso a assets.voltages",
+   "TC15 — repetir exatamente a mesma busca em assets.voltages"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/types",
+  "query": [],
+  "request_body": "{\n  \"name\": \"TABLECACHE-HOMOLOG-API-20261010\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "TC30 — criar device type pela API"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid/session-policy",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid_organization": "string",
+   "allow_concurrent_sessions": "bool",
+   "require_mfa": "bool",
+   "revoked_sessions": [
+    "[]"
+   ],
+   "revoked_count": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "SR08 — allow_concurrent_sessions=false",
+   "SR10-P2 — conferir política da empresa-teste",
+   "M26 — Consultar política atual da organização"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations/:uid/access-periods",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "mode": "string",
+   "week": {
+    "friday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "monday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "sunday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "tuesday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "saturday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "thursday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ],
+    "wednesday": [
+     {
+      "end": "string",
+      "start": "string"
+     }
+    ]
+   },
+   "timezone": "string",
+   "uid_organization": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "SR11-A — ler a configuração atual de horário da empresa-teste"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "PUT",
+  "path": "/v1/admin/organizations/:uid/access-periods",
+  "query": [],
+  "request_body": "{\n  \"mode\": \"block\",\n  \"timezone\": \"America/Sao_Paulo\",\n  \"week\": {\n    \"monday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}],\n    \"tuesday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}],\n    \"wednesday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}],\n    \"thursday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}],\n    \"friday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}],\n    \"saturday\": [{\"start\":\"00:00\",\"end\":\"15:36\"}],\n    \"sunday\": [{\"start\":\"00:00\",\"end\":\"23:59\"}]\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "SR11-B — criar uma transição próxima",
+   "SR11-E — restaurar período da empresa-teste"
+  ]
+ },
+ {
+  "module": "admin/platform-capabilities",
+  "method": "GET",
+  "path": "/v1/admin/platform-capabilities",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "description": "string",
+     "uid_user_created": "null",
+     "uid_user_updated": "null"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PC01 — Consultar catálogo global de capabilities",
+   "PB53-D — Confirmar que a requisição realmente está usando o Basic"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans",
+  "query": [
+   "q"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "tiers": [
+      {
+       "uid": "string",
+       "quantity_to": "null",
+       "quantity_from": "int",
+       "uid_billing_plan": "string",
+       "unit_price_cents": "int"
+      }
+     ],
+     "active": "bool",
+     "currency": "string",
+     "created_at": "string",
+     "unit_label": "string",
+     "updated_at": "string",
+     "description": "string",
+     "billing_mode": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string",
+     "negative_adjustment_policy": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PC02 — Listar billing plans para pegar o UID do plano",
+   "PB37 — Listar billing plans e escolher o plano de homologação existente",
+   "PB65 — Confirmar que os planos inválidos não foram persistidos"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans/:uid/capabilities",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "capabilities": [
+    "[]"
+   ],
+   "uid_billing_plan": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PC03 — Consultar capabilities do billing plan",
+   "PC05 — Confirmar capabilities persistidas no plano",
+   "PB06-A — Confirmar estado atual das capabilities do plano"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "PUT",
+  "path": "/v1/admin/billing-plans/:uid/capabilities",
+  "query": [],
+  "request_body": "{\n  \"capabilities\": [\n    \"products\",\n    \"procurement\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "PC04 — Atribuir capabilities ao billing plan",
+   "PC06 — Limpar capabilities do plano",
+   "PB06-B — Alterar o default corrente do demo_postpaid"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "GET",
+  "path": "/v1/admin/organizations",
+  "query": [
+   "q"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid_organization_owner": "string",
+     "reseller_enabled": "bool",
+     "uid_user_created": "string",
+     "uid_billing_plan": "string",
+     "uid_valuation_currency": "string",
+     "uid_timezone": "string",
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "uid_situations": "string",
+     "created_at": "string",
+     "updated_at": "string"
+    }
+   ],
+   "total": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PB01 — escolher uma organização descartável para testar troca de plano",
+   "K2C19A — localizar uma organização cliente real",
+   "01 - List"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"legal_name\": \"Colaborador Engagement Homologacao\",\n  \"preferred_name\": \"Colaborador C1\",\n  \"birth_date\": \"1990-05-20\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "C1-01 — Criar colaborador exclusivo para os testes de Engagement",
+   "C03 — Criar colaborador",
+   "C04 — Repetir criação com a mesma Idempotency-Key"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans/not-a-uuid/capabilities",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "PB15 — UUID inválido no endpoint de capabilities"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "PUT",
+  "path": "/v1/admin/billing-plans/not-a-uuid/capabilities",
+  "query": [],
+  "request_body": "{\n  \"capabilities\": []\n}",
+  "response_schema": null,
+  "example_names": [
+   "PB24 — PUT com UUID de plano inválido"
+  ]
+ },
+ {
+  "module": "admin/platform-capabilities",
+  "method": "POST",
+  "path": "/v1/admin/platform-capabilities/search",
+  "query": [],
+  "request_body": "{\n  \"q\": \"products\",\n  \"limit\": 25,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "PB27 — Search de platform capabilities / happy path",
+   "PB28 — Search com non-Primary deve ser negado",
+   "PB29 — Campo JSON desconhecido no search"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans/:uid/quote",
+  "query": [
+   "quantity"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "currency": "string",
+   "quantity": "int",
+   "simulation": "bool",
+   "total_cents": "int",
+   "billing_mode": "string",
+   "uid_billing_plan": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PB38 — Quote de 50 unidades",
+   "PB39 — Quote na primeira unidade da 2ª faixa",
+   "PB40 — Quote na primeira unidade da 3ª faixa"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "GET",
+  "path": "/v1/admin/billing-plans/not-a-uuid/quote",
+  "query": [
+   "quantity"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "PB51 — UUID do plano malformado"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "GET",
+  "path": "/v1/admin/users/:uid",
+  "query": [
+   "include_inactive"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "created_at": "string",
+   "email": "string",
+   "enabled": "bool",
+   "login": "string",
+   "mobile": "null",
+   "mobile_country": "string",
+   "name": "string",
+   "organizations_access": "string",
+   "password_initialized": "bool",
+   "profile_code": "string",
+   "scopes": [
+    {
+     "uid_organization": "string",
+     "entities": [
+      {
+       "uid_entity": "string",
+       "uid_units": [
+        "[]"
+       ],
+       "uid_groups": [
+        "string"
+       ],
+       "uid_assets": [
+        "[]"
+       ]
+      }
+     ]
+    }
+   ],
+   "uid": "string",
+   "uid_organization": "string",
+   "uid_organization_owner": "string",
+   "uid_situations": "string",
+   "updated_at": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "PB53-B — Confirmar o perfil real do usuário",
+   "M03C — conferir o cadastro do Basic",
+   "F45 — Conferir o cadastro/scopes do usuário Secondary"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "POST",
+  "path": "/v1/admin/billing-plans",
+  "query": [],
+  "request_body": "{\n  \"code\": \"homologacao_progressivo\",\n  \"name\": \"Homologação progressiva\",\n  \"description\": \"Plano descartável do roteiro de testes\",\n  \"billing_mode\": \"postpaid\",\n  \"unit_label\": \"ativo\",\n  \"active\": true,\n  \"tiers\": [\n    {\n      \"quantity_from\": 1,\n      \"quantity_to\": 10,\n      \"unit_price_cents\": 1000\n    },\n    {\n      \"quantity_from\": 11,\n      \"quantity_to\": 30,\n      \"unit_price_cents\": 800\n    },\n    {\n      \"quantity_from\": 31,\n      \"quantity_to\": 50,\n      \"unit_price_cents\": 700\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "PB57 — Criar plano dedicado de homologação",
+   "PB57-A — repetir criação com uma Idempotency-Key nova",
+   "PB59 — Mesma Idempotency-Key com body diferente"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/organization-unit-types",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "code": "string",
+    "active": "bool",
+    "canonical_name": "string"
+   }
+  ],
+  "example_names": [
+   "S01 — Consultar tipos de unidade organizacional"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/work-modes",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "code": "string",
+    "active": "bool",
+    "canonical_name": "string"
+   }
+  ],
+  "example_names": [
+   "S02 — Consultar modos de trabalho"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/organization-units",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_unit_type\": \"91420000-0000-4000-8000-000000000001\",\n  \"uid_parent\": null,\n  \"code\": \"DIR_OPERACIONAL\",\n  \"name\": \"Diretoria Operacional\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S03 — Criar unidade organizacional raiz",
+   "S04 — Replay idempotente da unidade raiz",
+   "S05 — Criar unidade filha"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/organization-units",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "uid_parent": "string",
+     "updated_at": "string",
+     "uid_unit_type": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S09 — Listar unidades da organização",
+   "S10 — Listagem sem organização alvo"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/organization-units/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "active": "bool",
+   "created_at": "string",
+   "uid_parent": "string",
+   "updated_at": "string",
+   "uid_unit_type": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S11 — Consultar unidade filha por UID"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/positions",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"code\": \"GER_OPERACOES\",\n  \"name\": \"Gerente de Operações\",\n  \"description\": \"Responsável pela operação\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S12 — Criar posição",
+   "S13 — Replay da posição"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/positions/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "active": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "description": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S14 — GET da posição criada"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/positions",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "description": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S15 — Listar posições da organização"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PATCH",
+  "path": "/v1/admin/collaborators/positions/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"description\": \"Responsável pela operação e gestão da equipe\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S16 — PATCH da posição"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/:uid/assignments",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_engagement\": \"995f425d-2e88-46a4-90bc-9bcdfcf63e30\",\n  \"uid_organization_unit\": \"3e504bb1-f9f3-4ae0-ab52-88f56b302572\",\n  \"uid_position\": \"241bf6b9-0884-4e5e-9bc9-afd0381917b6\",\n  \"started_on\": \"2027-01-01\",\n  \"is_primary\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "S17 — Criar assignment principal",
+   "S18 — Replay do assignment",
+   "S22 — Conflito de dois assignments principais sobrepostos"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/:uid/assignments",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "ended_on": "null",
+     "created_at": "string",
+     "is_primary": "bool",
+     "started_on": "string",
+     "updated_at": "string",
+     "uid_position": "string",
+     "uid_engagement": "string",
+     "uid_collaborator": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string",
+     "uid_organization_unit": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S19 — Listar assignments do colaborador"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "ended_on": "null",
+   "created_at": "string",
+   "is_primary": "bool",
+   "started_on": "string",
+   "updated_at": "string",
+   "uid_position": "string",
+   "uid_engagement": "string",
+   "uid_collaborator": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_organization_unit": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S20 — GET individual do assignment"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PATCH",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_position\": \"241bf6b9-0884-4e5e-9bc9-afd0381917b6\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S21 — PATCH de assignment com campo proibido"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid/work-modes",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_work_mode\": \"91420000-0000-4000-8000-000000000011\",\n  \"started_on\": \"2027-01-01\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S23 — Criar período de trabalho presencial",
+   "S24 — Work mode sobreposto",
+   "S26 — Iniciar remote no dia seguinte"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PATCH",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid/work-modes/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"ended_on\": \"2027-03-31\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S25 — Encerrar período onsite"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid/managers",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_manager_assignment\": \"45840032-e33f-406d-8b60-e562e6c554c6\",\n  \"started_on\": \"2027-01-01\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "S27 — Impedir assignment de gerenciar a si próprio"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/:uid/assignments/:uid/work-modes",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "ended_on": "null",
+     "created_at": "string",
+     "started_on": "string",
+     "updated_at": "string",
+     "uid_work_mode": "string",
+     "uid_assignment": "string",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "S28 — Listar histórico de work modes"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/engagement-types",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "code": "string",
+    "active": "bool",
+    "created_at": "string",
+    "updated_at": "string",
+    "description": "null",
+    "canonical_name": "string",
+    "uid_user_created": "null",
+    "uid_user_updated": "null"
+   }
+  ],
+  "example_names": [
+   "E01 — Consultar tipos de vínculo"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/:uid/engagements",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_engagement_type\": \"91410000-0000-4000-8000-000000000001\",\n  \"uid_country\": \"c0580000-0000-4000-8000-000000000001\",\n  \"uid_country_subdivision\": null,\n  \"uid_contract_entity\": null,\n  \"started_on\": \"2026-10-01\",\n  \"ended_on\": null,\n  \"is_primary\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "E02 — Criar engagement principal",
+   "E03 — Replay idempotente do mesmo engagement",
+   "E04 — Mesma Idempotency-Key com payload diferente"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PATCH",
+  "path": "/v1/admin/collaborators/:uid/engagements/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"ended_on\": \"2026-12-31\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "E07 — Encerrar o engagement principal atual",
+   "E14 — Tentar reabrir engagement encerrado",
+   "E15 — Tentar alterar a data de encerramento já gravada"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PATCH",
+  "path": "/v1/admin/collaborators/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"active\": false\n}",
+  "response_schema": null,
+  "example_names": [
+   "E20 — Desativar o collaborator",
+   "E23 — Reativar o collaborator",
+   "C07 — PATCH para alterar campo mutável"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/:uid/engagements/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "ended_on": "string",
+   "created_at": "string",
+   "is_primary": "bool",
+   "started_on": "string",
+   "updated_at": "string",
+   "uid_country": "string",
+   "uid_collaborator": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_contract_entity": "null",
+   "uid_engagement_type": "string",
+   "uid_country_subdivision": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "E22 — Engagement histórico continua legível com collaborator inativo",
+   "E27 — GET de engagement sem organização alvo"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/:uid/engagements/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "E24 — Listar engagements do collaborator",
+   "E25 — Filtrar somente vínculos primary",
+   "E26 — Search de engagements sem organização alvo"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "GET",
+  "path": "/v1/admin/collaborators/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "active": "bool",
+   "birth_date": "null",
+   "created_at": "string",
+   "legal_name": "string",
+   "updated_at": "string",
+   "preferred_name": "null",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "uid_birth_country": "null",
+   "uid_marital_status": "null",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "C06 — Buscar colaborador por UID",
+   "C04 — GET após conflito",
+   "C17 — GET sem uid_organization"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "PUT",
+  "path": "/v1/admin/collaborators/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"legal_name\": \"Maria Helena de Souza\",\n  \"preferred_name\": \"Helena\",\n  \"birth_date\": \"1991-04-18\",\n  \"uid_birth_country\": \"c0580000-0000-4000-8000-000000000001\",\n  \"uid_marital_status\": \"7812d6d2-cd08-5105-8fd0-2325ede56bc0\",\n  \"active\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "C05 — PUT completo do colaborador",
+   "C15 — Organização imutável no PUT",
+   "C20 — PUT limpando campos opcionais"
+  ]
+ },
+ {
+  "module": "admin/collaborators",
+  "method": "POST",
+  "path": "/v1/admin/collaborators/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    },\n    {\n      \"field\": \"preferred_name\",\n      \"operator\": \"contains\",\n      \"value\": \"Helena\"\n    }\n  ],\n  \"limit\": 100,\n  \"offset\": 0\n}",
+  "response_schema": null,
+  "example_names": [
+   "C08 — Search do colaborador na organização",
+   "C09 — Search sem uid_organization"
+  ]
+ },
+ {
+  "module": "users/security",
+  "method": "GET",
+  "path": "/v1/users/security",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "require_mfa": "bool",
+   "effective_require_mfa": "bool",
+   "organization_require_mfa": "bool",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "M02 — Consultar configuração MFA do próprio usuário",
+   "M06 — Consultar configuração de segurança"
+  ]
+ },
+ {
+  "module": "users/security",
+  "method": "PUT",
+  "path": "/v1/users/security",
+  "query": [],
+  "request_body": "{\n  \"require_mfa\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "M03 — Usuário habilita o próprio MFA",
+   "M07 — Habilitar MFA do usuário",
+   "M28 — Desabilitar MFA pessoal com MFA organizacional ativo"
+  ]
+ },
+ {
+  "module": "users/contact-verification",
+  "method": "POST",
+  "path": "/v1/users/contact-verification/request",
+  "query": [],
+  "request_body": "{\n  \"channel\": \"email\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "M03B — Solicitar verificação do email",
+   "M03E — solicitar verificação do email"
+  ]
+ },
+ {
+  "module": "users/contact-verification",
+  "method": "POST",
+  "path": "/v1/users/contact-verification/confirm",
+  "query": [],
+  "request_body": "{\n  \"channel\": \"email\",\n  \"challenge_id\": \"e151ef7b-6daf-4430-96a8-7869c3801318\",\n  \"token\": \"e3gPe7eSDhBDt0qoPTtP72sunULcdKW5-8J5ymsRsP8\",\n  \"code\": \"\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "M05 — Confirmar verificação do e-mail"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "PUT",
+  "path": "/v1/admin/knowledge/revisions/:uid/attachments",
+  "query": [],
+  "request_body": "{\n  \"attachments\": [\n    {\n      \"uid_document\": \"66d002de-53fd-4a29-9c18-efadc8f22036\",\n      \"uid_document_revision\": \"13b7ab37-57cc-5671-9c56-081065a8cb78\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2C01 — Vincular o attachment GED à revisão Knowledge draft",
+   "K2C12B — Vincular GED R01 na nova revisão Knowledge",
+   "K2C13 — Revisão já publicada deve ser imutável"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "GET",
+  "path": "/v1/admin/knowledge/revisions/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "body": "string",
+   "title": "string",
+   "videos": [
+    "[]"
+   ],
+   "summary": "string",
+   "uid_item": "string",
+   "created_at": "string",
+   "attachments": [
+    {
+     "uid_document": "string",
+     "uid_document_revision": "string"
+    }
+   ],
+   "search_vector": "string",
+   "revision_number": "int",
+   "uid_user_created": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "K2C01B — Conferir a revisão e o attachment fixo",
+   "K2C16B — Confirmar que o draft continua sem attachments",
+   "K2C18B — Confirmar preservação do attachment anterior"
+  ]
+ },
+ {
+  "module": "public/knowledge",
+  "method": "GET",
+  "path": "/v1/public/knowledge/items/:slug/attachments/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "K2C04 — Download público do attachment",
+   "K2C05 — Attachment de outro item deve ser invisível",
+   "K2C06 — Item authenticated pela rota pública"
+  ]
+ },
+ {
+  "module": "knowledge/items",
+  "method": "GET",
+  "path": "/v1/knowledge/items/:slug/attachments/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "K2C07 — Download authenticated autorizado",
+   "K2C08 — selected sem grant efetivo para o ator atual.",
+   "K2C09 — Selected com grant efetivo"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "PUT",
+  "path": "/v1/admin/knowledge/items/:uid/grants",
+  "query": [],
+  "request_body": "{\n  \"grants\": [\n    {\n      \"principal_type\": \"profile\",\n      \"profile_code\": \"primary_admin\",\n      \"scope_type\": \"global\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2C09A — Dar grant efetivo ao Primary",
+   "K2C09B — Revogar os grants do item C"
+  ]
+ },
+ {
+  "module": "admin/knowledge",
+  "method": "POST",
+  "path": "/v1/admin/knowledge/items/:uid/archive",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "K2C10 — Archive/despublicação"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "GET",
+  "path": "/v1/admin/documents/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "title": "string",
+   "active": "bool",
+   "target": "null",
+   "metadata": {},
+   "area_code": "string",
+   "revisions": [
+    {
+     "uid": "string",
+     "sha256": "string",
+     "extension": "string",
+     "mime_type": "string",
+     "created_at": "string",
+     "size_bytes": "int",
+     "uid_document": "string",
+     "revision_code": "string",
+     "change_summary": "null",
+     "revision_number": "int",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "original_filename": "string"
+    }
+   ],
+   "type_code": "string",
+   "uid_class": "null",
+   "class_name": "null",
+   "created_at": "string",
+   "updated_at": "string",
+   "origin_code": "string",
+   "tenant_code": "string",
+   "distribution": "null",
+   "uid_contract": "string",
+   "access_source": "string",
+   "contract_code": "string",
+   "uid_organization": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "document_sequence": "int",
+   "permission_source": "string",
+   "organization_sequence": "int",
+   "uid_organization_context": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "K2C18A — Consultar documento GED atual",
+   "G07 — Basic lê documento classificado via grupo funcional",
+   "G12 — Basic com scope parcial NÃO lê documento por target da Entity"
+  ]
+ },
+ {
+  "module": "admin/document-contracts",
+  "method": "POST",
+  "path": "/v1/admin/document-contracts",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"contract_year\": 2026,\n  \"contract_code\": \"KNOW-2C-CUSTOMER-01\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2C19A — Criar contrato GED na organização cliente",
+   "G01 — criar contrato raiz na Autoscale",
+   "C30 — criar contrato raiz"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "POST",
+  "path": "/v1/admin/documents",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_contract\": \"9060dcdf-1595-40db-932a-8445f34eeff4\",\n  \"origin_code\": \"I\",\n  \"area_code\": \"TEC\",\n  \"type_code\": \"IM\",\n  \"title\": \"Knowledge 2C - Documento Cliente\",\n  \"metadata\": {}\n}",
+  "response_schema": null,
+  "example_names": [
+   "K2C19B — Criar documento GED da organização cliente",
+   "G11 — Criar documento classificado com target na Entity E1",
+   "G02 — criar o contrato SaaS padrão"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "POST",
+  "path": "/v1/admin/documents/:uid/revisions",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "K2C19C — Criar R00 GED do documento cliente",
+   "G03 — subir a R00 do contrato SaaS",
+   "G07 — owner sobe uma nova revisão R01"
+  ]
+ },
+ {
+  "module": "admin/integrations",
+  "method": "POST",
+  "path": "/v1/admin/integrations/fipe/sync",
+  "query": [],
+  "request_body": "{\n  \"job_type\": \"catalog_sync\",\n  \"payload\": {}\n}",
+  "response_schema": null,
+  "example_names": [
+   "F05 — Enfileirar catalog_sync",
+   "F07 — Replay do catalog_sync sem nova execução",
+   "F08 — Mesma Idempotency-Key com conteúdo diferente"
+  ]
+ },
+ {
+  "module": "admin/integrations",
+  "method": "GET",
+  "path": "/v1/admin/integrations/fipe/jobs/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "status": "string",
+   "job_key": "string",
+   "payload": {},
+   "attempts": "int",
+   "job_type": "string",
+   "locked_at": "null",
+   "created_at": "string",
+   "last_error": "null",
+   "started_at": "string",
+   "updated_at": "string",
+   "finished_at": "string",
+   "request_uid": "string",
+   "available_at": "string",
+   "items_failed": "int",
+   "items_updated": "int",
+   "items_inserted": "int",
+   "items_received": "int",
+   "items_unchanged": "int",
+   "uid_user_created": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F06 — Consultar o job criado",
+   "F13 — Consultar resultado do reference_sync",
+   "F15 — Consultar a segunda execução do reference_sync"
+  ]
+ },
+ {
+  "module": "admin/integrations",
+  "method": "GET",
+  "path": "/v1/admin/integrations/fipe/jobs",
+  "query": [
+   "limit",
+   "offset"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "status": "string",
+     "job_key": "string",
+     "payload": {
+      "fuel_code": "int",
+      "model_year": "int",
+      "vehicle_type": "string",
+      "source_brand_code": "string",
+      "source_model_code": "string"
+     },
+     "attempts": "int",
+     "job_type": "string",
+     "locked_at": "null",
+     "created_at": "string",
+     "last_error": "string",
+     "started_at": "string",
+     "updated_at": "string",
+     "finished_at": "string",
+     "request_uid": "string",
+     "available_at": "string",
+     "items_failed": "int",
+     "items_updated": "int",
+     "items_inserted": "int",
+     "items_received": "int",
+     "items_unchanged": "int",
+     "uid_user_created": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F09 — Listar jobs FIPE",
+   "F10 — Outro perfil NÃO pode consultar jobs FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/types/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "profile_code": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "fipe_vehicle_type": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F16 — Consultar o tipo de asset que vamos transformar em veículo rodoviário Método"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/types/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-813-12b803a4assets\",\n  \"active\": true,\n  \"profile_code\": \"road_vehicle\",\n  \"fipe_vehicle_type\": \"cars\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "F17 — Configurar o tipo como road_vehicle / cars"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/manufacturers/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "types": [
+    "string"
+   ],
+   "active": "bool",
+   "created_at": "string",
+   "updated_at": "string",
+   "fipe_brand_codes": {
+    "93df5f22-9d4a-449c-9332-b0364193f70a": "string"
+   },
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F18 — Consultar o fabricante do asset"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/manufacturers/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-813-44e4cd4aassets\",\n  \"active\": true,\n  \"types\": [\n    \"d1c3e08d-0bc3-447c-a562-3e53ad8374fc\",\n    \"93df5f22-9d4a-449c-9332-b0364193f70a\"\n  ],\n  \"fipe_brand_codes\": {}\n}",
+  "response_schema": null,
+  "example_names": [
+   "F19 — Associar o fabricante ao tipo rodoviário",
+   "F21 — Mapear o fabricante Navisoft para uma marca FIPE real"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/models/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "name": "string",
+   "active": "bool",
+   "uid_type": "string",
+   "created_at": "string",
+   "updated_at": "string",
+   "fipe_model_code": "null",
+   "telemetry_params": {},
+   "uid_manufacturer": "string",
+   "uid_user_created": "string",
+   "uid_user_updated": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F22 — Consultar o modelo que vamos mapear para FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/models",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-FIPE-AUDI-20261005\",\n  \"active\": true,\n  \"uid_type\": \"93df5f22-9d4a-449c-9332-b0364193f70a\",\n  \"uid_manufacturer\": \"4f547b91-8b31-42bc-8f00-a6ff88878731\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "F23 — Criar modelo dedicado para a homologação FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/models/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-FIPE-AUDI-20261005\",\n  \"active\": true,\n  \"uid_type\": \"93df5f22-9d4a-449c-9332-b0364193f70a\",\n  \"uid_manufacturer\": \"4f547b91-8b31-42bc-8f00-a6ff88878731\",\n  \"fipe_model_code\": \"5496\",\n  \"telemetry_params\": {\n    \"gps\": {\n      \"report_interval\": 60\n    }\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "F25 — Mapear o modelo Navisoft para o modelo FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/fuels/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"Gasoline\",\n  \"active\": true,\n  \"fipe_fuel_code\": 1\n}",
+  "response_schema": null,
+  "example_names": [
+   "F28 — Mapear Gasoline para o código FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_entity\": \"6e40aece-42bb-4a41-ac48-57afa5435ca8\",\n  \"uid_unit\": \"842741fd-8fbb-46c6-b0c9-be3e05c28ec0\",\n  \"uid_model\": \"09c8171a-a1a5-46b9-8ca0-4e2337b058c8\",\n  \"uid_fuel\": \"28607c62-4c42-4c0a-bc8d-7fb43aa9a369\",\n  \"identification\": \"HOMOLOG-FIPE-AUDI-2014-01\",\n  \"vehicle\": {\n    \"plate\": \"FIP2A14\",\n    \"model_year\": 2014,\n    \"telemetry_params_override\": {\n      \"gps\": {\n        \"report_interval\": 30\n      }\n    }\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "F32 — Criar asset rodoviário com veículo",
+   "02 - Create",
+   "47 — Basic tentando criar Asset"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/:uid/valuation",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "F34 — Valuation FIPE do asset",
+   "F36 — Retestar valuation após correção do histórico",
+   "F38 — Valuation com cache miss e criação automática de valuation_refresh"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PATCH",
+  "path": "/v1/admin/assets/:uid",
+  "query": [],
+  "request_body": "{\n  \"vehicle\": {\n    \"model_year\": 2013\n  }\n}",
+  "response_schema": null,
+  "example_names": [
+   "F37 — Alterar o ano do veículo para preparar cache miss",
+   "F47 — Impedir troca do veículo para modelo incompatível",
+   "F48 — Trocar temporariamente para combustível sem mapeamento FIPE"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/types",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-FIPE-INVALID-20261005\",\n  \"active\": true,\n  \"profile_code\": \"road_vehicle\",\n  \"fipe_vehicle_type\": \"aircraft\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "F46 — Rejeitar mapeamento FIPE inválido sem tocar em cadastro existente"
+  ]
+ },
+ {
+  "module": "health",
+  "method": "GET",
+  "path": "/v1/health",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "server_name": "string",
+   "status": "string",
+   "uptime_seconds": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "F59 — Readiness Core com cache FIPE fora"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "POST",
+  "path": "/v1/admin/users/functional-group-members",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_functional_group\": \"8c5f7d8c-0d0c-4f52-9276-7388eee5af81\",\n  \"uid_member_user\": \"091e62c3-75c1-432c-93e4-4a0134174efd\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G02 — Vincular Basic ao grupo funcional"
+  ]
+ },
+ {
+  "module": "admin/groups-permissions",
+  "method": "POST",
+  "path": "/v1/admin/groups-permissions",
+  "query": [],
+  "request_body": "{\n  \"group_code\": \"basic_user\",\n  \"permission_code\": \"documents.access\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G03 — Conceder documents.access ao perfil Basic",
+   "L5.4 — conceder devices.access ao Basic"
+  ]
+ },
+ {
+  "module": "admin/document-classes",
+  "method": "POST",
+  "path": "/v1/admin/document-classes",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"code\": \"ged_homolog_financial\",\n  \"name\": \"Financeiro GED Homologação\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G04 — Criar classe documental Financeiro"
+  ]
+ },
+ {
+  "module": "admin/document-classes",
+  "method": "PUT",
+  "path": "/v1/admin/document-classes/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"name\": \"Financeiro GED Homologação\",\n  \"active\": true,\n  \"permissions\": [\n    {\n      \"principal_type\": \"functional_group\",\n      \"uid_functional_group\": \"8c5f7d8c-0d0c-4f52-9276-7388eee5af81\",\n      \"action_code\": \"read\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "G05 — Conceder somente read ao grupo Financeiro",
+   "G10 — Alterar a classe para somente target/read"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "PUT",
+  "path": "/v1/admin/documents/:uid/class",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_class\": \"d98dbd66-bdbd-4b9f-a908-0cace3b97c25\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G06 — Associar a classe Financeiro ao documento",
+   "G09 — Basic NÃO pode gerenciar a classificação com grant somente read"
+  ]
+ },
+ {
+  "module": "admin/document-revisions",
+  "method": "GET",
+  "path": "/v1/admin/document-revisions/:uid/download",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "G08 — Basic NÃO pode baixar com grant somente read",
+   "G06 — baixar a revisão como destinatário",
+   "G23 — destinatário tenta baixar diretamente a R00 antiga"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "POST",
+  "path": "/v1/admin/documents/:uid/distributions",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"uid_recipient_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"access_mode\": \"read\",\n  \"revision_policy\": \"follow_latest\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G04 — distribuir para a organização cliente com follow_latest",
+   "G14 — redistribuir para o mesmo cliente",
+   "G18 — retry exato do G14"
+  ]
+ },
+ {
+  "module": "admin/document-distributions",
+  "method": "PUT",
+  "path": "/v1/admin/document-distributions/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": "{\n  \"access_mode\": \"read\",\n  \"revision_policy\": \"fixed_revision\",\n  \"uid_fixed_revision\": \"8ad234fc-2961-5e63-a242-e1b2a7aa1b6b\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "G09 — fixar a distribuição na R00",
+   "G16 — destinatário tenta alterar a distribuição"
+  ]
+ },
+ {
+  "module": "admin/document-distributions",
+  "method": "DELETE",
+  "path": "/v1/admin/document-distributions/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "G11 — revogar a distribuição"
+  ]
+ },
+ {
+  "module": "admin/images",
+  "method": "POST",
+  "path": "/v1/admin/images/organization/:uid",
+  "query": [
+   "link"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "C28 — nova logo usando o storage novo",
+   "C28A — mesmo upload, mas sem link=true",
+   "C28C — upload + vínculo público"
+  ]
+ },
+ {
+  "module": "public/images",
+  "method": "GET",
+  "path": "/v1/public/images/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "C28B — confirmar que logo não vinculada continua oculta",
+   "C28D — confirmar download público"
+  ]
+ },
+ {
+  "module": "admin/documents",
+  "method": "GET",
+  "path": "/v1/admin/documents/catalogs",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "areas": [
+    {
+     "code": "string",
+     "name": "string",
+     "active": "bool"
+    }
+   ],
+   "types": [
+    {
+     "code": "string",
+     "name": "string",
+     "active": "bool"
+    }
+   ],
+   "origins": [
+    {
+     "code": "string",
+     "name": "string",
+     "active": "bool"
+    }
+   ],
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "C29 — consultar catálogos do GED"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "PUT",
+  "path": "/v1/admin/devices/models/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG-813-0fab5a99devices\",\n  \"active\": true,\n  \"uid_type\": \"14c309f0-a8c6-4fe1-9e31-7cf2015fa6bb\",\n  \"uid_manufacturer\": \"bed9f48e-2769-4e4a-bf28-494ab1d12055\",\n  \"requires_simcard\": true\n}",
+  "response_schema": null,
+  "example_names": [
+   "98 — marcar modelo como requires_simcard=true"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "PUT",
+  "path": "/v1/admin/entities/technicians/:uid/user-account",
+  "query": [],
+  "request_body": "{\n  \"uid_user\": \"091e62c3-75c1-432c-93e4-4a0134174efd\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "L5.6 — vincular Basic ao executor",
+   "L4.2 — associar o Basic ao executor"
+  ]
+ },
+ {
+  "module": "technician/work-orders",
+  "method": "GET",
+  "path": "/v1/technician/work-orders",
+  "query": [
+   "limit",
+   "offset",
+   "state",
+   "uid_technician"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    "[]"
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "L5.7 — listar OS pendentes do executor",
+   "L6 — concluídas do executor",
+   "L7 — executor com state=all"
+  ]
+ },
+ {
+  "module": "technician/work-orders",
+  "method": "POST",
+  "path": "/v1/technician/work-orders/search",
+  "query": [],
+  "request_body": "{\n  \"state\": \"pending\",\n  \"filters\": [\n    {\n      \"field\": \"status\",\n      \"operator\": \"eq\",\n      \"value\": \"draft\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "L9 — state não pode ser combinado com filtro status",
+   "L11 — /search do executor, pending normal"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/work-orders/search",
+  "query": [],
+  "request_body": "{\n  \"state\": \"all\",\n  \"limit\": 25,\n  \"offset\": 0,\n  \"filters\": [\n    {\n      \"field\": \"uid_technician\",\n      \"operator\": \"eq\",\n      \"value\": \"e33312b8-bbc5-4648-a92e-bc1b372a573c\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "L12 — /search administrativo com filtro por executor"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/groups",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"name\": \"HOMOLOG Scope Group G1\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "02 - Create",
+   "75 — criar G2"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "POST",
+  "path": "/v1/admin/assets/group-assets",
+  "query": [],
+  "request_body": "{\n  \"uid_group\": \"52f410cd-f2a8-41c4-9140-28c61cf8bae6\",\n  \"uid_asset\": \"bc8d08ba-9b30-42f5-9faf-ac94dbb69769\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "38 — adicionar A1 ao G1",
+   "77 — adicionar A2 ao G2",
+   "42 — adicionar A2 ao mesmo G1"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "DELETE",
+  "path": "/v1/admin/assets/group-assets/:uid",
+  "query": [],
+  "request_body": "{\n  \"uid_group\": \"52f410cd-f2a8-41c4-9140-28c61cf8bae6\",\n  \"uid_asset\": \"bc8d08ba-9b30-42f5-9faf-ac94dbb69769\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "44 — remover A1 do G1",
+   "76 — remover A2 do G1"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/:uid",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_entity\": \"34ecddd9-b634-4bf1-a3b9-bd1df43c1ee8\",\n  \"uid_unit\": \"f0a9b007-3c59-43dd-adcb-2bd490e64f8e\",\n  \"identification\": \"SCOPE-0067-COPA-01\",\n  \"uid_model\": null\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - MOve A1 to UNit Def",
+   "36 — mover A1 de E1 para E2",
+   "32 — mover A1 para a unit default mantendo assets-only"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/voltages",
+  "query": [
+   "q"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "active": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "uid_user_created": "null",
+     "uid_user_updated": "null"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "02 - Filter Voltage"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "GET",
+  "path": "/v1/admin/assets/linked-devices",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "slot_code": "string",
+     "slot_name": "string",
+     "uid_asset": "string",
+     "created_at": "string",
+     "uid_device": "string",
+     "updated_at": "string",
+     "slot_number": "int",
+     "uid_organization": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "96a - Slots",
+   "C2 — vínculos atuais do asset"
+  ]
+ },
+ {
+  "module": "admin/events",
+  "method": "POST",
+  "path": "/v1/admin/events/models/search",
+  "query": [],
+  "request_body": "{\"filters\":[{\"field\":\"category\",\"operator\":\"eq\",\"value\":\"mechanical\"}]}",
+  "response_schema": null,
+  "example_names": [
+   "02 - Filter Categories"
+  ]
+ },
+ {
+  "module": "technician/work-orders",
+  "method": "POST",
+  "path": "/v1/technician/work-orders/:uid/start",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "C11 — técnico tenta iniciar antes de confirmar recebimento",
+   "C14 — iniciar a OS agora",
+   "C21 — iniciar a OS #40"
+  ]
+ },
+ {
+  "module": "technician/custody",
+  "method": "GET",
+  "path": "/v1/technician/custody",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   "[]"
+  ],
+  "example_names": [
+   "C12 — listar custódias do executor"
+  ]
+ },
+ {
+  "module": "technician/custody",
+  "method": "POST",
+  "path": "/v1/technician/custody/:uid/confirm-receipt",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "C13 — executor confirma o recebimento"
+  ]
+ },
+ {
+  "module": "technician/work-orders",
+  "method": "POST",
+  "path": "/v1/technician/work-orders/:uid/complete",
+  "query": [],
+  "request_body": "{\n  \"items\": [\n    {\n      \"uid_item\": \"f96e21cd-a443-4d30-9e7a-77d29af84c3b\",\n      \"result_notes\": \"Manutenção do equipamento secundário concluída na homologação 0092-0099\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "C15 — concluir SOMENTE o item de manutenção",
+   "C16 — concluir somente o item de instalação",
+   "C22 — registrar boot = fail"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/technical-packages",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"code\": \"homolog-slot4-test\",\n  \"name\": \"HOMOLOG Slot 4 com teste obrigatório\",\n  \"instructions\": {\n    \"installation\": \"Validar fixação, alimentação e comunicação antes de concluir.\"\n  },\n  \"requirements\": [\n    {\n      \"slot_number\": 4,\n      \"requirement_type\": \"auxiliary_tracker\",\n      \"uid_device_type\": \"14c309f0-a8c6-4fe1-9e31-7cf2015fa6bb\",\n      \"uid_device_model\": \"f67f6ff6-f527-45b8-8d83-5d87e5f18bed\",\n      \"required\": true,\n      \"instructions\": {\n        \"check\": \"Confirmar alimentação e transmissão.\"\n      },\n      \"tests\": [\n        {\n          \"test_code\": \"boot\",\n          \"name\": \"Inicialização e transmissão\",\n          \"required\": true\n        }\n      ]\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "C17 — criar pacote técnico para o slot 4"
+  ]
+ },
+ {
+  "module": "admin/assets",
+  "method": "PUT",
+  "path": "/v1/admin/assets/:uid/technical-package",
+  "query": [],
+  "request_body": "{\n  \"uid_technical_package\": \"c9b1e536-50dc-42be-9858-fdcbae55f84b\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "C18 — vincular pacote técnico ao asset"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/custody/:uid/declare-return",
+  "query": [],
+  "request_body": "{\n  \"condition\": \"testing\",\n  \"notes\": \"HOMOLOG equipamento substituído retornando para a organização\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "30 — declarar devolução do device antigo"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "POST",
+  "path": "/v1/admin/devices/custody/:uid/receive",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "31 — recebimento físico pela organização"
+  ]
+ },
+ {
+  "module": "admin/devices",
+  "method": "GET",
+  "path": "/v1/admin/devices/work-orders",
+  "query": [
+   "limit",
+   "offset",
+   "state",
+   "uid_technician"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "number": "int",
+     "status": "string",
+     "uid_asset": "string",
+     "created_at": "string",
+     "started_at": "null",
+     "updated_at": "string",
+     "description": "string",
+     "items_total": "int",
+     "cancelled_at": "null",
+     "completed_at": "null",
+     "dispatched_at": "string",
+     "items_pending": "int",
+     "uid_technician": "string",
+     "items_completed": "int",
+     "uid_organization": "string",
+     "uid_provider_entity": "string",
+     "asset_identification": "string",
+     "provider_name_snapshot": "string",
+     "technician_name_snapshot": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "L1 — Admin, listagem default pending",
+   "L2 — Admin, somente concluídas",
+   "L3 — Admin all filtrando pelo executor"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities/technicians/:uid/user-account",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "active": "bool",
+   "uid_user": "string",
+   "updated_at": "string",
+   "user_enabled": "bool",
+   "uid_technician": "string",
+   "uid_organization": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "L5.1 — conferir vínculo executor ↔ usuário"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/drivers",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"name\": \"HOMOLOG Executor Técnico 0086\",\n  \"birth_date\": \"1988-04-03\",\n  \"internal_contract_number\": \"HOMOLOG-DRV-0086\",\n  \"scopes\": [\n    {}\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "8 — criar motorista com os mesmos dados do executor"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "PATCH",
+  "path": "/v1/admin/entities/drivers/:uid",
+  "query": [],
+  "request_body": "{\n  \"name\": \"HOMOLOG Motorista Independente 0086\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "Alterar Nome Motorista"
+  ]
+ },
+ {
+  "module": "admin/addresses",
+  "method": "POST",
+  "path": "/v1/admin/addresses",
+  "query": [],
+  "request_body": "{\n  \"link_code\": \"organization\",\n  \"uid_link\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"country_code\": \"BR\",\n  \"postal_code\": \"30110-012\",\n  \"region\": \"MG\",\n  \"city\": \"Belo Horizonte\",\n  \"district\": \"Centro\",\n  \"address_line1\": \"Avenida HOMOLOG\",\n  \"number\": \"100\",\n  \"complement\": \"Sala 10\",\n  \"purposes\": [\n    {\n      \"code\": \"headquarters\",\n      \"is_primary\": true\n    },\n    {\n      \"code\": \"billing\",\n      \"is_primary\": true\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "93 — criar endereço de cobrança + sede"
+  ]
+ },
+ {
+  "module": "admin/contacts",
+  "method": "POST",
+  "path": "/v1/admin/contacts",
+  "query": [],
+  "request_body": "{\n  \"link_code\": \"organization\",\n  \"uid_link\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"name\": \"HOMOLOG Contato Duplicado\",\n  \"roles\": [\n    \"support\"\n  ],\n  \"methods\": [\n    {\n      \"type\": \"phone\",\n      \"value\": \"+5531987654301\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "90 — criar Contact na Organization",
+   "92 — mesmo telefone em outro contexto deve ser permitido",
+   "94 — WhatsApp em email deve ser recusado"
+  ]
+ },
+ {
+  "module": "admin/contacts",
+  "method": "GET",
+  "path": "/v1/admin/contacts/:uid",
+  "query": [
+   "uid_organization"
+  ],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "95 — isolamento por Organization"
+  ]
+ },
+ {
+  "module": "admin/situations",
+  "method": "POST",
+  "path": "/v1/admin/situations",
+  "query": [],
+  "request_body": "{\n  \"code\": \"test_blocked\",\n  \"name\": \"Bloqueado para homologação\",\n  \"enabled\": true,\n  \"operational\": true,\n  \"locked\": true,\n  \"applies_to_all\": false,\n  \"scopes\": [\n    \"entities\",\n    \"assets\"\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Create"
+  ]
+ },
+ {
+  "module": "admin/situations",
+  "method": "PUT",
+  "path": "/v1/admin/situations/:uid",
+  "query": [],
+  "request_body": "{\n  \"code\": \"active\",\n  \"name\": \"Ativo\",\n  \"applies_to_all\": false,\n  \"scopes\": [\n    \"assets\"\n  ],\n  \"enabled\": true,\n  \"operational\": true,\n  \"locked\": false\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Update"
+  ]
+ },
+ {
+  "module": "admin/situations",
+  "method": "DELETE",
+  "path": "/v1/admin/situations/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "01 - Delete"
+  ]
+ },
+ {
+  "module": "admin/situations",
+  "method": "GET",
+  "path": "/v1/admin/situations",
+  "query": [
+   "q"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "code": "string",
+     "name": "string",
+     "locked": "bool",
+     "scopes": [
+      "[]"
+     ],
+     "enabled": "bool",
+     "created_at": "string",
+     "updated_at": "string",
+     "operational": "bool",
+     "applies_to_all": "bool"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "02 - List All",
+   "03 - Search"
+  ]
+ },
+ {
+  "module": "admin/situations",
+  "method": "GET",
+  "path": "/v1/admin/situations/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "code": "string",
+   "name": "string",
+   "applies_to_all": "bool",
+   "enabled": "bool",
+   "operational": "bool",
+   "locked": "bool",
+   "scopes": [
+    "[]"
+   ],
+   "created_at": "string",
+   "updated_at": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "02 - List One"
+  ]
+ },
+ {
+  "module": "admin/common",
+  "method": "GET",
+  "path": "/v1/admin/common/timezones",
+  "query": [],
+  "request_body": null,
+  "response_schema": [
+   {
+    "uid": "string",
+    "code": "string",
+    "active": "bool",
+    "created_at": "string",
+    "updated_at": "string",
+    "uid_user_created": "null",
+    "uid_user_updated": "null"
+   }
+  ],
+  "example_names": [
+   "01 - Timezones"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "GET",
+  "path": "/v1/admin/users",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "can_create_organizations": "null",
+     "created_at": "string",
+     "email": "string",
+     "enabled": "bool",
+     "login": "string",
+     "mobile": "null",
+     "mobile_country": "string",
+     "name": "string",
+     "organizations_access": "string",
+     "password_initialized": "bool",
+     "profile_code": "string",
+     "scopes": [
+      {
+       "uid_organization": "string",
+       "entities": [
+        "[]"
+       ]
+      }
+     ],
+     "uid": "string",
+     "uid_organization": "string",
+     "uid_organization_owner": "string",
+     "uid_situations": "string",
+     "updated_at": "string"
+    }
+   ],
+   "limit": "int",
+   "offset": "int",
+   "total": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "04 - List All"
+  ]
+ },
+ {
+  "module": "admin/groups-permissions",
+  "method": "GET",
+  "path": "/v1/admin/groups-permissions",
+  "query": [
+   "filters"
+  ],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "created_at": "string",
+     "group_code": "string",
+     "updated_at": "string",
+     "permission_code": "string",
+     "uid_user_created": "string",
+     "uid_user_updated": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "L5.3 — verificar devices.access no Basic"
+  ]
+ },
+ {
+  "module": "admin/users",
+  "method": "POST",
+  "path": "/v1/admin/users/functional-groups",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"code\": \"ged_homolog_financial\",\n  \"name\": \"Financeiro GED Homologação\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "teste inicvio"
+  ]
+ },
+ {
+  "module": "admin/billing-plans",
+  "method": "DELETE",
+  "path": "/v1/admin/billing-plans/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "01 - Delete"
+  ]
+ },
+ {
+  "module": "admin/organizations",
+  "method": "POST",
+  "path": "/v1/admin/organizations/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Search 2"
+  ]
+ },
+ {
+  "module": "images",
+  "method": "GET",
+  "path": "/v1/images/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": null,
+  "example_names": [
+   "C26 — download autenticado da imagem"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/types/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "2 — buscar o tipo technician"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities/:uid",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "uid": "string",
+   "uid_organization": "string",
+   "uid_unit": "string",
+   "uid_situations": "string",
+   "name": "string",
+   "types": [
+    {
+     "uid": "string",
+     "uid_organization": "string",
+     "code": "string",
+     "name": "string",
+     "is_system": "bool",
+     "active": "bool"
+    }
+   ],
+   "created_at": "string",
+   "updated_at": "string",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "8 — conferir a entidade"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/units",
+  "query": [],
+  "request_body": "{\n  \"uid_organization\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\n  \"uid_entity\": \"34ecddd9-b634-4bf1-a3b9-bd1df43c1ee8\",\n  \"name\": \"HOMOLOG Savassi\"\n}",
+  "response_schema": null,
+  "example_names": [
+   "63 — criar segunda unit da E1",
+   "72 — criar uma unit específica da E2",
+   "02 - Create"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/units/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    },\n    {\n      \"field\": \"uid_entity\",\n      \"operator\": \"eq\",\n      \"value\": \"0a267d6b-6543-4973-bf4f-1c35d465208e\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "35 — listar Units da E2"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "GET",
+  "path": "/v1/admin/entities",
+  "query": [],
+  "request_body": null,
+  "response_schema": {
+   "items": [
+    {
+     "uid": "string",
+     "name": "string",
+     "uid_unit": "string",
+     "created_at": "string",
+     "updated_at": "string",
+     "uid_image_logo": "null",
+     "uid_situations": "string",
+     "uid_organization": "string"
+    }
+   ],
+   "limit": "int",
+   "total": "int",
+   "offset": "int",
+   "elapsed_ms": "float"
+  },
+  "example_names": [
+   "01 - List"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/search",
+  "query": [],
+  "request_body": "{\n  \"filters\": [\n    {\n      \"field\": \"uid_organization\",\n      \"operator\": \"eq\",\n      \"value\": \"adbadcf0-1a3f-4be6-b129-2adf05f565cf\"\n    }\n  ]\n}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Filter"
+  ]
+ },
+ {
+  "module": "admin/entities",
+  "method": "POST",
+  "path": "/v1/admin/entities/types",
+  "query": [],
+  "request_body": "{\"uid_organization\":\"adbadcf0-1a3f-4be6-b129-2adf05f565cf\",\"code\":\"technician\",\"name\":\"Técnico\",\"active\":true}",
+  "response_schema": null,
+  "example_names": [
+   "01 - Create Technician"
+  ]
+ }
+]

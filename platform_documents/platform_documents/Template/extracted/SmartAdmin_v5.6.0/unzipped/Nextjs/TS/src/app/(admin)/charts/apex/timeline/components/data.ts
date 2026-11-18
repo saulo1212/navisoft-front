@@ -1,0 +1,479 @@
+import { getColor } from '@/utils/getColor'
+import { ApexOptions } from 'apexcharts'
+
+export const getBasicTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      data: [
+        {
+          x: 'Code',
+          y: [new Date('2019-03-02').getTime(), new Date('2019-03-04').getTime()],
+        },
+        {
+          x: 'Test',
+          y: [new Date('2019-03-04').getTime(), new Date('2019-03-08').getTime()],
+        },
+        {
+          x: 'Validation',
+          y: [new Date('2019-03-08').getTime(), new Date('2019-03-12').getTime()],
+        },
+        {
+          x: 'Deployment',
+          y: [new Date('2019-03-12').getTime(), new Date('2019-03-18').getTime()],
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+    },
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  colors: [getColor('primary', 500)],
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+})
+
+export const getCustomColorsTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      data: [
+        {
+          x: 'Research',
+          y: [new Date('2019-03-01').getTime(), new Date('2019-03-05').getTime()],
+          fillColor: getColor('primary', 500),
+        },
+        {
+          x: 'Design',
+          y: [new Date('2019-03-05').getTime(), new Date('2019-03-09').getTime()],
+          fillColor: getColor('success', 500),
+        },
+        {
+          x: 'Development',
+          y: [new Date('2019-03-09').getTime(), new Date('2019-03-15').getTime()],
+          fillColor: getColor('warning', 600),
+        },
+        {
+          x: 'Testing',
+          y: [new Date('2019-03-15').getTime(), new Date('2019-03-20').getTime()],
+          fillColor: getColor('danger', 600),
+        },
+        {
+          x: 'Deployment',
+          y: [new Date('2019-03-20').getTime(), new Date('2019-03-25').getTime()],
+          fillColor: getColor('info', 500),
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      distributed: true,
+      dataLabels: {
+        hideOverflowingLabels: false,
+      },
+    },
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: (val: string | number | number[], opts) => {
+      if (!opts) return ''
+      const vals = val as number[]
+      const label = opts.w.globals.labels[opts.dataPointIndex]
+      const a = new Date(vals[0])
+      const b = new Date(vals[1])
+      const diff = Math.floor((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24))
+      return label + ': ' + diff + (diff > 1 ? ' days' : ' day')
+    },
+    style: {
+      colors: ['#f3f4f5', '#fff'],
+    },
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+})
+
+export const getMultiSeriesTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      name: 'Development Team',
+      data: [
+        {
+          x: 'Design',
+          y: [new Date('2019-03-01').getTime(), new Date('2019-03-05').getTime()],
+        },
+        {
+          x: 'Code',
+          y: [new Date('2019-03-06').getTime(), new Date('2019-03-15').getTime()],
+        },
+        {
+          x: 'Test',
+          y: [new Date('2019-03-16').getTime(), new Date('2019-03-22').getTime()],
+        },
+      ],
+    },
+    {
+      name: 'Testing Team',
+      data: [
+        {
+          x: 'Review',
+          y: [new Date('2019-03-05').getTime(), new Date('2019-03-08').getTime()],
+        },
+        {
+          x: 'QA Testing',
+          y: [new Date('2019-03-14').getTime(), new Date('2019-03-25').getTime()],
+        },
+        {
+          x: 'User Testing',
+          y: [new Date('2019-03-20').getTime(), new Date('2019-03-28').getTime()],
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+    },
+  },
+  dataLabels: {
+    enabled: true,
+  },
+  legend: {
+    position: 'top',
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  colors: [getColor('primary', 500), getColor('primary', 400)],
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+})
+
+export const getAdvancedTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      name: 'Bob',
+      data: [
+        {
+          x: 'Design',
+          y: [new Date('2019-03-05').getTime(), new Date('2019-03-08').getTime()],
+        },
+        {
+          x: 'Code',
+          y: [new Date('2019-03-08').getTime(), new Date('2019-03-11').getTime()],
+        },
+        {
+          x: 'Test',
+          y: [new Date('2019-03-11').getTime(), new Date('2019-03-16').getTime()],
+        },
+      ],
+    },
+    {
+      name: 'Alice',
+      data: [
+        {
+          x: 'Design',
+          y: [new Date('2019-03-02').getTime(), new Date('2019-03-05').getTime()],
+        },
+        {
+          x: 'Code',
+          y: [new Date('2019-03-06').getTime(), new Date('2019-03-09').getTime()],
+        },
+        {
+          x: 'Test',
+          y: [new Date('2019-03-10').getTime(), new Date('2019-03-19').getTime()],
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+    },
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  legend: {
+    position: 'top',
+  },
+  colors: [getColor('primary', 500), getColor('danger', 500)],
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+})
+
+export const getMultipleSeriesGroupTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      name: 'Frontend',
+      data: [
+        {
+          x: 'Design',
+          y: [new Date('2019-03-02').getTime(), new Date('2019-03-08').getTime()],
+        },
+        {
+          x: 'Development',
+          y: [new Date('2019-03-08').getTime(), new Date('2019-03-20').getTime()],
+        },
+        {
+          x: 'Testing',
+          y: [new Date('2019-03-20').getTime(), new Date('2019-03-28').getTime()],
+        },
+      ],
+    },
+    {
+      name: 'Backend',
+      data: [
+        {
+          x: 'API Design',
+          y: [new Date('2019-03-01').getTime(), new Date('2019-03-10').getTime()],
+        },
+        {
+          x: 'Implementation',
+          y: [new Date('2019-03-10').getTime(), new Date('2019-03-22').getTime()],
+        },
+        {
+          x: 'Integration Testing',
+          y: [new Date('2019-03-22').getTime(), new Date('2019-04-05').getTime()],
+        },
+      ],
+    },
+    {
+      name: 'Database',
+      data: [
+        {
+          x: 'Schema Design',
+          y: [new Date('2019-03-05').getTime(), new Date('2019-03-12').getTime()],
+        },
+        {
+          x: 'Data Migration',
+          y: [new Date('2019-03-15').getTime(), new Date('2019-03-25').getTime()],
+        },
+        {
+          x: 'Performance Testing',
+          y: [new Date('2019-03-25').getTime(), new Date('2019-04-10').getTime()],
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      barHeight: '70%',
+      rangeBarGroupRows: true,
+    },
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  legend: {
+    position: 'top',
+  },
+  tooltip: {
+ 
+    custom: (opts) => {
+      const task = opts.w.globals.initialSeries[opts.seriesIndex].data[opts.dataPointIndex]
+      const from = new Date(task.y[0])
+      const to = new Date(task.y[1])
+
+      const formatDate = (date: Date) => {
+        return date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear()
+      }
+
+      return (
+        '<div class="p-2">' +
+        '<div><b>' +
+        opts.w.globals.initialSeries[opts.seriesIndex].name +
+        ': ' +
+        task.x +
+        '</b></div>' +
+        '<div>Start: ' +
+        formatDate(from) +
+        '</div>' +
+        '<div>End: ' +
+        formatDate(to) +
+        '</div>' +
+        '</div>'
+      )
+    },
+  },
+  colors: [getColor('primary', 500), getColor('primary', 400), getColor('primary', 100)],
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+})
+
+export const getDumbbellTimelineOptions = (): ApexOptions => ({
+  series: [
+    {
+      data: [
+        {
+          x: 'Project A',
+          y: [new Date('2019-01-01').getTime(), new Date('2019-03-15').getTime()],
+        },
+        {
+          x: 'Project B',
+          y: [new Date('2019-02-15').getTime(), new Date('2019-06-01').getTime()],
+        },
+        {
+          x: 'Project C',
+          y: [new Date('2019-04-01').getTime(), new Date('2019-08-15').getTime()],
+        },
+        {
+          x: 'Project D',
+          y: [new Date('2019-05-15').getTime(), new Date('2019-09-01').getTime()],
+        },
+        {
+          x: 'Project E',
+          y: [new Date('2019-07-01').getTime(), new Date('2019-12-31').getTime()],
+        },
+      ],
+    },
+  ],
+  chart: {
+    height: 350,
+    type: 'rangeBar',
+    toolbar: {
+      show: true,
+    },
+  },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      isDumbbell: true,
+      dumbbellColors: [[getColor('primary', 500), getColor('danger', 500)]],
+    },
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+  yaxis: {
+    labels: {
+      formatter: (val: number) => {
+        return String(val)
+      },
+    },
+  },
+  grid: {
+    show: true,
+    borderColor: getColor('bootstrapVars', 'bodyColor', 'rgba', 0.08),
+    strokeDashArray: 5,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+  tooltip: {
+ 
+    custom: (opts) => {
+      const data = opts.w.globals.initialSeries[opts.seriesIndex].data[opts.dataPointIndex]
+      const startDate = new Date(data.y[0])
+      const endDate = new Date(data.y[1])
+
+      const formatDate = (date: Date) => {
+        return date.toLocaleDateString('en-US', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })
+      }
+
+      return `
+      <div class="p-2">
+          <div><b>${data.x}</b></div>
+          <div>Start: ${formatDate(startDate)}</div>
+          <div>End: ${formatDate(endDate)}</div>
+          <div>Duration: ${Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))} days</div>
+      </div>
+      `
+    },
+  },
+})

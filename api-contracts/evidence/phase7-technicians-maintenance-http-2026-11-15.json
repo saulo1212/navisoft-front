@@ -1,0 +1,285 @@
+{
+  "date": "2026-11-15T22:02:12.299Z",
+  "base": "https://api.navisoft.app",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "path": "/v1/users/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/types/search",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "label": "tipo technician existente na organização",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technician-capabilities",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "capacidade telemetry disponível",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "label": "prestadora criada com UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/87ebcb8d-1acc-4d8d-97d5-c3b9a506ae3e/types",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/technicians",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "label": "executor criado com UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technicians",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "label": "replay do executor mantém UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technicians",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "label": "payload divergente retorna 409",
+      "passed": true,
+      "status": 409,
+      "code": "idempotency_conflict"
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1",
+      "method": "PATCH",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "capabilities retornam objetos com code",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1",
+      "method": "PATCH",
+      "status": 422
+    },
+    {
+      "label": "capabilities duplicadas retornam 422",
+      "passed": true,
+      "status": 422,
+      "code": "invalid_technician_capability"
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1/prices",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1/prices",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "preço com cálculo em centavos",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1/prices",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1/prices",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "replacement no-op preserva versão",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1/prices",
+      "method": "PUT",
+      "status": 422
+    },
+    {
+      "label": "custo negativo retorna 422",
+      "passed": true,
+      "status": 422,
+      "code": "invalid_technician_price"
+    },
+    {
+      "path": "/v1/admin/assets",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "label": "ativo exclusivo da fixture criado",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "label": "manutenção criada",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "label": "replay da manutenção mantém UID",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "manutenção inicia aberta",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/assets/1b889cad-acb5-4c9c-9976-311b2cdaef20/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "condição bloqueante indisponibiliza somente o ativo de teste",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "PATCH",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "PATCH agrega item sem perder o anterior",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95/transition",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95/transition",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95/transition",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "manutenção concluída após replay",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/assets/1b889cad-acb5-4c9c-9976-311b2cdaef20/status",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "label": "ativo disponível após resolver condição",
+      "passed": true
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "PATCH",
+      "status": 409
+    },
+    {
+      "label": "manutenção terminal não aceita PATCH",
+      "passed": true,
+      "status": 409,
+      "code": "maintenance_order_immutable"
+    },
+    {
+      "path": "/v1/admin/maintenance/orders/c6b8abb5-3d3a-4015-a7cf-dacacaad9a95",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/assets/1b889cad-acb5-4c9c-9976-311b2cdaef20",
+      "method": "DELETE",
+      "status": 204
+    },
+    {
+      "path": "/v1/admin/entities/technicians/66b58582-6da9-4950-85fb-b22d19bfe2e1",
+      "method": "PATCH",
+      "status": 200
+    },
+    {
+      "path": "/v1/admin/entities/87ebcb8d-1acc-4d8d-97d5-c3b9a506ae3e/lifecycle",
+      "method": "PATCH",
+      "status": 200
+    }
+  ],
+  "fixtures": {
+    "provider": "87ebcb8d-1acc-4d8d-97d5-c3b9a506ae3e",
+    "technician": "66b58582-6da9-4950-85fb-b22d19bfe2e1",
+    "asset": "1b889cad-acb5-4c9c-9976-311b2cdaef20",
+    "maintenance": "c6b8abb5-3d3a-4015-a7cf-dacacaad9a95"
+  },
+  "cleanup": [
+    {
+      "label": "encerrar manutenção não terminal",
+      "passed": true
+    },
+    {
+      "label": "excluir ativo de fixture ou inativar por histórico",
+      "passed": true
+    },
+    {
+      "label": "desativar executor de fixture",
+      "passed": true
+    },
+    {
+      "label": "inativar prestadora de fixture",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

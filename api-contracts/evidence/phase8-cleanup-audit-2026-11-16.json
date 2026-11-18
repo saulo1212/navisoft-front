@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-16T15:17:10.839Z",
+  "checks": [
+    {
+      "resource": "template",
+      "uid": "7d0f934b-1339-4dcf-bc3d-3cb3b642431c",
+      "status": 200,
+      "inactive": true,
+      "latestVersion": 2
+    },
+    {
+      "resource": "group",
+      "uid": "8336d23a-3259-4ec5-8e56-0261b48563f9",
+      "status": 200,
+      "inactive": true
+    },
+    {
+      "resource": "template",
+      "uid": "903c1676-cc4f-4a49-a716-847bca15238b",
+      "status": 200,
+      "inactive": true,
+      "latestVersion": 3
+    },
+    {
+      "resource": "template",
+      "uid": "3a1b63a2-a429-4dd5-9427-c10cd6d49e5d",
+      "status": 200,
+      "inactive": true,
+      "latestVersion": 2
+    },
+    {
+      "resource": "group",
+      "uid": "7fdf6c6e-99c9-4673-a9fb-b3af76183338",
+      "status": 200,
+      "inactive": true
+    },
+    {
+      "resource": "asset",
+      "uid": "67d0025b-5630-47ca-80a3-45b3c32ae89c",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "resource": "asset",
+      "uid": "3aeb9d5d-663f-4c72-95c0-f18b7cd29ff5",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "resource": "template",
+      "uid": "7eb2ee35-c53f-48eb-af00-4eb8840a12da",
+      "status": 200,
+      "inactive": true,
+      "latestVersion": 3
+    },
+    {
+      "resource": "template",
+      "uid": "7a798022-9e9e-4c51-8fbd-a34e160db4ec",
+      "status": 200,
+      "inactive": true,
+      "latestVersion": 2
+    },
+    {
+      "resource": "group",
+      "uid": "5835cca0-c89c-468a-a1ee-f7182eff4aba",
+      "status": 200,
+      "inactive": true
+    },
+    {
+      "resource": "asset",
+      "uid": "5dd9a72c-3fae-4d62-9991-6cdefbb674fd",
+      "status": 404,
+      "removed": true
+    },
+    {
+      "resource": "asset",
+      "uid": "2631f769-7a7d-4813-a599-81457bda7a44",
+      "status": 404,
+      "removed": true
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-15T22:11:18.137Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "label": "conferir executor de fixture",
+      "path": "/v1/admin/entities/technicians/1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+      "method": "GET",
+      "status": 404,
+      "expected": [
+        200
+      ],
+      "requestId": "76f82d3d-16f4-4c55-9fc4-156489e572cd",
+      "passed": false
+    },
+    {
+      "label": "desativar executor",
+      "path": "/v1/admin/entities/technicians/1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+      "method": "PATCH",
+      "status": 404,
+      "expected": [
+        200
+      ],
+      "requestId": "435564f1-1126-442b-b732-4b7f06f96173",
+      "passed": false
+    },
+    {
+      "label": "inativar prestadora",
+      "path": "/v1/admin/entities/6124adf6-9027-42bd-b32c-b11ba8c82c90/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "a960caf3-9a6a-4ec4-b429-e5367330932e",
+      "passed": true
+    }
+  ],
+  "fixtures": {
+    "provider": "6124adf6-9027-42bd-b32c-b11ba8c82c90",
+    "technician": "1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+    "orders": []
+  },
+  "cleanup": [
+    {
+      "label": "desativar executor",
+      "passed": false,
+      "error": "desativar executor: HTTP 404 "
+    },
+    {
+      "label": "inativar prestadora",
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "failure": "conferir executor de fixture: HTTP 404 "
+}

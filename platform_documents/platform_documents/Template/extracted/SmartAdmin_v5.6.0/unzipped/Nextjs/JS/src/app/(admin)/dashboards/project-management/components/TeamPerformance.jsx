@@ -1,0 +1,18 @@
+'use client';
+
+import ComponentCard from '@/components/ComponentCard';
+import ApexChartClient from '@/components/client-wrappers/ApexChartClient';
+import { teamPerformanceChartOptions } from './data';
+const TeamPerformance = () => {
+  return <ComponentCard title={<h2>
+          Team{' '}
+          <span className="fw-light">
+            <i>Performance</i>
+          </span>
+        </h2>}>
+      <div className="panel-content">
+        <ApexChartClient getOptions={teamPerformanceChartOptions} series={teamPerformanceChartOptions().series} type={'radar'} />
+      </div>
+    </ComponentCard>;
+};
+export default TeamPerformance;

@@ -1,0 +1,309 @@
+{
+  "date": "2026-11-15T22:08:25.069Z",
+  "base": "https://api.navisoft.app",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "creations": [
+    {
+      "path": "/v1/admin/geo/points",
+      "key": "32739829-d580-4927-b26c-2dd36ae82b9b",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0"
+    },
+    {
+      "path": "/v1/admin/geo/points",
+      "key": "32739829-d580-4927-b26c-2dd36ae82b9b",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0"
+    },
+    {
+      "path": "/v1/admin/geo/points",
+      "key": "32739829-d580-4927-b26c-2dd36ae82b9b",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0-divergente"
+    },
+    {
+      "path": "/v1/admin/geo/points",
+      "key": "30c03f76-ac04-497f-9b0a-38bf9d17a44d",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "70aef4b0-580f-4e3f-8cb8-2d1af3bb50dd",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "70aef4b0-580f-4e3f-8cb8-2d1af3bb50dd",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "70aef4b0-580f-4e3f-8cb8-2d1af3bb50dd",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1-divergente"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "a484071f-fb7b-4f2b-a888-c2b85b1c078b",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "5a94c52f-1c3c-4096-b625-c6cc9955eec8",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "5a94c52f-1c3c-4096-b625-c6cc9955eec8",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "5a94c52f-1c3c-4096-b625-c6cc9955eec8",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2-divergente"
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "key": "34d3b8b7-878b-4cae-a231-dbea6e9ba1c1",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2"
+    },
+    {
+      "path": "/v1/admin/geo/routes",
+      "key": "a0f82ff4-ac04-4f35-973b-f3e85d8bef48",
+      "name": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-3"
+    }
+  ],
+  "checks": [
+    {
+      "label": "sessão válida",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "0: create",
+      "actual": 201,
+      "expected": 201,
+      "passed": true
+    },
+    {
+      "label": "0: replay status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "0: replay UID",
+      "actual": "8b06df9f-4525-4f96-a831-135c15c2cda7",
+      "expected": "8b06df9f-4525-4f96-a831-135c15c2cda7",
+      "passed": true
+    },
+    {
+      "label": "0: payload divergente",
+      "actual": 409,
+      "expected": 409,
+      "passed": true
+    },
+    {
+      "label": "0: geometria inválida",
+      "actual": 422,
+      "expected": 422,
+      "passed": true
+    },
+    {
+      "label": "0: detalhe",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "0: nome no detalhe",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0",
+      "passed": true
+    },
+    {
+      "label": "0: PUT completo",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "0: edição persistida",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0-editado",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-0-editado",
+      "passed": true
+    },
+    {
+      "label": "0: GET lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "0: POST lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "1: create",
+      "actual": 201,
+      "expected": 201,
+      "passed": true
+    },
+    {
+      "label": "1: replay status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "1: replay UID",
+      "actual": "fce28b1c-2d5e-483d-8e41-630b153bc795",
+      "expected": "fce28b1c-2d5e-483d-8e41-630b153bc795",
+      "passed": true
+    },
+    {
+      "label": "1: payload divergente",
+      "actual": 409,
+      "expected": 409,
+      "passed": true
+    },
+    {
+      "label": "1: geometria inválida",
+      "actual": 422,
+      "expected": 422,
+      "passed": true
+    },
+    {
+      "label": "1: detalhe",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "1: nome no detalhe",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1",
+      "passed": true
+    },
+    {
+      "label": "1: PUT completo",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "1: edição persistida",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1-editado",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-1-editado",
+      "passed": true
+    },
+    {
+      "label": "1: GET lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "1: POST lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "2: create",
+      "actual": 201,
+      "expected": 201,
+      "passed": true
+    },
+    {
+      "label": "2: replay status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "2: replay UID",
+      "actual": "69d7359e-34f8-4278-b69c-139779c6dbd1",
+      "expected": "69d7359e-34f8-4278-b69c-139779c6dbd1",
+      "passed": true
+    },
+    {
+      "label": "2: payload divergente",
+      "actual": 409,
+      "expected": 409,
+      "passed": true
+    },
+    {
+      "label": "2: geometria inválida",
+      "actual": 422,
+      "expected": 422,
+      "passed": true
+    },
+    {
+      "label": "2: detalhe",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "2: nome no detalhe",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2",
+      "passed": true
+    },
+    {
+      "label": "2: PUT completo",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "2: edição persistida",
+      "actual": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2-editado",
+      "expected": "QA-GEO-cc2b7d49-d74b-4f8a-8e06-ac6021991c25-2-editado",
+      "passed": true
+    },
+    {
+      "label": "2: GET lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "2: POST lista/search",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "label": "3: create",
+      "actual": 503,
+      "expected": 201,
+      "passed": false
+    }
+  ],
+  "cleanup": [
+    {
+      "path": "/v1/admin/geo/geofences",
+      "uid": "69d7359e-34f8-4278-b69c-139779c6dbd1",
+      "deleteStatus": 503,
+      "getStatus": 503,
+      "passed": false
+    },
+    {
+      "path": "/v1/admin/geo/geofences",
+      "uid": "fce28b1c-2d5e-483d-8e41-630b153bc795",
+      "deleteStatus": 503,
+      "getStatus": 503,
+      "passed": false
+    },
+    {
+      "path": "/v1/admin/geo/points",
+      "uid": "8b06df9f-4525-4f96-a831-135c15c2cda7",
+      "deleteStatus": 503,
+      "getStatus": 200,
+      "passed": false
+    }
+  ],
+  "passed": false,
+  "failure": "3: create: 503; esperado 201"
+}

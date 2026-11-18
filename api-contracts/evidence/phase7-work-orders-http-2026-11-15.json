@@ -1,0 +1,535 @@
+{
+  "date": "2026-11-15T22:12:52.491Z",
+  "organization": "6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+  "checks": [
+    {
+      "label": "reativar prestadora de fixture",
+      "path": "/v1/admin/entities/6124adf6-9027-42bd-b32c-b11ba8c82c90/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "9ad52c53-38f7-4a83-b23b-acc9ce1b7289",
+      "passed": true
+    },
+    {
+      "label": "reativar executor de fixture",
+      "path": "/v1/admin/entities/technicians/1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "9a94458a-7fd2-407e-a7e0-dfffeeb58258",
+      "passed": true
+    },
+    {
+      "label": "conferir executor de fixture",
+      "path": "/v1/admin/entities/technicians/1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e04affa7-963b-4042-b869-7ee160d97a3a",
+      "passed": true
+    },
+    {
+      "label": "criar ativo exclusivo",
+      "path": "/v1/admin/assets",
+      "method": "POST",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "b9a070f2-4857-4fc9-8cb0-826b88a6a2e1",
+      "passed": true
+    },
+    {
+      "label": "catálogo de modelos",
+      "path": "/v1/admin/devices/models?limit=100&offset=0",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "37fadb14-7945-4ff3-958b-8b9bcf4ef3c6",
+      "passed": true
+    },
+    {
+      "label": "criar dispositivo exclusivo",
+      "path": "/v1/admin/devices",
+      "method": "POST",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "25aca4fc-6186-4c6d-b428-800e797d3178",
+      "passed": true
+    },
+    {
+      "label": "preparar dispositivo",
+      "path": "/v1/admin/devices/4d956e4f-d07d-47be-b6ea-e4d2253181cb/prepare",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6998fe31-137c-49c2-97f3-b4962b857ba7",
+      "passed": true
+    },
+    {
+      "label": "liberar dispositivo",
+      "path": "/v1/admin/devices/4d956e4f-d07d-47be-b6ea-e4d2253181cb/release",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e88ea305-2463-4303-b479-e6d88cc41ed8",
+      "passed": true
+    },
+    {
+      "label": "install: criar OS",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "17119e8d-459e-448b-99da-2410ee96d734",
+      "passed": true
+    },
+    {
+      "label": "install: replay criação",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "837dc6ad-6553-40ef-ab14-219304facac1",
+      "passed": true
+    },
+    {
+      "label": "install: conflito criação",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "d31563d6-c5a8-45fe-8949-356b88a580ba",
+      "passed": true
+    },
+    {
+      "label": "install: despachar",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/dispatch",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "5bdabd09-7154-4bc9-9807-ed8b76688014",
+      "passed": true
+    },
+    {
+      "label": "install: detalhe após despacho",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "bc739d3f-6553-4e59-b5b9-42080bf841e8",
+      "passed": true
+    },
+    {
+      "label": "install: snapshot",
+      "status": "priced",
+      "version": 1,
+      "passed": true
+    },
+    {
+      "label": "início sem recebimento deve falhar",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/start",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "ae5acad1-b71b-47a7-816d-0e5651c28ac2",
+      "passed": true
+    },
+    {
+      "label": "listar custódias",
+      "path": "/v1/admin/devices/custody?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%226f68ea93-7ba5-4dae-b764-f4fe076bfbb8%22%7D%5D&limit=100&offset=0",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "44398aa6-107a-40c5-b34d-2392c365dae9",
+      "passed": true
+    },
+    {
+      "label": "confirmar recebimento da custódia",
+      "path": "/v1/admin/devices/custody/db72cac9-38d7-4234-839c-5663b0c0e716/confirm-receipt",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "1b174263-b66f-4394-9024-34de612c6461",
+      "passed": true
+    },
+    {
+      "label": "install: iniciar",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/start",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "c3e30acd-ac55-47e5-942e-0acc94df01b7",
+      "passed": true
+    },
+    {
+      "label": "install: detalhe em andamento",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "3c818e93-e090-4f7f-b3e3-44555d9a92d0",
+      "passed": true
+    },
+    {
+      "label": "install: concluir",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/complete",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "8cbd64dc-94f4-495b-8e37-b8d6c42d21ee",
+      "passed": true
+    },
+    {
+      "label": "install: replay conclusão",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/complete",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6177aa4a-d254-41d2-a34e-94d585597c07",
+      "passed": true
+    },
+    {
+      "label": "install: conflito conclusão",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047/complete",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "6a762024-9331-410a-9c2a-d970b279d7b6",
+      "passed": true
+    },
+    {
+      "label": "install: estado final",
+      "path": "/v1/admin/devices/work-orders/f3837b93-1464-43ef-afd2-b31b2f462047",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "0f1ec664-aa92-4768-a1bb-e27d91081379",
+      "passed": true
+    },
+    {
+      "label": "remove: criar OS",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "b79cb08c-a79e-479a-b2b0-df28905451eb",
+      "passed": true
+    },
+    {
+      "label": "remove: replay criação",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6ffdff8b-62c7-4e27-ae5f-02111efe3227",
+      "passed": true
+    },
+    {
+      "label": "remove: conflito criação",
+      "path": "/v1/admin/devices/work-orders",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "a2db430f-f333-4a21-b68f-be0993c71a8b",
+      "passed": true
+    },
+    {
+      "label": "remove: despachar",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083/dispatch",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "44f7bcd8-6c16-4e3a-8dab-76c296f23b41",
+      "passed": true
+    },
+    {
+      "label": "remove: detalhe após despacho",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "77c63060-6ecd-45c3-9f47-33845a1fc355",
+      "passed": true
+    },
+    {
+      "label": "remove: snapshot",
+      "status": "unpriced",
+      "version": null,
+      "passed": true
+    },
+    {
+      "label": "remove: iniciar",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083/start",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "41e91dc0-1129-4bdb-98d8-910b5a1572e5",
+      "passed": true
+    },
+    {
+      "label": "remove: detalhe em andamento",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e0b268c6-83f7-4923-834b-6f4c9ad978c1",
+      "passed": true
+    },
+    {
+      "label": "remove: concluir",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083/complete",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2d6d25fd-e698-47d3-b43c-d1fa45e7468a",
+      "passed": true
+    },
+    {
+      "label": "remove: replay conclusão",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083/complete",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "b4b53d1f-b29b-4063-b390-9996f47dde6f",
+      "passed": true
+    },
+    {
+      "label": "remove: conflito conclusão",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083/complete",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "87b9e342-d591-4ed3-9749-d224748a94be",
+      "passed": true
+    },
+    {
+      "label": "remove: estado final",
+      "path": "/v1/admin/devices/work-orders/b26e9728-3937-450a-99fd-e2f3ad6b3083",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "3b71954f-2737-4809-a620-fe8ac44ac0f2",
+      "passed": true
+    },
+    {
+      "label": "listar custódias",
+      "path": "/v1/admin/devices/custody?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%226f68ea93-7ba5-4dae-b764-f4fe076bfbb8%22%7D%5D&limit=100&offset=0",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "22b2fafd-10e6-4741-8fb4-1633bcdf5a9f",
+      "passed": true
+    },
+    {
+      "label": "declarar devolução",
+      "path": "/v1/admin/devices/custody/7b51e26d-2d6b-4e8f-b58a-31bc23f2a874/declare-return",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "34e03ca0-ca1e-41e5-b7d8-8b0fd44583b0",
+      "passed": true
+    },
+    {
+      "label": "receber fisicamente",
+      "path": "/v1/admin/devices/custody/7b51e26d-2d6b-4e8f-b58a-31bc23f2a874/receive",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "c88ae9bd-2f1e-4c0a-ad44-70524155b11f",
+      "passed": true
+    },
+    {
+      "label": "resposta de recebimento",
+      "fields": [
+        "uid",
+        "status",
+        "purpose",
+        "closed_at",
+        "uid_asset",
+        "created_at",
+        "uid_device",
+        "updated_at",
+        "received_at",
+        "return_notes",
+        "device_serial",
+        "dispatched_at",
+        "return_method",
+        "return_paid_by",
+        "uid_technician",
+        "uid_work_order",
+        "technician_name",
+        "return_condition",
+        "return_reference",
+        "technician_notes",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "return_cost_cents",
+        "work_order_number",
+        "asset_identification",
+        "technician_received_at",
+        "technician_returned_at",
+        "technician_confirmed_at",
+        "technician_name_snapshot",
+        "return_reimbursement_cents",
+        "elapsed_ms"
+      ],
+      "closedAt": "2026-11-15T19:12:55.041932-03:00",
+      "receivedAt": "2026-11-15T19:12:55.041932-03:00",
+      "status": "received"
+    },
+    {
+      "label": "listar custódias",
+      "path": "/v1/admin/devices/custody?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%226f68ea93-7ba5-4dae-b764-f4fe076bfbb8%22%7D%5D&limit=100&offset=0",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e1ad9440-0f9e-43ed-960e-88d2070a0a6b",
+      "passed": true
+    },
+    {
+      "label": "inativar device histórico",
+      "path": "/v1/admin/devices/4d956e4f-d07d-47be-b6ea-e4d2253181cb/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "454bb748-49f1-43ca-9529-d7a6b61b302a",
+      "passed": true
+    },
+    {
+      "label": "desativar executor",
+      "path": "/v1/admin/entities/technicians/1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "44e8a3a1-af72-432b-ad2c-c9284c25a2b4",
+      "passed": true
+    },
+    {
+      "label": "inativar prestadora",
+      "path": "/v1/admin/entities/6124adf6-9027-42bd-b32c-b11ba8c82c90/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e697391b-59e9-46eb-a921-494c5a8c02a3",
+      "passed": true
+    }
+  ],
+  "fixtures": {
+    "provider": "6124adf6-9027-42bd-b32c-b11ba8c82c90",
+    "technician": "1a60b8be-e3b8-4a6f-a40d-784c3f6dcdb2",
+    "orders": [
+      "f3837b93-1464-43ef-afd2-b31b2f462047",
+      "b26e9728-3937-450a-99fd-e2f3ad6b3083"
+    ],
+    "asset": "6212c727-92c4-419d-a715-8cd3c6b7d229",
+    "device": "4d956e4f-d07d-47be-b6ea-e4d2253181cb"
+  },
+  "cleanup": [
+    {
+      "label": "encerrar OS não terminal f3837b93-1464-43ef-afd2-b31b2f462047",
+      "passed": true
+    },
+    {
+      "label": "encerrar OS não terminal b26e9728-3937-450a-99fd-e2f3ad6b3083",
+      "passed": true
+    },
+    {
+      "label": "excluir device ou inativar preservando histórico",
+      "passed": true
+    },
+    {
+      "label": "excluir ativo de fixture",
+      "passed": true
+    },
+    {
+      "label": "desativar executor",
+      "passed": true
+    },
+    {
+      "label": "inativar prestadora",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
