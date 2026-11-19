@@ -8,8 +8,12 @@ export const menuItems = [{
 }, {
   icon: '/icons/sprite.svg#trello',
   key: 'dashboard',
-  label: 'Dashboard',
-  url: '/dashboards/control-center'
+  label: 'Painéis',
+  children: [
+    { key: 'dashboard-overview', label: 'Visão geral', url: '/dashboards/control-center' },
+    { key: 'dashboard-operations', label: 'Operações', url: '/dashboards/project-management' },
+    { key: 'dashboard-finance', label: 'Financeiro', url: '/dashboards/subscription' }
+  ]
 }, {
   key: 'operacao',
   label: 'Operação',
@@ -114,8 +118,8 @@ export const menuItems = [{
 }, {
   icon: '/icons/sprite.svg#shield',
   key: 'controle-acesso',
-  label: 'Controle de Acesso',
-  url: '/access-control/user-profile'
+  label: 'Segurança da conta',
+  url: '/account/security'
 }, {
   icon: '/icons/sprite.svg#key',
   key: 'grupos-permissoes',
@@ -167,16 +171,19 @@ export const menuItems = [{
   icon: '/icons/sprite.svg#share-2',
   key: 'integracoes',
   label: 'Integrações',
-  url: '/integracoes'
+  children: [
+    { key: 'integracoes-servicos', label: 'Serviços e credenciais', url: '/integracoes' },
+    { key: 'integracoes-fipe', label: 'Sincronização FIPE', url: '/integracoes/fipe' }
+  ]
 }, {
   icon: '/icons/sprite.svg#sliders',
   key: 'platform-capabilities',
-  label: 'Platform Capabilities',
+  label: 'Capacidades da plataforma',
   url: '/platform-capabilities'
 }, {
   icon: '/icons/sprite.svg#activity',
   key: 'health',
-  label: 'Health & Status',
+  label: 'Saúde da plataforma',
   url: '/health'
 }, {
   icon: '/icons/sprite.svg#cpu',

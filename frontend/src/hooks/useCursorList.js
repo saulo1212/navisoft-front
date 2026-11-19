@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isApiError } from '@/lib/api/errors';
+import { isAccessDenied, readErrorMessage } from '@/lib/api/errors';
 import { useSession } from '@/lib/session/SessionContext';
 
 // Hook genérico para listagens paginadas por cursor (after_uid/has_more),
@@ -28,12 +28,18 @@ export function useCursorList(fetcher, { params = {}, enabled = true } = {}) {
     setError(null);
     try {
       const result = await fetcher({ token, q, afterUid: reset ? null : afterUid, signal: controller.signal, ...params });
+      if (controller.signal.aborted) return;
       setItems(prev => (reset ? result.items : [...prev, ...result.items]));
       setHasMore(result.has_more);
       setAfterUid(result.next_after_uid);
     } catch (err) {
       if (controller.signal.aborted) return;
-      setError(isApiError(err) ? err.code || `http_${err.status}` : 'network_error');
+      if (isAccessDenied(err)) {
+        setItems([]);
+        setHasMore(false);
+        setAfterUid(null);
+      }
+      setError(readErrorMessage(err));
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }

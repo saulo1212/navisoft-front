@@ -299,23 +299,31 @@
 
 > Collection: `Services`, `Platform Capabilites`, `/v1/admin/integrations`, `Fipe Sync`, `Storage`, `/v1/admin/images`, `Common`, `Redis Cache (T2/T4)`, `/v1/health`.
 
-- [ ] Platform capabilities (`/v1/admin/platform-capabilities`) — feature flags por organização.
-- [ ] Integrações (`/v1/admin/integrations`).
-- [ ] Sincronização FIPE (`Fipe Sync`).
-- [ ] Storage / upload de imagens (`/v1/admin/images`) — reaproveitar em GED/assets.
-- [ ] Health / diagnóstico (`/v1/health/details`) — painel de status (admin).
-- [ ] Endpoints de cache Redis / Services: apenas instrumentação/diagnóstico interno (avaliar se entram na UI).
+- [~] Capacidades da plataforma em `/platform-capabilities`, com busca paginada no catálogo e edição dos padrões em `/planos`. A capacidade efetiva depende da versão do contrato ativo. O contrato HTTP disponível não oferece edição direta nem consulta do snapshot por organização.
+- [~] Integrações em `/integracoes`, com catálogo de Services, vínculos da organização selecionada e importação, substituição e revogação da credencial Autoscale Notifications conforme o contrato de `integration-tokens`.
+- [~] Sincronização FIPE em `/integracoes/fipe`, com criação idempotente de tarefas de catálogo, referência e variante, histórico paginado e detalhe por UID.
+- [~] Upload binário de logos de organização e entidade, visualização autenticada da imagem vinculada ao asset e prévia local de JPEG no GED. Upload de fotos de assets aguarda contrato HTTP de envio e vínculo. Os repositórios de storage são configurados no backend. O reteste de vínculo da logo de entidade depende da correção SYS-IMG-01 descrita no guia de testes.
+- [~] Saúde em `/health`, com leitura de `/v1/health/details`, incluindo diagnóstico crítico com HTTP 503. A interface aceita credencial temporária `health:read` em memória quando a sessão não tem acesso ao diagnóstico.
+- [~] Redis e Services constam como diagnósticos de leitura. O painel de saúde mostra disponibilidade dos caches e contadores de sessão quando fornecidos pela API. A tela de integrações mostra o estado solicitado dos serviços por organização.
+
+**Validação local:** 119 testes aprovados, incluindo seis da Fase 15 com HTTP simulado (`cd frontend; npm.cmd run test:platform`). As quatro novas rotas foram geradas no build com servidor Next.js e na exportação estática para GitHub Pages. O lint dos arquivos novos passou. Permanecem três ocorrências preexistentes de `react-hooks/set-state-in-effect` nas páginas de detalhe de organização, entidade e asset.
+
+**Homologação:** a API respondeu 200 em `GET /v1/health/ready`. A sessão disponível retornou 401 em `/v1/users/status` e nas consultas protegidas de catálogo, Services, FIPE e Health. A homologação de leituras protegidas e mutações depende de uma sessão autorizada de teste.
 
 ---
 
 ## Fase 16 — Dashboards e Finalização
 
-- [ ] Dashboards (`control-center`, etc.) alimentados por dados reais agregados.
-- [ ] Revisão de navegação, permissões por área e ocultação cross-tenant em toda a UI.
-- [ ] Varredura de QA: estados de erro (401/403/404/409/422/503) consistentes em todos os módulos.
-- [ ] Remoção/condicionamento das camadas mock para produção.
-- [ ] Homologação HTTP end-to-end por módulo contra a base real (registrar evidências como em `frontend_integration_status.md`).
-- [ ] Documentação final de uso e deploy.
+- [x] Painéis de Visão geral, Operações e Financeiro com totais da API. Operação usa o contexto selecionado. Financeiro mantém o escopo das contas da sessão. Falhas ou respostas sem total ficam explícitas.
+- [~] Menu e rotas diretas compartilham os gates de área documentados. As consultas dependentes da seleção aguardam o contexto organizacional. Formulários e dados do escopo anterior são desmontados ao trocar organização ou acesso. A matriz cross-tenant ao vivo permanece pendente.
+- [~] O cliente e as listas compartilhadas apresentam mensagens consistentes para 401/403/404/409/422/503 e descartam dados de listas quando o acesso é negado. Cenários locais executados. A validação de telas e perfis na API real permanece pendente.
+- [x] Produção usa a API real e oculta as demonstrações do template. As rotas demonstrativas redirecionam. Em desenvolvimento, a navegação demonstrativa fica disponível com `NEXT_PUBLIC_ENABLE_TEMPLATE_DEMOS=1`.
+- [~] Roteiro de homologação HTTP somente leitura disponível em `frontend/scripts/homologation-read.http.mjs`. Readiness e portal público responderam 200 e o contexto anônimo retornou 401 como esperado. A sessão local retornou 401. As consultas protegidas e os fluxos de escrita ainda dependem de uma sessão e organização descartável de homologação. [Evidência da execução](api-contracts/evidence/phase16-readonly.json)
+- [x] Documentação de uso, testes, configuração do proxy e deploy estático em [frontend/README.md](frontend/README.md).
+
+**Validação local:** 124 testes aprovados, lint dos novos painéis e guardas aprovado e exportação para GitHub Pages com 163 páginas geradas. Foram conferidos os recursos estáticos dos três painéis e os redirecionamentos das duas páginas demonstrativas de autenticação. O lint ampliado ainda aponta ocorrências preexistentes nos hooks de paginação e no controle de menu móvel.
+
+**Homologação:** a tentativa adicional de abrir uma sessão com a conta dedicada de teste também retornou 401 (request ID `3d55b460-c204-43f5-9eb1-81a7db47e202`). A rodada autenticada, as escritas e a matriz cross-tenant continuam pendentes.
 
 ---
 

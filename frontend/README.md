@@ -1,66 +1,42 @@
 # Navisoft — Frontend
 
-Painel administrativo construído em Next.js (App Router) sobre o template SmartAdmin v5.6.0,
-integrando com a API Navisoft documentada em `platform_documents/` (sessão/MFA, entidades, frota,
-devices/SIM, geografia, técnicos e ordens de serviço técnica).
+Painel administrativo em Next.js com autenticação e MFA, seleção de organização e módulos integrados à API Navisoft.
 
-## Como rodar
+## Uso local
+
+Use Node.js 22 e execute em `frontend/`.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000). A rota raiz redireciona para o login.
+Copie `.env.example` para `.env.local` se precisar configurar outra base. Em desenvolvimento e no servidor Next.js, use `NEXT_PUBLIC_API_BASE_URL=/api/navisoft` e indique o destino da API em `NAVISOFT_API_URL`. O proxy encaminha as chamadas na mesma origem. Mantenha credenciais fora das variáveis públicas.
 
-> O dev/build usam `next dev --webpack` / `next build --webpack`. O pipeline Sass do template
-> (`bootstrap` + `@import "variables-dark"`) quebra sob o Turbopack padrão do Next 16 nesta
-> combinação de versões; webpack resolve sem alterar o CSS do tema.
+Abra [localhost:3000](http://localhost:3000), entre com sua conta e selecione uma organização para consultar os módulos operacionais. O painel **Visão geral** mostra contagens da organização informada na API. **Operações** resume ordens de serviço, manutenções e agenda. **Financeiro** usa as contas acessíveis pela sessão e funciona sem selecionar uma organização. Um zero indica total zero retornado pela API. Um traço indica que a resposta veio sem total.
 
-## Modo mock vs. backend real
+Os dados de negócio vêm da API real em todos os ambientes. Para navegar pelas páginas demonstrativas do SmartAdmin durante o desenvolvimento, use `NEXT_PUBLIC_ENABLE_TEMPLATE_DEMOS=1`. A produção oculta o menu demonstrativo e redireciona as rotas demonstrativas.
 
-Controlado por `.env.local`:
+## Produção
 
+### Servidor Next.js
+
+```bash
+npm run build
+npm start
 ```
-NEXT_PUBLIC_API_MODE=mock   # ou "real"
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
-```
 
-Em `mock` (padrão, backend Navisoft indisponível no momento), toda a camada `src/lib/api/mock/*`
-simula os contratos HTTP documentados (status codes, idempotência, paginação por cursor, gates)
-inteiramente no navegador — sem rede. Contas de demonstração aparecem na própria tela de login.
+Configure o mesmo proxy usado no desenvolvimento. O build usa Webpack para o Sass do tema.
 
-Para apontar para a API real, defina `NEXT_PUBLIC_API_MODE=real` e a `NEXT_PUBLIC_API_BASE_URL`
-correta. As funções em `src/lib/api/endpoints/*.js` já chamam os caminhos REST documentados —
-confirme-os contra `platform_documents/*.md` antes de homologar, pois alguns (ex.: edição de
-organização/política de sessão) foram inferidos por convenção onde o texto não detalhava a rota
-exata.
+### GitHub Pages
 
-## Publicação no GitHub Pages
+Em **Settings → Pages**, escolha **GitHub Actions** como fonte. Em **Settings → Secrets and variables → Actions → Variables**, configure `NAVISOFT_API_BASE_URL` com a URL HTTPS da API ou de um proxy com CORS habilitado.
 
-Em **Settings → Pages**, escolha **GitHub Actions** como fonte. O workflow exporta
-`frontend/out` com o caminho base do repositório e publica o resultado em
-[saulo1212.github.io/navisoft-front](https://saulo1212.github.io/navisoft-front/).
+O workflow define `NEXT_STATIC_EXPORT=1`, `PAGES_BASE_PATH` e `NEXT_PUBLIC_API_BASE_URL`, gera `frontend/out` e publica o artefato. O servidor que atende a API deve permitir preflights e requisições da origem do Pages com os cabeçalhos usados pelos fluxos, incluindo `Authorization`, `Content-Type`, `Idempotency-Key`, `X-File-Name` e `X-Revision-Summary`. A publicação estática exige a URL HTTPS porque o proxy Next.js depende de um servidor. [Workflow de publicação](../.github/workflows/deploy.yml)
 
-Em **Settings → Secrets and variables → Actions → Variables**, defina
-`NAVISOFT_API_BASE_URL` com a URL HTTPS da API ou do proxy. Esse endereço precisa
-aceitar requisições da origem `https://saulo1212.github.io`, inclusive preflights
-CORS e os cabeçalhos `Authorization` e `Content-Type`. Execute o workflow novamente
-depois de alterar a variável. A tela de login fica indisponível até que a URL esteja configurada.
+## Verificação
 
-## Estrutura
-
-- `src/lib/api/` — cliente HTTP real + mocks + camada de endpoints por domínio.
-- `src/lib/session/` — `SessionProvider` (login, MFA, contexto de acesso, organização selecionada).
-- `src/components/admin/` — primitivas reutilizadas pelos módulos (tabela com paginação por
-  cursor, drawer de formulário, diálogo de confirmação, badges de status, guarda de autenticação).
-- `src/app/auth/` — login, MFA, esqueci senha, redefinição de senha.
-- `src/app/(admin)/` — módulos operacionais: `entidades`, `frota`, `devices-sim`, `geografia`,
-  `tecnicos`, `ordens-servico`, além de `account/security` e as páginas de demonstração originais
-  do template.
-
-## Escopo
-
-Cobre os fluxos descritos em `platform_documents/frontend_01..08`. Itens explicitamente fora do
-escopo nos próprios documentos (CRUD completo de unidades, portal do executor, polígonos
-complexos, concorrência, etc.) não foram implementados — ver as seções "Limites" de cada tópico.
+- `npm run test:dashboard` valida os agregados e seus filtros de organização, a navegação por área e as mensagens dos estados HTTP.
+- Rode os scripts de teste de `package.json` por módulo para verificar contratos com HTTP simulado.
+- `npm run test:homologation:read` verifica consultas na API real. Configure `TEST_API_URL`, `TEST_API_TOKEN` e `TEST_API_ORGANIZATION_UID` para o ambiente de homologação. `TEST_HEALTH_TOKEN` habilita a consulta detalhada de saúde. `TEST_API_REPORT_PATH` grava as evidências com status, códigos e identificadores de requisição. O roteiro não cria registros de negócio.
+- Os roteiros de mutação por módulo requerem sessão e organização descartável de homologação. Consulte os casos aprovados e as pendências antes de executar. [Checklist e evidências](../task.md)

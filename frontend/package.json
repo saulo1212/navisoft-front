@@ -24,6 +24,9 @@
     "test:documents:http": "node scripts/documents.http.mjs",
     "test:billing": "node scripts/billing.test.mjs",
     "test:reports": "node scripts/reports.test.mjs",
+    "test:platform": "node scripts/platform.test.mjs",
+    "test:dashboard": "node scripts/dashboard.test.mjs",
+    "test:homologation:read": "node scripts/homologation-read.http.mjs",
     "lint": "eslint src",
     "format": "prettier --write './src/**/*.{ts,tsx,js,jsx}'"
   },

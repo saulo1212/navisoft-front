@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import FormModal from '@/components/admin/FormModal';
+import PlatformLogo from '@/components/admin/PlatformLogo';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
@@ -270,6 +271,7 @@ const EntityDetailInner = () => {
               <p className="text-muted small mb-0 mt-3">Organização é imutável após a criação.</p>
             </Card.Body>
           </Card>
+          <PlatformLogo owner="entity" uid={entity.uid} imageUid={entity.uid_image_logo} />
 
           <Card className="panel mt-3">
             <Card.Body>

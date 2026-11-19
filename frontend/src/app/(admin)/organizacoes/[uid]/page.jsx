@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import FormModal from '@/components/admin/FormModal';
+import PlatformLogo from '@/components/admin/PlatformLogo';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
   getOrganization, getOrganizationGates, getOrgSessionPolicy,
@@ -168,6 +169,8 @@ const OrganizationDetailPage = () => {
           </Card>
         </Col>
       </Row>
+
+      <PlatformLogo owner="organization" uid={org.uid} imageUid={org.uid_image_logo} editable={canEditIdentity} />
 
       <FormModal
         show={editOpen} onHide={() => setEditOpen(false)} title="Editar identidade"

@@ -7,6 +7,7 @@ import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import FormModal from '@/components/admin/FormModal';
 import OrganizationGate from '@/components/admin/OrganizationGate';
+import { PlatformImage } from '@/components/admin/PlatformLogo';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { getEntity, searchUnits } from '@/lib/api/endpoints/entities';
 import {
@@ -203,6 +204,9 @@ const AssetDetailInner = () => {
                 </>}
                 <dt className="col-sm-5 text-muted">UID</dt><dd className="col-sm-7 font-monospace">{asset.uid}</dd>
               </dl>
+              {asset.uid_organization === orgUid && asset.uid_image_logo && <div className="mt-3">
+                <PlatformImage uid={asset.uid_image_logo} alt={`Imagem do asset ${asset.identification}`} />
+              </div>}
               <p className="text-muted small mb-0 mt-3">Organização e entidade são imutáveis por este formulário.</p>
             </Card.Body>
           </Card>

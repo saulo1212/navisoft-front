@@ -14,30 +14,38 @@ import {
 } from '@/lib/api/endpoints/devices';
 import { isApiError } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
+import { areaAllowed } from '@/lib/navigation/access';
 import { useSession } from '@/lib/session/SessionContext';
 
 const DevicesSimPage = () => {
-  const [tab, setTab] = useState('devices');
+  const { areaAccess } = useSession();
+  const canDevices = areaAllowed(areaAccess, 'devices');
+  const canSims = areaAllowed(areaAccess, 'simcards');
+  const [selectedTab, setTab] = useState('devices');
+  const tab = canDevices && canSims ? selectedTab : canDevices ? 'devices' : 'simcards';
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Devices & SIM" subTitle1="Operação" />
       <Nav variant="tabs" activeKey={tab} onSelect={k => setTab(k)} className="mb-3">
-        <Nav.Item><Nav.Link eventKey="devices">Devices</Nav.Link></Nav.Item>
-        <Nav.Item><Nav.Link eventKey="simcards">SIM cards</Nav.Link></Nav.Item>
+        {canDevices && <Nav.Item><Nav.Link eventKey="devices">Devices</Nav.Link></Nav.Item>}
+        {canSims && <Nav.Item><Nav.Link eventKey="simcards">SIM cards</Nav.Link></Nav.Item>}
       </Nav>
-      {tab === 'devices' ? <DevicesTab /> : <SimcardsTab />}
+      {tab === 'devices' && canDevices && <DevicesTab canSims={canSims} />}
+      {tab === 'simcards' && canSims && <SimcardsTab />}
     </div>
   );
 };
 
 const EMPTY_DEVICE_FORM = { typeUid: '', manufacturerUid: '', modelUid: '', deviceSerial: '', deviceImei: '', devicePwd: '' };
 
-const DevicesTab = () => {
+const DevicesTab = ({ canSims }) => {
   const { token, selectedOrganizationUid } = useSession();
   const { q, setQ, items, hasMore, loadMore, loading, error, refresh } = useOffsetList(listDevices, {
     params: { organizationUid: selectedOrganizationUid, includeInactive: true }
   });
-  const { items: simItems, refresh: refreshSims } = useOffsetList(listSimcards, { params: { organizationUid: selectedOrganizationUid } });
+  const { items: simItems, refresh: refreshSims } = useOffsetList(listSimcards, {
+    params: { organizationUid: selectedOrganizationUid }, enabled: canSims
+  });
 
   // Catálogo (tipo → fabricante → modelo), mesmo padrão de assets/frota.
   const [types, setTypes] = useState([]);
@@ -109,7 +117,7 @@ const DevicesTab = () => {
     setDetailError(null);
     setLinkChoice('');
     setLink(null);
-    if (row.uid_linked_simcard) {
+    if (canSims && row.uid_linked_simcard) {
       try {
         const result = await listLinkedSimcards({ token, organizationUid: selectedOrganizationUid, deviceUid: row.uid });
         setLink(normalizeList(result).items[0] ?? null);
@@ -271,6 +279,7 @@ const DevicesTab = () => {
                 <strong>Status:</strong> <StatusBadge status={detail.active ? 'active' : 'inactive'} />
                 <Button size="sm" variant="outline-secondary" disabled={detailBusy} onClick={openLifecycle}>Alterar situação</Button>
               </p>
+              {canSims && <>
               <hr />
               <h6>SIM vinculado</h6>
               {detail.uid_linked_simcard ? (
@@ -300,6 +309,7 @@ const DevicesTab = () => {
               {!detail.active && !detail.uid_linked_simcard && (
                 <p className="text-muted small mt-2 mb-0">Reative o device para vincular um SIM.</p>
               )}
+              </>}
             </Modal.Body>
           </>
         )}

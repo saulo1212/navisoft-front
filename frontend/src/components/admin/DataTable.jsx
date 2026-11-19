@@ -2,12 +2,7 @@
 
 import { Button, Spinner, Table } from 'react-bootstrap';
 import Pagination from './Pagination';
-
-const ERROR_LABELS = {
-  organization_not_found: 'Organização não encontrada ou fora do escopo.',
-  area_not_allowed: 'Sua área de acesso não permite ver estes dados.',
-  network_error: 'Falha de rede ao buscar os dados.'
-};
+import { readErrorMessage } from '@/lib/api/errors';
 
 // Tabela genérica para listagens administrativas paginadas por cursor.
 // `columns`: [{ key, label, render?(row) }]
@@ -43,7 +38,7 @@ const DataTable = ({
         <p className="text-muted text-center small py-4 mb-0">{emptyMessage}</p>
       )}
       {error && (
-        <p className="text-danger text-center small py-3 mb-0">{ERROR_LABELS[error] || `Erro: ${error}`}</p>
+        <p className="text-danger text-center small py-3 mb-0" role="alert">{readErrorMessage(error)}</p>
       )}
       {!error && rows.length > 0 && (hasMore || loadingMore) && !pagination && (
         <div className="text-center py-3 border-top">

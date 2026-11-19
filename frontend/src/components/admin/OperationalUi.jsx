@@ -4,9 +4,10 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { useSession } from '@/lib/session/SessionContext';
 import { errorMessage, isApiError } from '@/lib/api/errors';
+import { areaAllowed } from '@/lib/navigation/access';
 
 export const operationError = error => isApiError(error) ? `${errorMessage(error)}${error.code ? ` (${error.code})` : ''}` : error.message || 'Não foi possível concluir a operação.';
-export const areaAllowed = (context, area) => context?.status === 'evaluated' && context.areas?.[area] === 'allowed';
+export { areaAllowed };
 
 export function OperationalGate({ area, children }) {
   const { token, selectedOrganizationUid, areaAccess } = useSession();

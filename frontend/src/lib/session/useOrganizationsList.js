@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchMyOrganizations } from '@/lib/api/endpoints/auth';
-import { isApiError } from '@/lib/api/errors';
+import { isAccessDenied, readErrorMessage } from '@/lib/api/errors';
 import { useSession } from './SessionContext';
 
 // Seletor paginado de /v1/users/me/organizations (tópico 01, item 3 da
@@ -28,12 +28,18 @@ export function useOrganizationsList() {
       const result = await fetchMyOrganizations({
         token, q, afterUid: reset ? null : afterUid, limit: 50, signal: controller.signal
       });
+      if (controller.signal.aborted) return;
       setItems(prev => (reset ? result.items : [...prev, ...result.items]));
       setHasMore(result.has_more);
       setAfterUid(result.next_after_uid);
     } catch (err) {
       if (controller.signal.aborted) return;
-      setError(isApiError(err) ? err.code || `http_${err.status}` : 'network_error');
+      if (isAccessDenied(err)) {
+        setItems([]);
+        setHasMore(false);
+        setAfterUid(null);
+      }
+      setError(readErrorMessage(err));
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }

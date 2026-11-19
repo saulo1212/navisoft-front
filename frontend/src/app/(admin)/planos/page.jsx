@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Alert, Button, Table } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
@@ -79,7 +80,8 @@ function PlanDetailsContent({ uid, token, onClose, onChange, refresh }) {
         <Button size="sm" variant="outline-danger" onClick={() => { mutation.clearError(); setDialog('delete'); }}>Excluir plano</Button>
       </div>
       <BillingRead query={capabilities}>{result => <>
-        <p>Capacidades {result.capabilities?.join(', ') || '—'}</p>
+        <p>Capacidades padrão {result.capabilities?.join(', ') || '—'}</p>
+        <p className="small">As capacidades padrão são usadas na publicação de versões do plano. <Link href="/platform-capabilities">Consultar catálogo</Link></p>
         <Button size="sm" variant="outline-primary" onClick={() => { mutation.clearError(); setDialog('capabilities'); }}>Editar capacidades</Button>
         {dialog === 'capabilities' && <BillingForm title="Editar capacidades" mutation={mutation} onClose={() => setDialog(null)}
           onSubmit={values => mutation.submit(args => setPlanCapabilities({ ...args, token, uid }),

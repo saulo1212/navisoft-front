@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-11-19T16:19:29.188Z",
+  "mode": "read-only",
+  "checks": [
+    {
+      "name": "health-ready",
+      "expected": [
+        200
+      ],
+      "status": 200,
+      "passed": true,
+      "requestId": "180ea10f-aad6-44c5-9218-5412a11e94e0"
+    },
+    {
+      "name": "public-knowledge",
+      "expected": [
+        200
+      ],
+      "status": 200,
+      "passed": true,
+      "requestId": "ba6b22a7-f696-48fe-ab3b-264eb9aa6f74"
+    },
+    {
+      "name": "anonymous-session-denied",
+      "expected": [
+        401
+      ],
+      "status": 401,
+      "passed": true,
+      "requestId": "72a6d87b-b30b-4864-a234-e92d304a3632",
+      "code": "authentication_required"
+    },
+    {
+      "name": "session-status",
+      "expected": [
+        200
+      ],
+      "status": 401,
+      "passed": false,
+      "requestId": "077dc9de-4ab9-4023-aa2e-55b702e3e2da"
+    }
+  ],
+  "authenticated": "session_unavailable"
+}

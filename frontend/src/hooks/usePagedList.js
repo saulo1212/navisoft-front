@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isApiError } from '@/lib/api/errors';
+import { isAccessDenied, readErrorMessage } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
 import { DEFAULT_LIST_LIMIT } from '@/lib/api/config';
 import { useSession } from '@/lib/session/SessionContext';
@@ -32,6 +32,7 @@ export function usePagedList(fetcher, { params = {}, pageSize = DEFAULT_LIST_LIM
     try {
       const offset = (targetPage - 1) * pageSize;
       const payload = await fetcher({ token, q, limit: pageSize, offset, signal: controller.signal, ...params });
+      if (controller.signal.aborted) return;
       const norm = normalizeList(payload);
       // Se o endpoint ignorou limit/offset (devolveu mais que pageSize), ele
       // paginamos no cliente — mantém o MESMO comportamento/UX dos que paginam
@@ -41,7 +42,11 @@ export function usePagedList(fetcher, { params = {}, pageSize = DEFAULT_LIST_LIM
       setTotal(norm.total);
     } catch (err) {
       if (controller.signal.aborted) return;
-      setError(isApiError(err) ? err.code || `http_${err.status}` : 'network_error');
+      if (isAccessDenied(err)) {
+        setItems([]);
+        setTotal(null);
+      }
+      setError(readErrorMessage(err));
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }

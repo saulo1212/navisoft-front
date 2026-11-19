@@ -28,19 +28,24 @@ const INITIAL_STATE = {
 export function SessionProvider({ children }) {
   const [state, setState] = useState(INITIAL_STATE);
   const [selectedOrganizationUid, setSelectedOrganizationUid] = useState(null);
-  const [orgGates, setOrgGates] = useState({ data: null, loading: false, error: null });
+  const [orgGates, setOrgGates] = useState(null);
+  const [orgGatesRevision, setOrgGatesRevision] = useState(0);
   const bootRef = useRef(false);
+  const contextRequest = useRef(0);
 
   const resetToUnauthenticated = useCallback((error = null) => {
+    contextRequest.current += 1;
     clearSession();
     setSelectedOrganizationUid(null);
-    setOrgGates({ data: null, loading: false, error: null });
+    setOrgGates(null);
     setState({ ...INITIAL_STATE, phase: 'unauthenticated', error });
   }, []);
 
   const loadAccessContext = useCallback(async (token, account) => {
+    const requestId = ++contextRequest.current;
     try {
       const ctx = await fetchAccessContext({ token });
+      if (requestId !== contextRequest.current) return;
       // O modo temporal vem de session.access_period.mode (disabled|warn|block).
       const mode = ctx?.session?.access_period?.mode;
       const temporalMode = mode === 'warn' || mode === 'block' ? mode : 'none';
@@ -49,6 +54,7 @@ export function SessionProvider({ children }) {
         temporalMode, error: null
       }));
     } catch (error) {
+      if (requestId !== contextRequest.current) return;
       if (isApiError(error) && error.status === 401) {
         resetToUnauthenticated('relogin_required');
         return;
@@ -157,55 +163,59 @@ export function SessionProvider({ children }) {
   }, [state.phase, refreshAccessContext]);
 
   const selectOrganization = useCallback(organizationUid => {
+    if (organizationUid === selectedOrganizationUid) return;
+    setOrgGates(null);
     setSelectedOrganizationUid(organizationUid);
     writeSelectedOrganization(organizationUid);
-  }, []);
+  }, [selectedOrganizationUid]);
 
   const clearOrganization = useCallback(() => {
     setSelectedOrganizationUid(null);
     writeSelectedOrganization(null);
-    setOrgGates({ data: null, loading: false, error: null });
+    setOrgGates(null);
   }, []);
 
+  const retryOrganizationAccess = useCallback(() => {
+    setOrgGates(null);
+    setOrgGatesRevision(value => value + 1);
+  }, []);
+  const orgContextEnabled = state.phase === 'authenticated' && state.areaAccess?.status === 'evaluated' && Boolean(selectedOrganizationUid);
+  const orgContextKey = orgContextEnabled ? JSON.stringify([state.token, selectedOrganizationUid, state.areaAccess, orgGatesRevision]) : null;
+
   useEffect(() => {
-    if (state.phase !== 'authenticated' || !selectedOrganizationUid) {
-      setOrgGates({ data: null, loading: false, error: null });
-      return;
-    }
-    let active = true;
+    if (!orgContextKey) return;
     const controller = new AbortController();
-    setOrgGates({ data: null, loading: true, error: null });
     (async () => {
       try {
         const gates = await fetchOrganizationAccessContext({
           token: state.token, organizationUid: selectedOrganizationUid, signal: controller.signal
         });
-        if (active) setOrgGates({ data: gates, loading: false, error: null });
+        if (!controller.signal.aborted) setOrgGates({ key: orgContextKey, data: gates, error: null });
       } catch (error) {
-        if (!active) return;
+        if (controller.signal.aborted) return;
         if (isApiError(error) && error.status === 401) {
           resetToUnauthenticated('relogin_required');
           return;
         }
         if (isApiError(error) && error.status === 404) {
           clearOrganization();
-          setOrgGates({ data: null, loading: false, error: 'organization_not_found' });
           return;
         }
-        setOrgGates({ data: null, loading: false, error: error.code || 'unavailable' });
+        setOrgGates({ key: orgContextKey, data: null, error });
       }
     })();
-    return () => { active = false; controller.abort(); };
-  }, [state.phase, state.token, selectedOrganizationUid, resetToUnauthenticated, clearOrganization]);
+    return () => controller.abort();
+  }, [orgContextKey, state.token, selectedOrganizationUid, resetToUnauthenticated, clearOrganization]);
 
+  const currentOrgGates = orgContextKey && orgGates?.key === orgContextKey ? orgGates : null;
   const value = useMemo(() => ({
     ...state,
     selectedOrganizationUid,
-    orgGates: orgGates.data,
-    orgGatesLoading: orgGates.loading,
-    orgGatesError: orgGates.error,
-    login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization
-  }), [state, selectedOrganizationUid, orgGates, login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization]);
+    orgGates: currentOrgGates?.data ?? null,
+    orgGatesLoading: Boolean(orgContextKey && !currentOrgGates),
+    orgGatesError: currentOrgGates?.error ?? null,
+    login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization, retryOrganizationAccess
+  }), [state, selectedOrganizationUid, currentOrgGates, orgContextKey, login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization, retryOrganizationAccess]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }

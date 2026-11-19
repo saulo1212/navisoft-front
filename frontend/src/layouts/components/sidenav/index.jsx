@@ -7,6 +7,7 @@ import { menuItems } from '@/layouts/components/data';
 import SimplebarClient from '@/components/client-wrappers/SimplebarClient';
 import { basePath } from '@/helpers';
 import { useSession } from '@/lib/session/SessionContext';
+import { accessibleMenu } from '@/lib/navigation/access';
 const Sidenav = () => {
   const { areaAccess } = useSession();
   const inputRef = useRef(null);
@@ -15,10 +16,7 @@ const Sidenav = () => {
     filtered,
     openKeys
   } = useMemo(() => {
-    const canReadGeo = areaAccess?.status === 'evaluated' && ['geo_points', 'geo_geofences', 'geo_routes'].some(area => areaAccess.areas?.[area] === 'allowed');
-    const allowed = area => areaAccess?.status === 'evaluated' && areaAccess.areas?.[area] === 'allowed';
-    const requiredAreas = { tecnicos: 'devices', 'ordens-servico': 'devices', 'minhas-ordens-servico': 'devices', manutencao: 'maintenance', checklists: 'checklists' };
-    const visibleItems = menuItems.filter(item => (item.key !== 'geografia' || canReadGeo) && (!requiredAreas[item.key] || allowed(requiredAreas[item.key])));
+    const visibleItems = accessibleMenu(menuItems, areaAccess);
     if (!search.trim()) return {
       filtered: visibleItems,
       openKeys: new Set()

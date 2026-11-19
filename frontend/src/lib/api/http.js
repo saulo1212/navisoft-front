@@ -13,7 +13,7 @@ export function registerUnauthorizedHandler(fn) {
 
 // Cliente HTTP real. Todas as chamadas usam cache:'no-store' porque o backend
 // documentado envia Cache-Control: no-store em todas as rotas autenticadas.
-export async function apiRequest(path, { method = 'GET', body, rawBody, headers: requestHeaders, token, signal, searchParams, idempotencyKey, includeStatus = false, responseType = 'json' } = {}) {
+export async function apiRequest(path, { method = 'GET', body, rawBody, headers: requestHeaders, token, signal, searchParams, idempotencyKey, includeStatus = false, responseType = 'json', notifyUnauthorized = true } = {}) {
   if (!API_CONFIGURED) throw new ApiError(0, 'api_not_configured', null);
   if (body !== undefined && rawBody !== undefined) throw new Error('Escolha corpo JSON ou binário, não ambos.');
   // Base pode ser absoluta (http...) ou relativa same-origin (ex.: /api/navisoft,
@@ -66,7 +66,7 @@ export async function apiRequest(path, { method = 'GET', body, rawBody, headers:
   if (!response.ok) {
     const code = payload?.error ?? payload?.code ?? null;
     const err = new ApiError(response.status, code, payload);
-    if (err.isReloginRequired && unauthorizedHandler) {
+    if (notifyUnauthorized && err.isReloginRequired && unauthorizedHandler) {
       try { unauthorizedHandler(err); } catch { /* não deixar o handler mascarar o erro original */ }
     }
     throw err;

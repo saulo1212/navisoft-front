@@ -97,7 +97,7 @@ const CATEGORY_MESSAGES = {
   network: 'Falha de conexão com o servidor.',
   auth: 'Autenticação necessária.',
   gate: 'Você não tem permissão para esta ação.',
-  not_found: 'Recurso não encontrado.',
+  not_found: 'Recurso não encontrado ou indisponível para este acesso.',
   conflict: 'Conflito: o recurso já existe ou foi alterado.',
   validation: 'Dados inválidos. Revise os campos e tente novamente.',
   technical: 'Serviço temporariamente indisponível. Tente novamente em instantes.',
@@ -107,9 +107,20 @@ const CATEGORY_MESSAGES = {
 // Resolve a melhor mensagem legível para um erro (ApiError ou genérico).
 export function errorMessage(error) {
   if (!isApiError(error)) return CATEGORY_MESSAGES.unknown;
-  if (error.code && CODE_MESSAGES[error.code]) return CODE_MESSAGES[error.code];
-  // A API às vezes traz uma mensagem textual segura no payload.
+  if (error.isReloginRequired) return CODE_MESSAGES.relogin_required;
+  if (error.code && Object.hasOwn(CODE_MESSAGES, error.code)) return CODE_MESSAGES[error.code];
+  if (error.category !== 'unknown') return CATEGORY_MESSAGES[error.category];
   const payloadMsg = error.payload?.message;
   if (typeof payloadMsg === 'string' && payloadMsg && payloadMsg !== 'Not Found') return payloadMsg;
   return CATEGORY_MESSAGES[error.category] ?? CATEGORY_MESSAGES.unknown;
+}
+
+export const isAccessDenied = error => isApiError(error) && [401, 403, 404].includes(error.status);
+
+export function readErrorMessage(error) {
+  if (isApiError(error)) return errorMessage(error);
+  if (typeof error !== 'string') return CATEGORY_MESSAGES.network;
+  if (Object.hasOwn(CODE_MESSAGES, error)) return CODE_MESSAGES[error];
+  const status = /^http_(\d{3})$/.exec(error)?.[1];
+  return status ? errorMessage(new ApiError(Number(status))) : error;
 }

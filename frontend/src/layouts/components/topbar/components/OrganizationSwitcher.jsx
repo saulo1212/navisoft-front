@@ -1,25 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Spinner } from 'react-bootstrap';
+import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
 import { fetchMyOrganizations } from '@/lib/api/endpoints/auth';
 import { useSession } from '@/lib/session/SessionContext';
 
 const OrganizationSwitcher = () => {
-  const { token, selectedOrganizationUid, selectOrganization, clearOrganization } = useSession();
-  const [organizations, setOrganizations] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!token) return;
-    let active = true;
-    setLoading(true);
-    fetchMyOrganizations({ token, limit: 50 })
-      .then(result => { if (active) setOrganizations(result.items); })
-      .catch(() => {})
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [token]);
+  const { token, areaAccess, selectedOrganizationUid, selectOrganization, clearOrganization } = useSession();
+  const enabled = Boolean(token && areaAccess?.status === 'evaluated');
+  const { data, loading } = useKnowledgeQuery(fetchMyOrganizations, { token, areaAccess, limit: 50 }, enabled);
+  if (!enabled) return null;
+  const organizations = data?.items ?? [];
 
   const current = organizations.find(org => org.uid === selectedOrganizationUid);
 

@@ -8,6 +8,7 @@ import ToggleMobileMenu from '@/layouts/components/topbar/components/ToggleMobil
 import ToggleSidenav from '@/layouts/components/topbar/components/ToggleSidenav';
 import VirtualAssistant from '@/layouts/components/topbar/components/VirtualAssistant';
 import dynamic from 'next/dynamic';
+import { templateDemosEnabled } from '@/lib/navigation/access';
 const MaximizeScreen = dynamic(() => import('@/layouts/components/topbar/components/MaximizeScreen'), {
   ssr: false
 });
@@ -26,9 +27,9 @@ const Topbar = () => {
 
         <ToggleSidenav />
 
-        <form className="app-search" role="search" action="/forum/search" autoComplete="off">
+        {templateDemosEnabled && <form className="app-search" role="search" action="/forum/search" autoComplete="off">
           <input type="text" className="form-control" placeholder="Search for anything" />
-        </form>
+        </form>}
       </div>
 
       <button type="button" className="btn btn-system hidden-mobile" onClick={customizer.toggle} aria-label="Open Settings">
@@ -39,7 +40,7 @@ const Topbar = () => {
 
       <ThemeToggler />
 
-      <VirtualAssistant />
+      {templateDemosEnabled && <VirtualAssistant />}
 
       <MaximizeScreen />
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isApiError } from '@/lib/api/errors';
+import { isAccessDenied, readErrorMessage } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
 import { DEFAULT_LIST_LIMIT } from '@/lib/api/config';
 import { useSession } from '@/lib/session/SessionContext';
@@ -40,12 +40,12 @@ export function useOffsetList(fetcher, { params = {}, limit = DEFAULT_LIST_LIMIT
       setOffset(nextOffset + norm.items.length);
     } catch (err) {
       if (controller.signal.aborted) return;
-      if ([403, 404].includes(err.status)) {
+      if (isAccessDenied(err)) {
         setItems([]);
         setTotal(null);
         setHasMore(false);
       }
-      setError(isApiError(err) ? err.code || `http_${err.status}` : 'network_error');
+      setError(readErrorMessage(err));
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }
