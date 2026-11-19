@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -15,7 +15,7 @@ import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
 
 const OrganizationDetailPage = () => {
-  const { uid } = useParams();
+  const uid = useDetailParam('uid');
   const { token } = useSession();
   const [org, setOrg] = useState(null);
   const [gates, setGates] = useState(null);

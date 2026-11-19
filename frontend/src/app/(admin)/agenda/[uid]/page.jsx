@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import Link from 'next/link';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -14,7 +14,7 @@ import { agendaAnalysisBody, agendaControlForm, agendaControlsBody, PRIORITIES }
 import { intentKey } from '@/lib/domain/technicalOperations';
 import { useSession } from '@/lib/session/SessionContext';
 
-export default function Page() { const { uid } = useParams(); return <OperationalGate area="agenda"><Entry key={uid} uid={uid} /></OperationalGate>; }
+export default function Page() { const uid = useDetailParam('uid'); return <OperationalGate area="agenda"><Entry key={uid} uid={uid} /></OperationalGate>; }
 function Entry({ uid }) {
   const { token, selectedOrganizationUid } = useSession();
   const action = useOperationalAction();

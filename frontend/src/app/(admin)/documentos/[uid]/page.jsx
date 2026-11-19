@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
@@ -15,7 +15,7 @@ import { distributionBody, distributionForm, documentUploadIntent } from '@/lib/
 import { intentKey } from '@/lib/domain/technicalOperations';
 import { useSession } from '@/lib/session/SessionContext';
 
-export default function Page() { const { uid } = useParams(); return <OperationalGate area="documents"><Document key={uid} uid={uid} /></OperationalGate>; }
+export default function Page() { const uid = useDetailParam('uid'); return <OperationalGate area="documents"><Document key={uid} uid={uid} /></OperationalGate>; }
 function Document({ uid }) {
   const { token, selectedOrganizationUid } = useSession();
   const [revision, setRevision] = useState(0);

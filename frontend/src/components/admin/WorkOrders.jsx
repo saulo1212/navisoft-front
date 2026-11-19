@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -47,7 +48,7 @@ function Orders({ selfService }) {
     }, response => {
       setForm(null); list.refresh(); notifySuccess('OS criada.');
       const uid = unwrap(response)?.uid;
-      if (uid) router.push(`${route(false)}/${encodeURIComponent(uid)}`);
+      if (uid) router.push(detailHref(route(false), uid));
     }, () => { setForm(null); list.setItems([]); });
   };
   return <>
@@ -57,7 +58,7 @@ function Orders({ selfService }) {
     <select id="wo-state" className="form-select mb-3" style={{ maxWidth: 300 }} value={state} onChange={e => setState(e.target.value)}><option value="pending">Pendentes</option><option value="completed">Concluídas</option><option value="all">Todas, incluindo canceladas</option></select>
     {action.error && <Alert variant="danger">{action.error}</Alert>}
     <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por descrição..." actionLabel={selfService ? undefined : 'Nova OS'} actionDisabled={action.busy} onAction={() => { intention.current = null; action.clearError(); setForm({ uid_asset: '', uid_technician: '', description: '', items: [emptyItem()] }); }} />
-    <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => router.push(`${route(selfService)}/${encodeURIComponent(row.uid)}`)} columns={[
+    <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => router.push(detailHref(route(selfService), row.uid))} columns={[
       { key: 'number', label: 'Número' }, { key: 'asset', label: 'Ativo', render: row => row.asset_identification || row.uid_asset },
       ...(!selfService ? [{ key: 'technician', label: 'Executor', render: row => row.technician_name_snapshot || row.uid_technician }] : []),
       { key: 'items_total', label: 'Itens' }, { key: 'items_completed', label: 'Concluídos' }, { key: 'items_pending', label: 'Pendentes' },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -17,7 +17,7 @@ import { PROFILE_CODES as PROFILES, PROFILE_LABELS } from '@/lib/domain/users';
 const KNOWN_APPS = ['navisoft'];
 
 const UserDetailPage = () => {
-  const { uid } = useParams();
+  const uid = useDetailParam('uid');
   const { token } = useSession();
 
   const [user, setUser] = useState(null);

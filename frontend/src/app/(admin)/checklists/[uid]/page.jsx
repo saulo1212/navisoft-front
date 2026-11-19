@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { Alert, Button, Modal } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import ChecklistNavigation from '@/components/admin/ChecklistNavigation';
@@ -12,7 +12,7 @@ import { checklistBody, checklistForm } from '@/lib/domain/checklists';
 import { useSession } from '@/lib/session/SessionContext';
 import { notifySuccess } from '@/lib/ui/toast';
 
-export default function Page() { const { uid } = useParams(); return <OperationalGate area="checklists"><Template key={uid} uid={uid} /></OperationalGate>; }
+export default function Page() { const uid = useDetailParam('uid'); return <OperationalGate area="checklists"><Template key={uid} uid={uid} /></OperationalGate>; }
 function Template({ uid }) {
   const { token, selectedOrganizationUid } = useSession();
   const [record, setRecord] = useState(null);

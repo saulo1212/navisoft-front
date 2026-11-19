@@ -36,6 +36,18 @@ confirme-os contra `platform_documents/*.md` antes de homologar, pois alguns (ex
 organização/política de sessão) foram inferidos por convenção onde o texto não detalhava a rota
 exata.
 
+## Publicação no GitHub Pages
+
+Em **Settings → Pages**, escolha **GitHub Actions** como fonte. O workflow exporta
+`frontend/out` com o caminho base do repositório e publica o resultado em
+[saulo1212.github.io/navisoft-front](https://saulo1212.github.io/navisoft-front/).
+
+Em **Settings → Secrets and variables → Actions → Variables**, defina
+`NAVISOFT_API_BASE_URL` com a URL HTTPS da API ou do proxy. Esse endereço precisa
+aceitar requisições da origem `https://saulo1212.github.io`, inclusive preflights
+CORS e os cabeçalhos `Authorization` e `Content-Type`. Execute o workflow novamente
+depois de alterar a variável. A tela de login fica indisponível até que a URL esteja configurada.
+
 ## Estrutura
 
 - `src/lib/api/` — cliente HTTP real + mocks + camada de endpoints por domínio.

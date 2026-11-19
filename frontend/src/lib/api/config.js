@@ -7,6 +7,7 @@
 // Escolher a base por ambiente em NEXT_PUBLIC_API_BASE_URL.
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+export const API_CONFIGURED = process.env.NEXT_PUBLIC_STATIC_EXPORT !== '1' || API_BASE_URL.startsWith('https://');
 
 // `application` é obrigatório/implícito no login; o backend assume "navisoft"
 // quando vazio. Mantido como constante para uso no fluxo de autenticação.

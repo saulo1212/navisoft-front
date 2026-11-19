@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -64,7 +65,7 @@ const CollaboratorsInner = () => {
       {total != null && <p className="text-muted small mb-2">{total} colaborador(es) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
-        onRowClick={row => router.push(`/colaboradores/${row.uid}`)}
+        onRowClick={row => router.push(detailHref('/colaboradores', row.uid))}
         emptyMessage="Nenhum colaborador cadastrado nesta organização."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />

@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { Suspense, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Button, Form } from 'react-bootstrap';
@@ -34,7 +35,7 @@ function Documents() {
       const body = documentBody(form, selectedOrganizationUid, catalogs.data);
       const result = await createDocument({ token, organizationUid: selectedOrganizationUid, body, signal, idempotencyKey: intentKey(intention, 'ged-document', body) });
       return requireUid((result.item ?? result).uid, 'documento criado');
-    }, uid => { setForm(null); router.push(`/documentos/${uid}`); }, () => { setForm(null); list.setItems([]); });
+    }, uid => { setForm(null); router.push(detailHref('/documentos', uid)); }, () => { setForm(null); list.setItems([]); });
   };
   return <>
     <PageBreadcrumb title="Documentos / GED" subTitle1="Conteúdo" /><DocumentsNavigation />
@@ -44,7 +45,7 @@ function Documents() {
     {catalogs.error && <Alert variant="danger">{operationError(catalogs.error)}</Alert>}
     <Button variant="outline-secondary" className="mb-3" disabled={list.loading} onClick={list.refresh}>Atualizar</Button>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
-      { key: 'code', label: 'Documento', render: row => <Button variant="link" onClick={() => router.push(`/documentos/${encodeURIComponent(row.uid)}`)}>{row.code || row.uid}</Button> }, { key: 'title', label: 'Título' }, { key: 'class_name', label: 'Classe' }, { key: 'access_source', label: 'Acesso', render: row => row.access_source === 'distribution' ? 'Distribuído' : row.access_source || 'Próprio' }, { key: 'active', label: 'Ativo', render: row => row.active ? 'Sim' : 'Não' }
+      { key: 'code', label: 'Documento', render: row => <Button variant="link" onClick={() => router.push(detailHref('/documentos', row.uid))}>{row.code || row.uid}</Button> }, { key: 'title', label: 'Título' }, { key: 'class_name', label: 'Classe' }, { key: 'access_source', label: 'Acesso', render: row => row.access_source === 'distribution' ? 'Distribuído' : row.access_source || 'Próprio' }, { key: 'active', label: 'Ativo', render: row => row.active ? 'Sim' : 'Não' }
     ]} />
     {form && <FormDrawer show title="Novo documento" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       <OperationField label="UUID do contrato GED" required {...field('uid_contract')} /><OperationField label="Título" required {...field('title')} />

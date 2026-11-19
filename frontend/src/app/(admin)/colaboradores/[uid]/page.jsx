@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -18,7 +18,7 @@ import { useSession } from '@/lib/session/SessionContext';
 import { DEFAULT_COUNTRY_UID, fmtDate } from '@/lib/domain/collaborators';
 
 const CollaboratorDetailPage = () => {
-  const { uid } = useParams();
+  const uid = useDetailParam('uid');
   const { token, selectedOrganizationUid: orgUid } = useSession();
 
   const [col, setCol] = useState(null);

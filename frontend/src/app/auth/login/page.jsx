@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Alert, Button, Col, FormControl, FormLabel, InputGroup, Row } from 'react-bootstrap';
 import { isApiError } from '@/lib/api/errors';
+import { API_CONFIGURED } from '@/lib/api/config';
 import { useSession } from '@/lib/session/SessionContext';
 
 const ERROR_MESSAGES = {
@@ -23,7 +24,7 @@ const Login = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    if (submitting) return;
+    if (submitting || !API_CONFIGURED) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -47,6 +48,7 @@ const Login = () => {
           <h2 className="text-center mb-4">Navisoft</h2>
           <p className="text-center text-white opacity-50 mb-4">Entre com suas credenciais para continuar</p>
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
+          {!API_CONFIGURED && <Alert variant="warning" className="py-2 small">O acesso está indisponível até que o endereço da API seja configurado.</Alert>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <FormLabel>Login, e-mail ou telefone</FormLabel>
@@ -67,7 +69,7 @@ const Login = () => {
               </InputGroup>
             </div>
             <div className="d-grid mb-3">
-              <Button type="submit" variant="primary" size="lg" className="bg-primary bg-opacity-75" disabled={submitting}>
+              <Button type="submit" variant="primary" size="lg" className="bg-primary bg-opacity-75" disabled={submitting || !API_CONFIGURED}>
                 {submitting ? 'Entrando...' : 'Entrar'}
               </Button>
             </div>

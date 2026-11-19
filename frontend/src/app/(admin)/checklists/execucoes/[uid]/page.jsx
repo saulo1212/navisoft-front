@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { Alert, Button, Modal } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import ChecklistNavigation from '@/components/admin/ChecklistNavigation';
@@ -13,7 +13,7 @@ import { requireUid } from '@/lib/domain/technicalOperations';
 import { useSession } from '@/lib/session/SessionContext';
 
 const resultLabel = value => ({ fit: 'Apto', not_fit: 'Inapto', released: 'Liberado', blocked: 'Bloqueado' })[value] || value || 'Não calculado';
-export default function Page() { const { uid } = useParams(); return <OperationalGate area="checklists"><Run key={uid} uid={uid} /></OperationalGate>; }
+export default function Page() { const uid = useDetailParam('uid'); return <OperationalGate area="checklists"><Run key={uid} uid={uid} /></OperationalGate>; }
 function Run({ uid }) {
   const { token, selectedOrganizationUid } = useSession();
   const [run, setRun] = useState(null);

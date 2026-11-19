@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './config';
+import { API_BASE_URL, API_CONFIGURED } from './config';
 import { ApiError } from './errors';
 
 // --- Handler global de sessão inválida ---------------------------------------
@@ -14,6 +14,7 @@ export function registerUnauthorizedHandler(fn) {
 // Cliente HTTP real. Todas as chamadas usam cache:'no-store' porque o backend
 // documentado envia Cache-Control: no-store em todas as rotas autenticadas.
 export async function apiRequest(path, { method = 'GET', body, rawBody, headers: requestHeaders, token, signal, searchParams, idempotencyKey, includeStatus = false, responseType = 'json' } = {}) {
+  if (!API_CONFIGURED) throw new ApiError(0, 'api_not_configured', null);
   if (body !== undefined && rawBody !== undefined) throw new Error('Escolha corpo JSON ou binário, não ambos.');
   // Base pode ser absoluta (http...) ou relativa same-origin (ex.: /api/navisoft,
   // o proxy do Next). Base relativa é resolvida contra a origem atual do browser.

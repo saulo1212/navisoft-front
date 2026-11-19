@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -24,7 +25,7 @@ const EMPTY_ADDRESS = {
 };
 
 const EntityDetailInner = () => {
-  const { uid } = useParams();
+  const uid = useDetailParam('uid');
   const router = useRouter();
   const { token, selectedOrganizationUid: orgUid } = useSession();
 

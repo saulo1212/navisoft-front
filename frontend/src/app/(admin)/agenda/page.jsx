@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import FullCalendar from '@fullcalendar/react';
@@ -33,7 +34,7 @@ function Agenda() {
     getAgendaSettings({ token, organizationUid: selectedOrganizationUid, signal: controller.signal }).then(result => { if (!controller.signal.aborted) setSettings(result); }).catch(error => { if (!controller.signal.aborted) setSettingsError(error.code || 'Não foi possível carregar as cores.'); });
     return () => controller.abort();
   }, [token, selectedOrganizationUid]);
-  const open = uid => router.push(`/agenda/${encodeURIComponent(uid)}`);
+  const open = uid => router.push(detailHref('/agenda', uid));
   const savePalette = event => {
     event.preventDefault();
     void action.run(async signal => {

@@ -1,7 +1,8 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import Link from 'next/link';
 import { Alert, Button, Form, Offcanvas, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -15,7 +16,7 @@ import { knowledgeAttachmentsBody, knowledgeGrantsBody, knowledgePublishBody, kn
 import { intentKey } from '@/lib/domain/technicalOperations';
 import { useSession } from '@/lib/session/SessionContext';
 
-export default function Page() { const { uid } = useParams(); return <OperationalGate area="knowledge"><Item key={uid} uid={uid} /></OperationalGate>; }
+export default function Page() { const uid = useDetailParam('uid'); return <OperationalGate area="knowledge"><Item key={uid} uid={uid} /></OperationalGate>; }
 function Item({ uid }) {
   const { token } = useSession();
   const [revision, setRevision] = useState(0);
@@ -75,7 +76,7 @@ function Item({ uid }) {
     {action.error && !modalOpen && <Alert variant="danger">{action.error}</Alert>}{notice && <Alert variant="success">{notice}</Alert>}
     <Button variant="outline-secondary" className="mb-3" disabled={action.busy} onClick={() => { setDenied(false); setRevision(value => value + 1); }}>Recarregar artigo</Button>
     {item && <>
-      <div className="card panel p-3 mb-3"><p className="mb-1">{item.slug} · {KNOWLEDGE_STATUSES[item.publication_status] || item.publication_status}</p><p>Audiência publicada: {KNOWLEDGE_AUDIENCES[item.audience_mode] || 'Nenhuma'}</p><p className="small">Última revisão: {latest?.revision_number ?? 'Sem revisão'} · Revisão publicada: {item.published_revision?.revision_number ?? 'Nenhuma'}</p><div className="d-flex flex-wrap gap-3"><Link href={`/knowledge/leitura/${encodeURIComponent(item.slug)}`}>Consultar versão disponível para minha sessão</Link>{item.audience_mode === 'public' && item.publication_status === 'published' && <Link href={`/ajuda/${encodeURIComponent(item.slug)}`}>Abrir versão pública</Link>}</div></div>
+      <div className="card panel p-3 mb-3"><p className="mb-1">{item.slug} · {KNOWLEDGE_STATUSES[item.publication_status] || item.publication_status}</p><p>Audiência publicada: {KNOWLEDGE_AUDIENCES[item.audience_mode] || 'Nenhuma'}</p><p className="small">Última revisão: {latest?.revision_number ?? 'Sem revisão'} · Revisão publicada: {item.published_revision?.revision_number ?? 'Nenhuma'}</p><div className="d-flex flex-wrap gap-3"><Link href={detailHref('/knowledge/leitura', item.slug, 'slug')}>Consultar versão disponível para minha sessão</Link>{item.audience_mode === 'public' && item.publication_status === 'published' && <Link href={detailHref('/ajuda', item.slug, 'slug')}>Abrir versão pública</Link>}</div></div>
       <div className="d-flex flex-wrap gap-2 mb-4"><Button disabled={action.busy} onClick={() => open(() => setEditor(knowledgeRevisionForm(latest || {})))}>Nova revisão</Button><Button variant="outline-primary" disabled={action.busy || !latest} onClick={() => open(() => setPublication({ uid: latest.uid, audience: Object.hasOwn(KNOWLEDGE_AUDIENCES, item.audience_mode) ? item.audience_mode : 'authenticated' }))}>Publicar revisão</Button><Button variant="outline-secondary" disabled={action.busy} onClick={() => open(() => setGrants(JSON.stringify(item.grants || [], null, 2)))}>Permissões de acesso selecionado</Button><Button variant="outline-secondary" disabled={action.busy || !latest || latest.uid === item.published_revision_uid} onClick={readAttachments}>Anexos do rascunho atual</Button><Button variant="outline-danger" disabled={action.busy || item.publication_status === 'archived'} onClick={() => open(() => setArchive(true))}>Arquivar / despublicar</Button></div>
       <h5>Histórico de revisões</h5><DataTable rows={history.data?.items || []} loading={history.loading} error={history.error ? history.error.code || 'network_error' : null} columns={[{ key: 'revision_number', label: 'Revisão' }, { key: 'title', label: 'Título', render: row => <Button variant="link" disabled={action.busy} onClick={() => readRevision(row)}>{row.title}</Button> }, { key: 'published', label: 'Publicada atualmente', render: row => row.uid === item.published_revision_uid ? 'Sim' : 'Não' }, { key: 'created_at', label: 'Criada em', render: row => new Date(row.created_at).toLocaleString('pt-BR') }]} />
     </>}

@@ -6,4 +6,4 @@ export const appDescription = '';
 export const author = 'Webora';
 export const authorWebsite = '';
 export const authorContact = '';
-export const basePath = '';
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';

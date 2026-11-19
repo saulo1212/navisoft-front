@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -20,7 +21,7 @@ import { useSession } from '@/lib/session/SessionContext';
 import { ASSET_PROFILE_LABELS, situationBadgeStatus, situationName } from '@/lib/domain/fleet';
 
 const AssetDetailInner = () => {
-  const { uid } = useParams();
+  const uid = useDetailParam('uid');
   const router = useRouter();
   const { token, selectedOrganizationUid: orgUid } = useSession();
 

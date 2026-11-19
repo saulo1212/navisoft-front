@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Badge, Button, Form } from 'react-bootstrap';
@@ -83,7 +84,7 @@ const UsersPage = () => {
       {total != null && <p className="text-muted small mb-2">{total} usuário(s).</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
-        onRowClick={row => router.push(`/usuarios/${row.uid}`)}
+        onRowClick={row => router.push(detailHref('/usuarios', row.uid))}
         emptyMessage="Nenhum usuário encontrado."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />

@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Alert, Button } from 'react-bootstrap';
@@ -27,7 +28,7 @@ function Runs() {
       // Resolve under the selected context before exposing a newly created run.
       await getChecklistRun({ token, organizationUid: selectedOrganizationUid, uid, signal });
       return uid;
-    }, uid => router.push(`/checklists/execucoes/${uid}`));
+    }, uid => router.push(detailHref('/checklists/execucoes', uid)));
   };
   const open = event => {
     event.preventDefault();
@@ -35,7 +36,7 @@ function Runs() {
       const uid = requireUid(lookup, 'execução');
       await getChecklistRun({ token, organizationUid: selectedOrganizationUid, uid, signal });
       return uid;
-    }, uid => router.push(`/checklists/execucoes/${uid}`));
+    }, uid => router.push(detailHref('/checklists/execucoes', uid)));
   };
   return <>
     <PageBreadcrumb title="Execuções de checklist" subTitle1="Operação" /><ChecklistNavigation />

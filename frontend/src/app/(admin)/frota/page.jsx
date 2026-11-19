@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -108,7 +109,7 @@ const FleetInner = () => {
       {total != null && <p className="text-muted small mb-2">{total} asset(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
-        onRowClick={row => router.push(`/frota/${row.uid}`)}
+        onRowClick={row => router.push(detailHref('/frota', row.uid))}
         emptyMessage="Nenhum asset cadastrado nesta organização."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />

@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Alert, Button, Spinner } from 'react-bootstrap';
@@ -22,7 +23,7 @@ export default function KnowledgeCatalog({ publicAccess = true, token, organizat
     {!query.loading && !query.error && <>
       <p className="text-muted small">{query.data?.total ?? items.length} artigo(s) disponível(is)</p>
       {items.length === 0 && <p>Nenhum artigo encontrado.</p>}
-      {items.map(item => <article className="card panel p-4 mb-3" key={item.slug}><h3 className="h5"><Link href={`${publicAccess ? '/ajuda' : '/knowledge/leitura'}/${encodeURIComponent(item.slug)}`}>{item.title || item.slug}</Link></h3><p className="mb-1">{item.summary}</p>{item.published_at && <span className="small text-muted">Publicado em {new Date(item.published_at).toLocaleDateString('pt-BR')}</span>}</article>)}
+      {items.map(item => <article className="card panel p-4 mb-3" key={item.slug}><h3 className="h5"><Link href={detailHref(publicAccess ? '/ajuda' : '/knowledge/leitura', item.slug, 'slug')}>{item.title || item.slug}</Link></h3><p className="mb-1">{item.summary}</p>{item.published_at && <span className="small text-muted">Publicado em {new Date(item.published_at).toLocaleDateString('pt-BR')}</span>}</article>)}
       <div className="d-flex align-items-center justify-content-between gap-2 mt-3"><Button variant="outline-secondary" disabled={offset === 0} onClick={() => setOffset(value => Math.max(0, value - limit))}>Anterior</Button><span>Página {Math.floor(offset / limit) + 1}</span><Button variant="outline-secondary" disabled={offset + items.length >= (query.data?.total ?? items.length) || items.length === 0} onClick={() => setOffset(value => value + limit)}>Próxima</Button></div>
     </>}
   </>;

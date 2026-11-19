@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Alert, Button } from 'react-bootstrap';
@@ -41,7 +42,7 @@ const OrganizationsPage = () => {
       {total != null && <p className="text-muted small mb-2">{total} organização(ões) visível(is).</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
-        onRowClick={row => router.push(`/organizacoes/${row.uid}`)}
+        onRowClick={row => router.push(detailHref('/organizacoes', row.uid))}
         emptyMessage="Nenhuma organização visível para o seu acesso."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
@@ -50,7 +51,7 @@ const OrganizationsPage = () => {
         setCreated({ scope });
         refresh();
         const uid = result?.uid_organization ?? result?.organization?.uid ?? result?.uid;
-        if (uid) router.push(`/organizacoes/${encodeURIComponent(uid)}`);
+        if (uid) router.push(detailHref('/organizacoes', uid));
       }} />}
     </div>
   );

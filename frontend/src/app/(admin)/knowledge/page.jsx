@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Alert, Button } from 'react-bootstrap';
@@ -29,7 +30,7 @@ function Items() {
       const body = knowledgeItemBody(slug);
       const result = await createKnowledgeItem({ token, body, signal, idempotencyKey: intentKey(intention, 'knowledge-item', body) });
       return requireUid((result.item ?? result).uid, 'artigo criado');
-    }, uid => { setSlug(null); router.push(`/knowledge/${uid}`); }, () => { setSlug(null); list.setItems([]); });
+    }, uid => { setSlug(null); router.push(detailHref('/knowledge', uid)); }, () => { setSlug(null); list.setItems([]); });
   };
   return <>
     <PageBreadcrumb title="Base de conhecimento" subTitle1="Conteúdo" /><KnowledgeNavigation />
@@ -38,7 +39,7 @@ function Items() {
     <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar artigos..." actionLabel="Novo artigo" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setSlug(''); }} />
     <Button variant="outline-secondary" className="mb-3" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
-      { key: 'title', label: 'Artigo', render: row => <Button variant="link" onClick={() => router.push(`/knowledge/${encodeURIComponent(row.uid)}`)}>{row.title || row.slug}</Button> }, { key: 'slug', label: 'Identificador' }, { key: 'publication_status', label: 'Situação', render: row => KNOWLEDGE_STATUSES[row.publication_status] || row.publication_status }, { key: 'audience_mode', label: 'Audiência', render: row => KNOWLEDGE_AUDIENCES[row.audience_mode] || 'Sem publicação' }
+      { key: 'title', label: 'Artigo', render: row => <Button variant="link" onClick={() => router.push(detailHref('/knowledge', row.uid))}>{row.title || row.slug}</Button> }, { key: 'slug', label: 'Identificador' }, { key: 'publication_status', label: 'Situação', render: row => KNOWLEDGE_STATUSES[row.publication_status] || row.publication_status }, { key: 'audience_mode', label: 'Audiência', render: row => KNOWLEDGE_AUDIENCES[row.audience_mode] || 'Sem publicação' }
     ]} />
     {slug !== null && <FormDrawer show title="Novo artigo" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setSlug(null); }}><OperationField label="Identificador na URL" required placeholder="como-instalar-o-equipamento" value={slug} onChange={event => setSlug(event.target.value)} /><p className="small text-muted">Depois da criação, escreva a primeira revisão do artigo.</p></FormDrawer>}
   </>;

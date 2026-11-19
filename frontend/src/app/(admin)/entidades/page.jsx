@@ -1,5 +1,6 @@
 'use client';
 
+import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -71,7 +72,7 @@ const EntitiesInner = () => {
       {total != null && <p className="text-muted small mb-2">{total} entidade(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
-        onRowClick={row => router.push(`/entidades/${row.uid}`)}
+        onRowClick={row => router.push(detailHref('/entidades', row.uid))}
         emptyMessage="Nenhuma entidade cadastrada nesta organização."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />

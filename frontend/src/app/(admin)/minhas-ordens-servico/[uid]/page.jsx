@@ -1,4 +1,4 @@
 'use client';
-import { useParams } from 'next/navigation';
+import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { WorkOrderDetailPage } from '@/components/admin/WorkOrders';
-export default function Page() { const { uid } = useParams(); return <WorkOrderDetailPage uid={uid} selfService />; }
+export default function Page() { const uid = useDetailParam('uid'); return <WorkOrderDetailPage uid={uid} selfService />; }
