@@ -4,7 +4,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
   getOrganization, getOrganizationGates, getOrgSessionPolicy,
@@ -169,7 +169,7 @@ const OrganizationDetailPage = () => {
         </Col>
       </Row>
 
-      <FormDrawer
+      <FormModal
         show={editOpen} onHide={() => setEditOpen(false)} title="Editar identidade"
         onSubmit={saveIdentity} submitting={savingId}
       >
@@ -184,7 +184,7 @@ const OrganizationDetailPage = () => {
         <p className="text-muted small">
           A validação final (unicidade de código, formato) é feita pelo backend; o gate liberado não garante aceite do payload.
         </p>
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

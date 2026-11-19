@@ -4,7 +4,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
   createAssignment, createEngagement, endEngagement, getCollaborator, listAssignments,
@@ -264,7 +264,7 @@ const CollaboratorDetailPage = () => {
         </Col>
       </Row>
 
-      <FormDrawer show={editOpen} onHide={() => setEditOpen(false)} title="Editar colaborador" onSubmit={saveEdit} submitting={savingEdit}>
+      <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar colaborador" onSubmit={saveEdit} submitting={savingEdit}>
         {editForm && (
           <>
             <div className="mb-3">
@@ -281,9 +281,9 @@ const CollaboratorDetailPage = () => {
             </div>
           </>
         )}
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={engOpen} onHide={() => setEngOpen(false)} title="Novo engagement" onSubmit={saveEng} submitting={savingEng}>
+      <FormModal show={engOpen} onHide={() => setEngOpen(false)} title="Novo engagement" onSubmit={saveEng} submitting={savingEng}>
         <div className="mb-3">
           <label className="form-label">Tipo de vínculo</label>
           <Form.Select value={engForm.uid_engagement_type} onChange={e => setEngForm(f => ({ ...f, uid_engagement_type: e.target.value }))} required>
@@ -303,9 +303,9 @@ const CollaboratorDetailPage = () => {
           <input type="date" className="form-control" value={engForm.started_on} onChange={e => setEngForm(f => ({ ...f, started_on: e.target.value }))} required />
         </div>
         <Form.Check type="switch" id="eng-primary" label="Vínculo principal" checked={engForm.is_primary} onChange={e => setEngForm(f => ({ ...f, is_primary: e.target.checked }))} />
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={asgOpen} onHide={() => setAsgOpen(false)} title="Nova lotação" onSubmit={saveAsg} submitting={savingAsg}>
+      <FormModal show={asgOpen} onHide={() => setAsgOpen(false)} title="Nova lotação" onSubmit={saveAsg} submitting={savingAsg}>
         <div className="mb-3">
           <label className="form-label">Engagement</label>
           <Form.Select value={asgForm.uid_engagement} onChange={e => setAsgForm(f => ({ ...f, uid_engagement: e.target.value }))} required>
@@ -332,7 +332,7 @@ const CollaboratorDetailPage = () => {
           <input type="date" className="form-control" value={asgForm.started_on} onChange={e => setAsgForm(f => ({ ...f, started_on: e.target.value }))} required />
         </div>
         <Form.Check type="switch" id="asg-primary" label="Lotação principal" checked={asgForm.is_primary} onChange={e => setAsgForm(f => ({ ...f, is_primary: e.target.checked }))} />
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

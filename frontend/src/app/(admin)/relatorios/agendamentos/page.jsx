@@ -5,7 +5,7 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import AgendaNavigation from '@/components/admin/AgendaNavigation';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import { OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import { createReportSchedule, deleteReportSchedule, getReportSchedule, listReportSchedules, setReportScheduleState, updateReportSchedule } from '@/lib/api/endpoints/reportSchedules';
@@ -62,7 +62,7 @@ function Schedules() {
       { key: 'timezone', label: 'Fuso' }, { key: 'next_run_at', label: 'Próxima execução', render: row => row.next_run_at ? new Date(row.next_run_at).toLocaleString('pt-BR') : 'Não informada' },
       { key: 'actions', label: 'Ações', render: row => <div className="d-flex gap-2"><Button size="sm" variant="outline-secondary" disabled={action.busy || !['active', 'paused'].includes(row.state)} onClick={() => { action.clearError(); setConfirmation({ row, state: row.state === 'paused' ? 'active' : 'paused' }); }}>{row.state === 'paused' ? 'Retomar' : 'Pausar'}</Button><Button size="sm" variant="outline-danger" disabled={action.busy} onClick={() => { action.clearError(); setConfirmation({ row, remove: true }); }}>Excluir</Button></div> }
     ]} />
-    {form && <FormDrawer show title={current ? 'Editar agendamento' : 'Novo agendamento diário'} submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
+    {form && <FormModal show title={current ? 'Editar agendamento' : 'Novo agendamento diário'} submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       {current && <p>Fuso: {current.timezone || 'Definido pela organização'} · Periodicidade: {current.cadence?.frequency}. O período e a periodicidade existentes serão preservados.</p>}
       <OperationField label="Código do relatório publicado" required {...field('report_code')} />
       <OperationField label="Versão publicada" type="number" min="1" step="1" required {...field('report_version')} />
@@ -73,7 +73,7 @@ function Schedules() {
       <OperationField label="Retenção do arquivo (segundos)" type="number" min="1" max="2592000" step="1" required {...field('retention_seconds')} />
       <OperationField label="Colunas (uma por linha)" multiline required {...field('columns')} />
       <details><summary className="mb-3">Filtros e ordenação avançados</summary><OperationField label="Filtros do relatório (JSON)" multiline required {...field('filters')} /><OperationField label="Ordenação (JSON)" multiline required {...field('sort')} /></details>
-    </fieldset></FormDrawer>}
-    {confirmation && <FormDrawer show title={confirmation.remove ? 'Excluir agendamento' : confirmation.state === 'paused' ? 'Pausar agendamento' : 'Retomar agendamento'} submitting={action.busy} error={action.error} onSubmit={confirm} submitLabel="Confirmar" onHide={() => { if (!action.busy) setConfirmation(null); }}><p>{confirmation.row.report_code} · {confirmation.row.uid}</p><p>{confirmation.remove ? 'O agendamento será excluído logicamente. O histórico de relatórios será preservado.' : 'A situação do agendamento será alterada.'}</p></FormDrawer>}
+    </fieldset></FormModal>}
+    {confirmation && <FormModal show title={confirmation.remove ? 'Excluir agendamento' : confirmation.state === 'paused' ? 'Pausar agendamento' : 'Retomar agendamento'} submitting={action.busy} error={action.error} onSubmit={confirm} submitLabel="Confirmar" onHide={() => { if (!action.busy) setConfirmation(null); }}><p>{confirmation.row.report_code} · {confirmation.row.uid}</p><p>{confirmation.remove ? 'O agendamento será excluído logicamente. O histórico de relatórios será preservado.' : 'A situação do agendamento será alterada.'}</p></FormModal>}
   </>;
 }

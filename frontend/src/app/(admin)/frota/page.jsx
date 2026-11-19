@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import { usePagedList } from '@/hooks/usePagedList';
@@ -114,7 +114,7 @@ const FleetInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Novo asset" onSubmit={submit} submitting={saving}>
+      <FormModal show={open} onHide={() => setOpen(false)} title="Novo asset" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Entidade</label>
           <Form.Select value={form.entityUid} onChange={e => onEntityChange(e.target.value)} required>
@@ -166,7 +166,7 @@ const FleetInner = () => {
           <div className="col-5 mb-2"><label className="form-label">Ano</label><input type="number" className="form-control" value={form.modelYear} onChange={e => setForm(f => ({ ...f, modelYear: e.target.value }))} /></div>
         </div>
         <p className="text-muted small">O asset é criado já com participação no grupo &quot;Geral&quot; da organização. Organização e entidade são imutáveis depois.</p>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };

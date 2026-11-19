@@ -5,7 +5,7 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import { OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import { getNotificationHook, listNotificationHooks, updateNotificationHook } from '@/lib/api/endpoints/notifications';
@@ -35,11 +35,11 @@ function Hooks() {
     {notice && <Alert variant="success">{notice}</Alert>}{action.error && !form && <Alert variant="danger">{action.error}</Alert>}
     <div className="d-flex gap-2 mb-3"><Button disabled={action.busy} onClick={open}>Configurar criação de organização</Button><Button variant="outline-secondary" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button></div>
     <DataTable rows={list.items} rowKey={row => row.uid || row.code} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[{ key: 'code', label: 'Automação' }, { key: 'scope', label: 'Origem', render: row => row.scope === 'default' ? 'Padrão herdado' : 'Organização' }, { key: 'version', label: 'Versão' }, { key: 'active', label: 'Ativa', render: row => row.active ? 'Sim' : 'Não' }]} />
-    {form && <FormDrawer show title="Criação de organização" submitting={action.busy} error={action.error} submitLabel="Salvar para esta organização" onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
+    {form && <FormModal show title="Criação de organização" submitting={action.busy} error={action.error} submitLabel="Salvar para esta organização" onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       <p>Configuração atual: {form.scope === 'default' ? 'padrão herdado' : 'organização'} · versão {form.version}.</p><p>Salvar define uma configuração própria para a organização selecionada.</p>
       <Form.Check id="notification-hook-active" label="Automação ativa" checked={form.active} onChange={event => setForm({ ...form, active: event.target.checked })} className="mb-3" />
       <OperationField multiline label="Conteúdo e destinatários (JSON)" required value={form.payload} onChange={event => setForm({ ...form, payload: event.target.value })} />
       <p className="small text-muted">Preserve as ações e os campos que deseja manter. Campos do contexto, como {'{{ organization.name }}'}, são resolvidos no momento da notificação.</p>
-    </fieldset></FormDrawer>}
+    </fieldset></FormModal>}
   </>;
 }

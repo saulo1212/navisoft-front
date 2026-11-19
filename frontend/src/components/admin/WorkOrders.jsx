@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, Button } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from './DataTable';
-import FormDrawer from './FormDrawer';
+import FormModal from './FormModal';
 import ListToolbar from './ListToolbar';
 import StatusBadge from './StatusBadge';
 import { areaAllowed, OperationalGate, OperationField, operationError, useOperationalAction } from './OperationalUi';
@@ -64,7 +64,7 @@ function Orders({ selfService }) {
       { key: 'items_total', label: 'Itens' }, { key: 'items_completed', label: 'Concluídos' }, { key: 'items_pending', label: 'Pendentes' },
       { key: 'status', label: 'Situação', render: row => <StatusBadge status={row.status} /> }
     ]} />
-    {form && <FormDrawer show title="Nova OS técnica" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}>
+    {form && <FormModal show title="Nova OS técnica" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}>
       <fieldset disabled={action.busy}>
         <OperationField label="UUID do ativo" required value={form.uid_asset} onChange={e => set('uid_asset', e.target.value)} />
         <OperationField label="UUID do executor ativo" required value={form.uid_technician} onChange={e => set('uid_technician', e.target.value)} />
@@ -82,7 +82,7 @@ function Orders({ selfService }) {
         </div>)}
         <Button size="sm" variant="outline-secondary" onClick={() => set('items', [...form.items, emptyItem()])}>Adicionar item</Button>
       </fieldset>
-    </FormDrawer>}
+    </FormModal>}
   </>;
 }
 

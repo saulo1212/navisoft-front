@@ -5,7 +5,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
@@ -337,14 +337,14 @@ const EntityDetailInner = () => {
         </Col>
       </Row>
 
-      <FormDrawer show={editOpen} onHide={() => setEditOpen(false)} title="Editar entidade" onSubmit={saveEdit} submitting={savingEdit}>
+      <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar entidade" onSubmit={saveEdit} submitting={savingEdit}>
         <div className="mb-3">
           <label className="form-label">Nome</label>
           <input className="form-control" value={editName} onChange={e => setEditName(e.target.value)} required />
         </div>
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={typesOpen} onHide={() => setTypesOpen(false)} title="Editar tipos" onSubmit={saveTypes} submitting={savingTypes}>
+      <FormModal show={typesOpen} onHide={() => setTypesOpen(false)} title="Editar tipos" onSubmit={saveTypes} submitting={savingTypes}>
         <p className="text-muted small">Substituição completa — não é possível salvar com zero tipos.</p>
         <div className="d-flex flex-column gap-2 mb-3">
           {typeCatalog.map(t => (
@@ -363,17 +363,17 @@ const EntityDetailInner = () => {
           <input className="form-control" placeholder="nome" value={newType.name} onChange={e => setNewType(n => ({ ...n, name: e.target.value }))} />
           <Button type="button" variant="outline-secondary" onClick={addType}>+</Button>
         </div>
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={unitOpen} onHide={() => setUnitOpen(false)} title="Nova unidade" onSubmit={saveUnit} submitting={savingUnit}>
+      <FormModal show={unitOpen} onHide={() => setUnitOpen(false)} title="Nova unidade" onSubmit={saveUnit} submitting={savingUnit}>
         <div className="mb-3">
           <label className="form-label">Nome da unidade</label>
           <input className="form-control" value={unitName} onChange={e => setUnitName(e.target.value)} required />
         </div>
         <p className="text-muted small">A unidade pertence a esta entidade.</p>
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={addrOpen} onHide={() => setAddrOpen(false)} title="Cadastrar endereço" onSubmit={saveAddr} submitting={savingAddr}>
+      <FormModal show={addrOpen} onHide={() => setAddrOpen(false)} title="Cadastrar endereço" onSubmit={saveAddr} submitting={savingAddr}>
         <div className="row g-2">
           <div className="col-5 mb-2"><label className="form-label">CEP</label><input className="form-control" value={addr.postal_code} onChange={e => setAddr(a => ({ ...a, postal_code: e.target.value }))} required /></div>
           <div className="col-7 mb-2"><label className="form-label">Cidade</label><input className="form-control" value={addr.city} onChange={e => setAddr(a => ({ ...a, city: e.target.value }))} required /></div>
@@ -389,9 +389,9 @@ const EntityDetailInner = () => {
             </Form.Select>
           </div>
         </div>
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={editAddrOpen} onHide={() => setEditAddrOpen(false)} title="Editar endereço" onSubmit={saveEditAddr} submitting={savingEditAddr}>
+      <FormModal show={editAddrOpen} onHide={() => setEditAddrOpen(false)} title="Editar endereço" onSubmit={saveEditAddr} submitting={savingEditAddr}>
         <div className="row g-2">
           <div className="col-5 mb-2"><label className="form-label">CEP</label><input className="form-control" value={editAddr.postal_code} onChange={e => setEditAddr(a => ({ ...a, postal_code: e.target.value }))} required /></div>
           <div className="col-7 mb-2"><label className="form-label">Cidade</label><input className="form-control" value={editAddr.city} onChange={e => setEditAddr(a => ({ ...a, city: e.target.value }))} required /></div>
@@ -407,9 +407,9 @@ const EntityDetailInner = () => {
             </Form.Select>
           </div>
         </div>
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={lifecycleOpen} onHide={() => setLifecycleOpen(false)} title="Alterar situação" onSubmit={saveLifecycle} submitting={savingLifecycle}>
+      <FormModal show={lifecycleOpen} onHide={() => setLifecycleOpen(false)} title="Alterar situação" onSubmit={saveLifecycle} submitting={savingLifecycle}>
         <div className="mb-3">
           <label className="form-label">Novo estado</label>
           <Form.Select value={lifecycle.state} onChange={e => setLifecycle(l => ({ ...l, state: e.target.value }))}>
@@ -422,7 +422,7 @@ const EntityDetailInner = () => {
           <label className="form-label">Motivo {lifecycle.state !== 'active' && <span className="text-danger">*</span>}</label>
           <textarea className="form-control" rows={3} value={lifecycle.reason} onChange={e => setLifecycle(l => ({ ...l, reason: e.target.value }))} />
         </div>
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

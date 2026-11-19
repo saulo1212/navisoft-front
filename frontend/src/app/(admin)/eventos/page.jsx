@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Alert, Button, Form, Offcanvas } from 'react-bootstrap';
+import { useId, useState } from 'react';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
@@ -16,6 +16,7 @@ function Occurrences() {
   const { token, selectedOrganizationUid } = useSession();
   const list = useOffsetList(listEventOccurrences, { params: { organizationUid: selectedOrganizationUid } });
   const action = useOperationalAction();
+  const detailTitleId = useId();
   const [detail, setDetail] = useState(null);
   const [treatment, setTreatment] = useState('acknowledge');
   const [text, setText] = useState('');
@@ -44,15 +45,30 @@ function Occurrences() {
       { key: 'status', label: 'Situação', render: row => row.status || row.state || '—' },
       { key: 'occurred_at', label: 'Data', render: row => row.occurred_at ? new Date(row.occurred_at).toLocaleString('pt-BR') : '—' }
     ]} />
-    <Offcanvas show={!!detail} onHide={() => { if (!action.busy) setDetail(null); }} placement="end" style={{ width: 520 }}><Offcanvas.Header closeButton><Offcanvas.Title>Atendimento da ocorrência</Offcanvas.Title></Offcanvas.Header><Offcanvas.Body>{detail && <>
-      <p>{detail.model_name || detail.model_code || detail.uid}</p><p>Ativo: {detail.asset_identification || detail.uid_asset || '—'}</p><p>Situação: {detail.status || detail.state || '—'}</p>
-      {detail.notes && <pre className="text-wrap">{typeof detail.notes === 'string' ? detail.notes : JSON.stringify(detail.notes, null, 2)}</pre>}
-      {action.error && <Alert variant="danger">{action.error}</Alert>}{notice && <Alert variant="success">{notice}</Alert>}
-      <form onSubmit={save}><fieldset disabled={action.busy || ['closed', 'resolved'].includes(detail.status || detail.state)}>
-        <Form.Group controlId="occurrence-action" className="mb-3"><Form.Label>Ação</Form.Label><Form.Select value={treatment} onChange={event => { setTreatment(event.target.value); setText(''); }}><option value="acknowledge">Reconhecer</option><option value="note">Adicionar anotação</option><option value="close">Encerrar</option></Form.Select></Form.Group>
-        {treatment !== 'acknowledge' && <OperationField multiline label={treatment === 'close' ? 'Resolução' : 'Anotação'} required value={text} onChange={event => setText(event.target.value)} />}
-        <Button type="submit">Confirmar tratamento</Button>
-      </fieldset></form>
-    </>}</Offcanvas.Body></Offcanvas>
+    <Modal
+      show={!!detail}
+      onHide={action.busy ? undefined : () => setDetail(null)}
+      aria-labelledby={detailTitleId}
+      centered
+      scrollable
+      backdrop="static"
+      keyboard={!action.busy}
+    >
+      <Modal.Header closeButton={!action.busy} closeLabel="Fechar">
+        <Modal.Title id={detailTitleId} className="fs-5">Atendimento da ocorrência</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {detail && <>
+          <p>{detail.model_name || detail.model_code || detail.uid}</p><p>Ativo: {detail.asset_identification || detail.uid_asset || '—'}</p><p>Situação: {detail.status || detail.state || '—'}</p>
+          {detail.notes && <pre className="text-wrap">{typeof detail.notes === 'string' ? detail.notes : JSON.stringify(detail.notes, null, 2)}</pre>}
+          {action.error && <Alert variant="danger">{action.error}</Alert>}{notice && <Alert variant="success">{notice}</Alert>}
+          <form onSubmit={save}><fieldset disabled={action.busy || ['closed', 'resolved'].includes(detail.status || detail.state)}>
+            <Form.Group controlId="occurrence-action" className="mb-3"><Form.Label>Ação</Form.Label><Form.Select value={treatment} onChange={event => { setTreatment(event.target.value); setText(''); }}><option value="acknowledge">Reconhecer</option><option value="note">Adicionar anotação</option><option value="close">Encerrar</option></Form.Select></Form.Group>
+            {treatment !== 'acknowledge' && <OperationField multiline label={treatment === 'close' ? 'Resolução' : 'Anotação'} required value={text} onChange={event => setText(event.target.value)} />}
+            <Button type="submit">Confirmar tratamento</Button>
+          </fieldset></form>
+        </>}
+      </Modal.Body>
+    </Modal>
   </>;
 }

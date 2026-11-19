@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { Alert, Button, Modal } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { areaAllowed, OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -79,7 +79,7 @@ function Maintenance() {
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => { if (!action.busy) void open(row); }} columns={[
       { key: 'asset', label: 'Ativo', render: row => row.asset_identification || row.uid_asset }, { key: 'description', label: 'Descrição' }, { key: 'origin_kind', label: 'Origem' }, { key: 'status', label: 'Situação', render: row => <StatusBadge status={row.status} /> }
     ]} />
-    {form && canWrite && <FormDrawer show title="Nova manutenção" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
+    {form && canWrite && <FormModal show title="Nova manutenção" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       <OperationField label="UUID do ativo" required value={form.uid_asset} onChange={e => set('uid_asset', e.target.value)} />
       <OperationField label="Descrição" required multiline value={form.description} onChange={e => set('description', e.target.value)} />
       {form.items.map((item, index) => <div className="border rounded p-2 mb-2" key={index}>
@@ -94,7 +94,7 @@ function Maintenance() {
         <Button size="sm" variant="outline-danger" onClick={() => set('conditions', form.conditions.filter((_, i) => i !== index))}>Remover condição</Button>
       </div>)}
       <Button size="sm" variant="outline-secondary" onClick={() => set('conditions', [...form.conditions, { description: '', blocking: false }])}>Adicionar condição</Button>
-    </fieldset></FormDrawer>}
+    </fieldset></FormModal>}
     <Modal show={!!detail} onHide={() => { if (!action.busy) setDetail(null); }} size="lg">
       <Modal.Header closeButton={!action.busy}><Modal.Title>Detalhes da manutenção</Modal.Title></Modal.Header>
       <Modal.Body>{detail && <>

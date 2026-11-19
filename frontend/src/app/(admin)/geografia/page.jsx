@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import GeographyMap from '@/components/admin/GeographyMap';
 import RoutePointsEditor from '@/components/admin/RoutePointsEditor';
 import ListToolbar from '@/components/admin/ListToolbar';
@@ -123,7 +123,7 @@ function ResourceTab({ kind, scope }) {
     <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome..." actionLabel={`Cadastrar ${resource.singular}`} onAction={() => openForm(null)} actionDisabled={busy} />
     {!list.error && <GeographyMap rows={list.items} selectedUid={detail?.uid} onSelect={row => { if (!busy && !form && !pendingDelete) void openDetail(row); }} />}
     <DataTable columns={columns} rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} emptyMessage="Nenhum registro encontrado neste escopo." />
-    {form && <FormDrawer show onHide={() => { if (!busy) setForm(null); }} title={`${form.uid ? 'Editar' : 'Cadastrar'} ${resource.singular}`} onSubmit={save} submitting={busy} error={error}>
+    {form && <FormModal show onHide={() => { if (!busy) setForm(null); }} title={`${form.uid ? 'Editar' : 'Cadastrar'} ${resource.singular}`} onSubmit={save} submitting={busy} error={error}>
       <fieldset disabled={busy}>
         <Field label="Nome" id="point-name" value={form.name} onChange={v => set('name', v)} required />
         <Field label="Descrição" id="point-description" value={form.description ?? ''} onChange={v => set('description', v)} />
@@ -149,7 +149,7 @@ function ResourceTab({ kind, scope }) {
         </>}
         <label className="d-flex gap-2"><input type="checkbox" checked={form.active} onChange={e => set('active', e.target.checked)} />Ativo</label>
       </fieldset>
-    </FormDrawer>}
+    </FormModal>}
     <Modal show={!!detail} onHide={() => setDetail(null)} size="lg">
       <Modal.Header closeButton><Modal.Title>{detail?.name || 'Detalhes'}</Modal.Title></Modal.Header>
       <Modal.Body>{detail && <>

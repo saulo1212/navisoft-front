@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Badge, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { usePagedList } from '@/hooks/usePagedList';
@@ -89,7 +89,7 @@ const UsersPage = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Novo usuário" onSubmit={submit} submitting={saving} submitLabel="Provisionar">
+      <FormModal show={open} onHide={() => setOpen(false)} title="Novo usuário" onSubmit={submit} submitting={saving} submitLabel="Provisionar">
         <div className="mb-3">
           <label className="form-label">Nome</label>
           <input className="form-control" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
@@ -115,7 +115,7 @@ const UsersPage = () => {
           O usuário é criado <strong>desabilitado</strong> e com escopo na organização atual.
           A ativação (habilitar + primeiro acesso/convite) é feita depois.
         </p>
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

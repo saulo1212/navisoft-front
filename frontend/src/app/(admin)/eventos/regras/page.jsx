@@ -5,7 +5,7 @@ import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
 import { useOffsetList } from '@/hooks/useOffsetList';
@@ -53,7 +53,7 @@ function Rules() {
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'name', label: 'Regra', render: row => <Button variant="link" disabled={action.busy} onClick={() => open(row)}>{row.name}</Button> }, { key: 'model_code', label: 'Modelo' }, { key: 'priority', label: 'Prioridade', render: row => EVENT_PRIORITIES[row.priority] || row.priority }, { key: 'active', label: 'Ativa', render: row => row.active ? 'Sim' : 'Não' }, { key: 'actions', label: 'Ações', render: row => <Button variant="outline-danger" size="sm" disabled={action.busy} onClick={() => { action.clearError(); setRemove(row); }}>Excluir</Button> }
     ]} />
-    {form && <FormDrawer show title={current ? 'Editar regra' : 'Nova regra'} onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
+    {form && <FormModal show title={current ? 'Editar regra' : 'Nova regra'} onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       <OperationField label="Nome" required {...field('name')} />
       <Form.Group controlId="event-model" className="mb-3"><Form.Label>Modelo de evento</Form.Label><Form.Select required value={form.uid_model} onChange={event => { const selected = models.items.find(row => row.uid === event.target.value); setForm({ ...form, uid_model: event.target.value, parameters: JSON.stringify(selected?.defaults || {}, null, 2) }); }}><option value="">Selecione</option>{models.items.filter(row => row.active && !row.fixed && !row.periodic && !row.activation_only).map(row => <option key={row.uid} value={row.uid}>{row.name}</option>)}{current && !models.items.some(row => row.uid === form.uid_model) && <option value={form.uid_model}>{current.model_code || form.uid_model}</option>}</Form.Select></Form.Group>
       {models.error && <Alert variant="danger">Erro ao carregar modelos: {models.error}</Alert>}{models.hasMore && <Button type="button" variant="outline-secondary" onClick={models.loadMore} disabled={models.loading}>Mais modelos</Button>}
@@ -65,7 +65,7 @@ function Rules() {
       <OperationField label="Confirmação da condição (segundos)" type="number" min="0" step="1" required {...field('condition_for_seconds')} /><OperationField label="Recuperação (segundos)" type="number" min="0" step="1" required {...field('recovery_for_seconds')} /><OperationField label="Atraso para disponibilizar ocorrência (segundos)" type="number" min="0" step="1" required {...field('delayed_seconds')} />
       <OperationField label="Início da vigência (fuso do navegador)" type="datetime-local" {...field('valid_from')} /><OperationField label="Fim da vigência (fuso do navegador)" type="datetime-local" {...field('valid_until')} />
       <details><summary className="mb-3">Condições, janelas e destinatários</summary><OperationField label="Condições AND (JSON)" multiline required {...field('conditions')} /><OperationField label="Janelas semanais (JSON)" multiline required {...field('windows')} /><p className="small">Dias de 1 (segunda) a 7 (domingo). Janelas podem atravessar a semana.</p><OperationField label="UUIDs de destinatários de Events (um por linha)" multiline {...field('recipients')} /><p className="small text-muted">Use destinatários cadastrados no domínio Events. Os destinatários de Notifications são independentes.</p></details>
-    </fieldset></FormDrawer>}
-    {remove && <FormDrawer show title="Excluir regra" submitLabel="Excluir" submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setRemove(null); }} onSubmit={event => { event.preventDefault(); void action.run(signal => deleteEventRule({ ...args, uid: remove.uid, signal }), complete, deny); }}><p>Excluir a regra “{remove.name}”? O histórico será preservado.</p></FormDrawer>}
+    </fieldset></FormModal>}
+    {remove && <FormModal show title="Excluir regra" submitLabel="Excluir" submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setRemove(null); }} onSubmit={event => { event.preventDefault(); void action.run(signal => deleteEventRule({ ...args, uid: remove.uid, signal }), complete, deny); }}><p>Excluir a regra “{remove.name}”? O histórico será preservado.</p></FormModal>}
   </>;
 }

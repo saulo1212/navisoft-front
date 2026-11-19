@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
@@ -77,7 +77,7 @@ const EntitiesInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Nova entidade" onSubmit={submit} submitting={saving}>
+      <FormModal show={open} onHide={() => setOpen(false)} title="Nova entidade" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Nome</label>
           <input className="form-control" value={name} onChange={e => setName(e.target.value)} required />
@@ -86,7 +86,7 @@ const EntitiesInner = () => {
           A entidade nasce vinculada à organização atual (organização imutável depois). Tipos, unidades e endereços
           são definidos na tela de detalhe.
         </p>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };

@@ -8,7 +8,7 @@ import PageBreadcrumb from '@/components/PageBreadcrumb';
 import ChecklistNavigation from '@/components/admin/ChecklistNavigation';
 import { ChecklistFields, newChecklistQuestion } from '@/components/admin/ChecklistFields';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { OperationalGate, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -44,6 +44,6 @@ function Templates() {
       { key: 'latest_version', label: 'Última versão publicada', render: row => row.latest_version || 'Sem publicação' },
       { key: 'active', label: 'Situação', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> }
     ]} />
-    {form && <FormDrawer show title="Novo checklist" onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}><ChecklistFields form={form} onChange={setForm} /></fieldset></FormDrawer>}
+    {form && <FormModal show title="Novo checklist" onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}><ChecklistFields form={form} onChange={setForm} /></fieldset></FormModal>}
   </>;
 }

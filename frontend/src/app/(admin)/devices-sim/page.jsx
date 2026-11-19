@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Badge, Button, FormSelect, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { useOffsetList } from '@/hooks/useOffsetList';
@@ -223,7 +223,7 @@ const DevicesTab = () => {
         emptyMessage="Nenhum device cadastrado nesta organização."
       />
 
-      <FormDrawer show={showCreate} onHide={() => setShowCreate(false)} title="Novo device" onSubmit={handleCreate} submitting={submitting} error={formError}>
+      <FormModal show={showCreate} onHide={() => setShowCreate(false)} title="Novo device" onSubmit={handleCreate} submitting={submitting} error={formError}>
         <div className="mb-3">
           <label className="form-label">Tipo</label>
           <FormSelect required value={form.typeUid} onChange={e => onTypeChange(e.target.value)}>
@@ -258,7 +258,7 @@ const DevicesTab = () => {
           <input type="password" className="form-control" value={form.devicePwd} onChange={e => setForm(f => ({ ...f, devicePwd: e.target.value }))} autoComplete="new-password" />
           <p className="text-muted small mt-1 mb-0">Entrada protegida; nunca é exibida depois de salva.</p>
         </div>
-      </FormDrawer>
+      </FormModal>
 
       <Modal show={Boolean(detail)} onHide={() => setDetail(null)} centered>
         {detail && (
@@ -305,7 +305,7 @@ const DevicesTab = () => {
         )}
       </Modal>
 
-      <FormDrawer
+      <FormModal
         show={lifecycleOpen} onHide={() => setLifecycleOpen(false)} title="Alterar situação" onSubmit={saveLifecycle} submitting={detailBusy}
       >
         <div className="mb-3">
@@ -321,7 +321,7 @@ const DevicesTab = () => {
           <textarea className="form-control" rows={3} required value={lifecycleReason} onChange={e => setLifecycleReason(e.target.value)} />
         </div>
         <p className="text-muted small mb-0">Sair de "Ativo" libera o SIM vinculado automaticamente. Reativar não reassocia SIM.</p>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };
@@ -385,12 +385,12 @@ const SimcardsTab = () => {
       <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por ICCID..." actionLabel="Novo SIM" onAction={() => setShowCreate(true)} />
       <DataTable columns={columns} rows={items} loading={loading} error={error} hasMore={hasMore} onLoadMore={loadMore} emptyMessage="Nenhum SIM cadastrado." />
 
-      <FormDrawer show={showCreate} onHide={() => setShowCreate(false)} title="Novo SIM" onSubmit={handleCreate} submitting={submitting} error={formError}>
+      <FormModal show={showCreate} onHide={() => setShowCreate(false)} title="Novo SIM" onSubmit={handleCreate} submitting={submitting} error={formError}>
         <div className="mb-3">
           <label className="form-label">ICCID</label>
           <input className="form-control" required value={iccid} onChange={e => setIccid(e.target.value)} />
         </div>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };

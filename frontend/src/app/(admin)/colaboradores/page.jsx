@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
@@ -70,7 +70,7 @@ const CollaboratorsInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Novo colaborador" onSubmit={submit} submitting={saving}>
+      <FormModal show={open} onHide={() => setOpen(false)} title="Novo colaborador" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Nome legal</label>
           <input className="form-control" value={form.legal_name} onChange={e => setForm(f => ({ ...f, legal_name: e.target.value }))} required />
@@ -84,7 +84,7 @@ const CollaboratorsInner = () => {
           <input type="date" className="form-control" value={form.birth_date} onChange={e => setForm(f => ({ ...f, birth_date: e.target.value }))} />
         </div>
         <p className="text-muted small">O colaborador nasce ativo e vinculado à organização atual. Vínculos de trabalho (engagements) e lotação são definidos na tela de detalhe.</p>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };

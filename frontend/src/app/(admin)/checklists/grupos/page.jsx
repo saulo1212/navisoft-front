@@ -5,7 +5,7 @@ import { Alert } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import ChecklistNavigation from '@/components/admin/ChecklistNavigation';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -42,11 +42,11 @@ function Groups() {
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => { if (!action.busy) void open(row); }} columns={[
       { key: 'code', label: 'Código' }, { key: 'name', label: 'Nome' }, { key: 'active', label: 'Situação', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> }
     ]} />
-    {form && <FormDrawer show title={form.uid ? 'Editar grupo' : 'Novo grupo'} onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
+    {form && <FormModal show title={form.uid ? 'Editar grupo' : 'Novo grupo'} onSubmit={save} submitting={action.busy} error={action.error} onHide={() => { if (!action.busy) setForm(null); }}><fieldset disabled={action.busy}>
       <OperationField label="Código" required disabled={!!form.uid} value={form.code} onChange={e => set('code', e.target.value)} />
       <OperationField label="Nome" required value={form.name} onChange={e => set('name', e.target.value)} />
       <OperationField label="Descrição" multiline value={form.description || ''} onChange={e => set('description', e.target.value)} />
       <label><input type="checkbox" checked={form.active === true} onChange={e => set('active', e.target.checked)} /> Ativo</label>
-    </fieldset></FormDrawer>}
+    </fieldset></FormModal>}
   </>;
 }

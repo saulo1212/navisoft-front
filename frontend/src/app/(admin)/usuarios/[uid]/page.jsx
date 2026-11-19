@@ -4,7 +4,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
   getUser, getUserApplications, patchUser, setUserApplications, updateUser
@@ -172,7 +172,7 @@ const UserDetailPage = () => {
         </Col>
       </Row>
 
-      <FormDrawer show={editOpen} onHide={() => setEditOpen(false)} title="Editar usuário" onSubmit={saveEdit} submitting={savingEdit}>
+      <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar usuário" onSubmit={saveEdit} submitting={savingEdit}>
         {form && (
           <>
             <Alert variant="warning" className="py-2 small">
@@ -202,7 +202,7 @@ const UserDetailPage = () => {
             <Form.Check type="switch" id="user-enabled" label="Habilitado" checked={form.enabled} onChange={e => setForm(f => ({ ...f, enabled: e.target.checked }))} />
           </>
         )}
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

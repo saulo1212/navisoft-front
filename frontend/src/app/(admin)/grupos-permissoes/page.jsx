@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import { groupsPermissionsApi } from '@/lib/api/endpoints/groupsPermissions';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
@@ -72,7 +72,7 @@ const GroupsPermissionsPage = () => {
         emptyMessage="Nenhuma associação de permissão encontrada."
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Associar permissão a grupo" onSubmit={submit} submitting={saving} submitLabel="Associar">
+      <FormModal show={open} onHide={() => setOpen(false)} title="Associar permissão a grupo" onSubmit={submit} submitting={saving} submitLabel="Associar">
         <div className="mb-3">
           <label className="form-label">Grupo</label>
           <Form.Select value={groupCode} onChange={e => setGroupCode(e.target.value)}>
@@ -84,7 +84,7 @@ const GroupsPermissionsPage = () => {
           <input className="form-control font-monospace" value={permissionCode} onChange={e => setPermissionCode(e.target.value)} placeholder="documents.access" required />
         </div>
         <p className="text-muted small">Associações duplicadas são rejeitadas (409). O backend valida o código da permissão.</p>
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

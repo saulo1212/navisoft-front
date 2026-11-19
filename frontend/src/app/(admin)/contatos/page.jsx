@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Badge, Button, Form, Row, Col } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import { usePagedList } from '@/hooks/usePagedList';
@@ -66,7 +66,7 @@ const ContactsInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer show={open} onHide={() => setOpen(false)} title="Novo contato" onSubmit={submit} submitting={saving}>
+      <FormModal show={open} onHide={() => setOpen(false)} title="Novo contato" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Nome</label>
           <input className="form-control" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
@@ -91,7 +91,7 @@ const ContactsInner = () => {
           </Col>
         </Row>
         <p className="text-muted small mb-0">O contato é ancorado à organização atual. O backend valida o formato do método (ex.: e-mail precisa ser e-mail válido).</p>
-      </FormDrawer>
+      </FormModal>
     </>
   );
 };

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Modal } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { areaAllowed, OperationalGate, OperationField, operationError, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -69,13 +69,13 @@ function Technicians() {
       { key: 'name', label: 'Executor' }, { key: 'provider_name', label: 'Prestadora', render: row => row.provider_name || row.uid_provider_entity },
       { key: 'active', label: 'Situação', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> }
     ]} />
-    {form && <FormDrawer show title="Novo executor" onHide={() => { if (!action.busy) setForm(null); }} submitting={action.busy} onSubmit={save} error={action.error}>
+    {form && <FormModal show title="Novo executor" onHide={() => { if (!action.busy) setForm(null); }} submitting={action.busy} onSubmit={save} error={action.error}>
       <fieldset disabled={action.busy}>
         <OperationField label="UUID da entidade prestadora" value={form.uid_provider_entity} required onChange={e => setForm({ ...form, uid_provider_entity: e.target.value })} />
         <OperationField label="Nome do executor" value={form.name} required onChange={e => setForm({ ...form, name: e.target.value })} />
         <label><input type="checkbox" checked={form.active} onChange={e => setForm({ ...form, active: e.target.checked })} /> Ativo</label>
       </fieldset>
-    </FormDrawer>}
+    </FormModal>}
     <Modal show={!!detail} onHide={() => { if (!action.busy) setDetail(null); }} size="lg">
       <Modal.Header closeButton={!action.busy}><Modal.Title>{detail?.name}</Modal.Title></Modal.Header>
       <Modal.Body>{detail && <>

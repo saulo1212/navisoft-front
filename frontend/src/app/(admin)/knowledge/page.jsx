@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Alert, Button } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import KnowledgeNavigation from '@/components/admin/KnowledgeNavigation';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { OperationalGate, OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -41,6 +41,6 @@ function Items() {
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'title', label: 'Artigo', render: row => <Button variant="link" onClick={() => router.push(detailHref('/knowledge', row.uid))}>{row.title || row.slug}</Button> }, { key: 'slug', label: 'Identificador' }, { key: 'publication_status', label: 'Situação', render: row => KNOWLEDGE_STATUSES[row.publication_status] || row.publication_status }, { key: 'audience_mode', label: 'Audiência', render: row => KNOWLEDGE_AUDIENCES[row.audience_mode] || 'Sem publicação' }
     ]} />
-    {slug !== null && <FormDrawer show title="Novo artigo" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setSlug(null); }}><OperationField label="Identificador na URL" required placeholder="como-instalar-o-equipamento" value={slug} onChange={event => setSlug(event.target.value)} /><p className="small text-muted">Depois da criação, escreva a primeira revisão do artigo.</p></FormDrawer>}
+    {slug !== null && <FormModal show title="Novo artigo" submitting={action.busy} error={action.error} onSubmit={save} onHide={() => { if (!action.busy) setSlug(null); }}><OperationField label="Identificador na URL" required placeholder="como-instalar-o-equipamento" value={slug} onChange={event => setSlug(event.target.value)} /><p className="small text-muted">Depois da criação, escreva a primeira revisão do artigo.</p></FormModal>}
   </>;
 }

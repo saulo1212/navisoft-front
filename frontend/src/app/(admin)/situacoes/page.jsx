@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { usePagedList } from '@/hooks/usePagedList';
@@ -70,7 +70,7 @@ const SituationsPage = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
-      <FormDrawer
+      <FormModal
         show={open} onHide={() => setOpen(false)} title={editing ? 'Editar situação' : 'Nova situação'}
         onSubmit={submit} submitting={saving}
       >
@@ -99,7 +99,7 @@ const SituationsPage = () => {
           <label className="form-check-label" htmlFor="s-all">Aplica-se a todos os escopos</label>
         </div>
         {editing?.locked && <p className="text-muted small mb-0">Situação de sistema (travada): código e exclusão são protegidos.</p>}
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };

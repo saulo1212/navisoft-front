@@ -13,7 +13,7 @@ import PageBreadcrumb from '@/components/PageBreadcrumb';
 import AgendaNavigation from '@/components/admin/AgendaNavigation';
 import DataTable from '@/components/admin/DataTable';
 import ListToolbar from '@/components/admin/ListToolbar';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import { OperationalGate, useOperationalAction } from '@/components/admin/OperationalUi';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import { getAgendaSettings, listAgenda, patchAgendaSettings } from '@/lib/api/endpoints/agenda';
@@ -57,6 +57,6 @@ function Agenda() {
       { key: 'due_at', label: 'Prazo', render: row => row.due_at ? new Date(row.due_at).toLocaleString('pt-BR') : 'Sem prazo' },
       { key: 'terminal', label: 'Encerrado', render: row => row.terminal ? 'Sim' : 'Não' }
     ]} />
-    {palette && <FormDrawer show title="Cores da organização" submitting={action.busy} error={action.error} onSubmit={savePalette} onHide={() => { if (!action.busy) setPalette(null); }}><fieldset disabled={action.busy}>{Object.entries(palette).map(([group, colors]) => <div key={group}><h6>{{ priorities: 'Prioridades', states: 'Situações', controls: 'Controles' }[group] || group}</h6>{Object.entries(colors).map(([key, value]) => <label key={key} className="d-flex justify-content-between mb-2">{PRIORITIES[key] || key}<input type="color" aria-label={`Cor ${key}`} value={value} onChange={event => setPalette(previous => ({ ...previous, [group]: { ...previous[group], [key]: event.target.value } }))} /></label>)}</div>)}</fieldset></FormDrawer>}
+    {palette && <FormModal show title="Cores da organização" submitting={action.busy} error={action.error} onSubmit={savePalette} onHide={() => { if (!action.busy) setPalette(null); }}><fieldset disabled={action.busy}>{Object.entries(palette).map(([group, colors]) => <div key={group}><h6>{{ priorities: 'Prioridades', states: 'Situações', controls: 'Controles' }[group] || group}</h6>{Object.entries(colors).map(([key, value]) => <label key={key} className="d-flex justify-content-between mb-2">{PRIORITIES[key] || key}<input type="color" aria-label={`Cor ${key}`} value={value} onChange={event => setPalette(previous => ({ ...previous, [group]: { ...previous[group], [key]: event.target.value } }))} /></label>)}</div>)}</fieldset></FormModal>}
   </>;
 }

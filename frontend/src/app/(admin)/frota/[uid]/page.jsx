@@ -5,7 +5,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import FormDrawer from '@/components/admin/FormDrawer';
+import FormModal from '@/components/admin/FormModal';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { getEntity, searchUnits } from '@/lib/api/endpoints/entities';
@@ -247,7 +247,7 @@ const AssetDetailInner = () => {
         </Col>
       </Row>
 
-      <FormDrawer show={editOpen} onHide={() => setEditOpen(false)} title="Editar asset" onSubmit={saveEdit} submitting={saving}>
+      <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar asset" onSubmit={saveEdit} submitting={saving}>
         {form && (
           <>
             <div className="mb-3">
@@ -281,9 +281,9 @@ const AssetDetailInner = () => {
             </div>
           </>
         )}
-      </FormDrawer>
+      </FormModal>
 
-      <FormDrawer show={lifecycleOpen} onHide={() => setLifecycleOpen(false)} title="Alterar situação" onSubmit={saveLifecycle} submitting={savingLifecycle}>
+      <FormModal show={lifecycleOpen} onHide={() => setLifecycleOpen(false)} title="Alterar situação" onSubmit={saveLifecycle} submitting={savingLifecycle}>
         <div className="mb-3">
           <label className="form-label">Novo estado</label>
           <Form.Select value={lifecycle.state} onChange={e => setLifecycle(l => ({ ...l, state: e.target.value }))}>
@@ -296,7 +296,7 @@ const AssetDetailInner = () => {
           <label className="form-label">Motivo {lifecycle.state !== 'active' && <span className="text-danger">*</span>}</label>
           <textarea className="form-control" rows={3} value={lifecycle.reason} onChange={e => setLifecycle(l => ({ ...l, reason: e.target.value }))} />
         </div>
-      </FormDrawer>
+      </FormModal>
     </div>
   );
 };
