@@ -6,7 +6,7 @@
 //theme colors
 //need some ideas? check out https://coolors.co/palettes/popular/5%20colors
 
-$color-primary: #886ab5;
+$color-primary: #2563eb;
 $color-success: #1dc9b7;
 $color-info: #2196F3;
 $color-warning: #ffc241;
@@ -135,8 +135,8 @@ $bs-cyan: mix($color-info, $color-success, 80%); // Dominantly blue but leans to
 	--app-nav-link-active-color: #{darken($color-primary, 5%)};
 	--app-nav-title-color: #666666;
 	--app-nav-border-color: rgba(var(--secondary), 0.3);
-	--app-nav-item-hover-bg: #{rgba(red($color-primary), green($color-primary), blue($color-primary), 0.045)};
-	--app-nav-item-active-bg: rgba(var(--secondary), 0.07);
+	--app-nav-item-hover-bg: #{rgba(red($color-primary), green($color-primary), blue($color-primary), 0.07)};
+	--app-nav-item-active-bg: rgba(var(--primary), 0.10);
 	--app-nav-item-active-indicator: var(--app-nav-link-active-color);
 	--app-nav-collapse-sign-color: var(--bs-body-color);
 

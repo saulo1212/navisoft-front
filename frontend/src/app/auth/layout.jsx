@@ -1,6 +1,5 @@
-import logoLight from '@/assets/img/logo-light.svg';
 import BackgroundAnimation from '@/components/BackgroundAnimation';
-import Image from 'next/image';
+import { basePath } from '@/helpers';
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 const AuthLayout = ({
@@ -12,7 +11,10 @@ const AuthLayout = ({
     }}>
         <Container>
           <Link className="navbar-brand" href="/">
-            <Image src={logoLight} alt="logo" />
+            <img src={`${basePath}/navisoft-logo.png`} alt="Navisoft" style={{
+            height: '2.5rem',
+            width: 'auto'
+          }} />
           </Link>
           <div className="ms-auto d-flex gap-2">
             <Link href="/auth/login" className="btn btn-link text-white border-0 text-decoration-none">

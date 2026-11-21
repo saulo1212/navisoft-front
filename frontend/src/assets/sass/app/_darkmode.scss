@@ -41,12 +41,12 @@ $light-border-subtle-dark: map-get($grays, 700);
 $dark-border-subtle-dark: map-get($grays, 800);
 
 // Body and global variables
-$body-color-dark: map-get($grays, 300);
-$body-bg-dark: map-get($grays, 900);
+$body-color-dark: #c4cdda;
+$body-bg-dark: #0b1424; // deep navy base
 $body-secondary-color-dark: rgba($body-color-dark, 0.75);
-$body-secondary-bg-dark: map-get($grays, 800);
+$body-secondary-bg-dark: #101a30; // navy secondary surfaces
 $body-tertiary-color-dark: rgba($body-color-dark, 0.5);
-$body-tertiary-bg-dark: mix(map-get($grays, 800), map-get($grays, 900), 50%);
+$body-tertiary-bg-dark: #16233c; // navy cards / dropdowns
 $body-emphasis-color-dark: $color-white;
 $border-color-dark: map-get($grays, 700);
 $border-color-translucent-dark: rgba($color-white, 0.15);
@@ -207,19 +207,19 @@ $nav-tabs-link-active-border-color-dark: $border-color-dark;
     --app-nav-link-color: #adb5bd;
     --app-nav-link-hover-color: #59adff;
     --app-nav-link-active-color: #fff;
-    --app-nav-title-color: #6c757d;
-    --app-nav-border-color: #495057;
-    --app-nav-item-hover-bg: rgba(255, 255, 255, 0.05);
-    --app-nav-item-active-bg: rgba(255, 255, 255, 0.05);
-    --app-nav-item-active-indicator: rgba(255, 255, 255, 0.9);
+    --app-nav-title-color: #6c7a90;
+    --app-nav-border-color: #2a3a55;
+    --app-nav-item-hover-bg: rgba(var(--primary), 0.14);
+    --app-nav-item-active-bg: rgba(var(--primary), 0.90);
+    --app-nav-item-active-indicator: #60a5fa;
     --app-nav-collapse-sign-color: var(--app-nav-link-color);
 
     //app layout
-    --app-header-background: #272b30;
+    --app-header-background: #0f1a30; // navy header / sidebar
     --app-nav-background: var(--app-header-background);
     --app-drawer-background: var(--app-header-background);
-    --app-layout-border-color: var(--bs-border-color);
-    --app-content-background: #363c41; //#22262a
+    --app-layout-border-color: rgba(255, 255, 255, 0.06);
+    --app-content-background: #0b1424; // navy content base
 
     // Panel specific
 	--app-panel-bg: var(--app-header-background);
@@ -229,10 +229,10 @@ $nav-tabs-link-active-border-color-dark: $border-color-dark;
     --panel-drag-bg: var(--app-content-background);
 
     // Form elements
-    --bs-input-bg: #2b3035;
-    --bs-input-border-color: #495057;
+    --bs-input-bg: #16233c;
+    --bs-input-border-color: #2a3a55;
     --bs-input-color: var(--bs-body-color);
-    --bs-input-focus-bg: #2b3035;
+    --bs-input-focus-bg: #16233c;
     --bs-input-focus-border-color: #86b7fe;
     --bs-input-focus-color: var(--bs-emphasis-color);
 

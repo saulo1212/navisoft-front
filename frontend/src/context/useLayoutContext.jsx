@@ -11,7 +11,7 @@ const INIT_STATE = {
   navFixed: false,
   navCollapsed: false,
   navMinified: false,
-  darkNavigation: true,
+  darkNavigation: false,
   colorblindMode: false,
   highContrastMode: false,
   selectedTheme: 'default'
@@ -25,7 +25,7 @@ export const useLayoutContext = () => {
 export const LayoutProvider = ({
   children
 }) => {
-  const [settings, setSettings] = useLocalStorage('__SMART_ADMIN_NEXT_CONFIG__', INIT_STATE);
+  const [settings, setSettings] = useLocalStorage('__NAVISOFT_LAYOUT_CONFIG_V2__', INIT_STATE);
   const [offcanvasStates, setOffcanvasStates] = useState({
     showCustomizer: false
   });

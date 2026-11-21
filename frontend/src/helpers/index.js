@@ -1,7 +1,7 @@
 export const currency = '$';
 export const currentYear = new Date().getFullYear();
-export const appName = 'SmartAdmin';
-export const appTitle = 'SmartAdmin - Enterprise Admin Dashboard';
+export const appName = 'Navisoft';
+export const appTitle = 'Navisoft - Painel Administrativo';
 export const appDescription = '';
 export const author = 'Webora';
 export const authorWebsite = '';

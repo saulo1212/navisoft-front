@@ -400,3 +400,193 @@
     }
 }
 
+
+
+/* === Active primary-nav item: blue left bar + tinted pill (design model) === */
+.primary-nav .nav-menu > li.active {
+    /* vertical accent bar flush to the sidebar edge */
+    &::after {
+        content: "";
+        position: absolute;
+        left: -1.5rem; // cancels .primary-nav horizontal padding
+        top: 0.2rem;
+        bottom: 0.2rem;
+        width: 3px;
+        border-radius: 0 4px 4px 0;
+        background: var(--app-nav-item-active-indicator);
+        z-index: 3;
+    }
+
+    /* rounded highlighted pill behind the active link */
+    > a {
+        background-color: var(--app-nav-item-active-bg);
+        color: var(--app-nav-link-active-color);
+        border-radius: 0.5rem;
+        padding-left: 0.75rem;
+        margin-left: -0.75rem;
+
+        .sa-icon {
+            color: var(--app-nav-link-active-color);
+            stroke: currentColor;
+        }
+
+        .collapse-sign {
+            color: var(--app-nav-link-active-color);
+        }
+    }
+
+    /* drop the template's default dot indicators */
+    &::before {
+        display: none !important;
+    }
+
+    > a .nav-link-text::before {
+        display: none !important;
+    }
+}
+
+
+/* === Organization switcher pill (header) === */
+.org-switcher {
+    background: transparent;
+    border: 1px solid var(--app-layout-border-color);
+    border-radius: 0.625rem;
+    padding: 0.3rem 0.6rem;
+    max-width: 16rem;
+    color: var(--bs-body-color);
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        border-color: rgba(var(--primary), 0.5);
+        background: rgba(var(--primary), 0.05);
+    }
+}
+
+.org-switcher-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: rgba(var(--primary), 0.12);
+    color: rgb(var(--primary));
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.org-switcher-text {
+    line-height: 1.15;
+    min-width: 0;
+}
+
+.org-switcher-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--bs-secondary-color);
+    font-weight: 500;
+}
+
+.org-switcher-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    max-width: 11rem;
+}
+
+.org-switcher-caret {
+    width: 1rem;
+    height: 1rem;
+    color: var(--bs-secondary-color);
+    stroke: currentColor;
+    fill: none;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] {
+    .org-switcher {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+
+        &:hover,
+        &:focus-visible {
+            background: rgba(var(--primary), 0.18);
+            border-color: rgba(var(--primary), 0.6);
+        }
+    }
+
+    .org-switcher-icon {
+        background: rgb(var(--primary));
+        color: #fff;
+    }
+}
+
+
+/* === Organization picker card (Selecione uma organização) === */
+.org-picker-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    background: rgb(var(--primary));
+    color: #fff;
+}
+
+.org-picker-search-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--input-placeholder-color);
+    stroke: currentColor;
+    fill: none;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.org-picker-list {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    overflow-x: hidden;
+}
+
+.org-picker-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    padding: 0.85rem 1rem;
+    color: var(--bs-body-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.12s ease, color 0.12s ease;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &:hover {
+        background: rgba(var(--primary), 0.08);
+    }
+
+    &.active {
+        background: rgba(var(--primary), 0.12);
+        color: rgb(var(--primary));
+    }
+}
+
+.org-picker-empty {
+    padding: 0.85rem 1rem;
+}
+
+[data-bs-theme="dark"] {
+    .org-picker-item:hover {
+        background: rgba(var(--primary), 0.22);
+    }
+
+    .org-picker-item.active {
+        background: rgb(var(--primary));
+        color: #fff;
+    }
+}

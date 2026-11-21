@@ -71,8 +71,11 @@ const Sidenav = () => {
         <AppLogo />
 
         <form className="app-menu-filter-container px-4" onSubmit={e => e.preventDefault()}>
-          <input type="text" className="form-control" id="searchInput" placeholder="Filter" autoComplete="off" ref={inputRef} value={search} onChange={e => setSearch(e.target.value)} />
-          {search && <div className="js-filter-message nav-filter-msg badge bg-secondary btn" title="Clear filter" onClick={() => setSearch('')}>
+          <input type="text" className="form-control" id="searchInput" placeholder="Filtrar" autoComplete="off" ref={inputRef} value={search} onChange={e => setSearch(e.target.value)} />
+          {!search && <svg className="sa-icon nav-filter-icon" aria-hidden="true">
+              <use href={`${basePath}/icons/sprite.svg#search`}></use>
+            </svg>}
+          {search && <div className="js-filter-message nav-filter-msg badge bg-secondary btn" title="Limpar filtro" onClick={() => setSearch('')}>
               {filtered.length}
             </div>}
         </form>
@@ -81,8 +84,8 @@ const Sidenav = () => {
           {hasResults ? <div id="sidenav" className="scrollbar ">
               <AppMenu menuItems={filtered} openKeys={search ? openKeys : undefined} />
             </div> : <div className="no-results-msg pt-3 info-container">
-              <h6 className="mb-1">No menu items found.</h6>
-              <p className="fs-sm">Try searching with different keywords.</p>
+              <h6 className="mb-1">Nenhum item encontrado.</h6>
+              <p className="fs-sm">Tente pesquisar com outras palavras.</p>
               <div className="d-flex align-items-center gap-1 fs-xs fw-500 font-style-italic">
                 <kbd className="kbd-key">
                   <svg width="15" height="15" aria-label="Escape key" role="img">
@@ -91,7 +94,7 @@ const Sidenav = () => {
                     </g>
                   </svg>
                 </kbd>
-                to reset
+                para limpar
               </div>
             </div>}
         </SimplebarClient>
