@@ -45,7 +45,7 @@ const Login = () => {
   return <Row className="justify-content-center">
       <Col xs={11} md={8} lg={6} xl={4}>
         <div id="regular-login" className="login-card p-4 p-md-6 bg-dark bg-opacity-50 translucent-dark rounded-4">
-          <h2 className="text-center mb-4">Navisoft</h2>
+          <h2 className="text-center mb-4">Entrar</h2>
           <p className="text-center text-white opacity-50 mb-4">Entre com suas credenciais para continuar</p>
           {error && <Alert variant="danger" className="py-2 small">{error}</Alert>}
           {!API_CONFIGURED && <Alert variant="warning" className="py-2 small">O acesso está indisponível até que o endereço da API seja configurado.</Alert>}

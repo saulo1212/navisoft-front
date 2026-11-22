@@ -29,19 +29,18 @@ const ProfileDropdown = () => {
     router.push('/auth/login');
   };
   return <Dropdown>
-            <DropdownToggle as={'a'} type="button" data-bs-toggle="dropdown" title={account?.email} className="btn-system bg-transparent d-flex flex-shrink-0 align-items-center justify-content-center no-arrow" aria-label="Open Profile Dropdown">
-                <Image src={adminAvatar} className="profile-image profile-image-md rounded-circle" alt={account?.name || 'Usuário'} />
+            <DropdownToggle as={'a'} type="button" data-bs-toggle="dropdown" className="btn-system bg-transparent d-flex flex-shrink-0 align-items-center justify-content-center no-arrow" aria-label="Abrir menu da conta">
+                <Image src={adminAvatar} className="profile-image profile-image-md rounded-circle" alt="" />
             </DropdownToggle>
 
             <DropdownMenu className="dropdown-menu-animated dropdown-menu-end">
                 <div className="notification-header rounded-top mb-2">
                     <div className="d-flex flex-row align-items-center mt-1 mb-1 color-white">
                         <span className="status status-success d-inline-block me-2">
-                            <Image src={adminAvatar} className="profile-image rounded-circle" alt={account?.name || 'Usuário'} />
+                            <Image src={adminAvatar} className="profile-image rounded-circle" alt="" />
                         </span>
                         <div className="info-card-text">
-                            <div className="fs-lg text-truncate text-truncate-lg">{account?.name || 'Usuário'}</div>
-                            <span className="text-truncate text-truncate-md opacity-80 fs-sm">{account?.email}</span>
+                            <div className="fs-lg">Minha conta</div>
                         </div>
                     </div>
                 </div>

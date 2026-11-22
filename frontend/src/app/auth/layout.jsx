@@ -1,5 +1,5 @@
 import BackgroundAnimation from '@/components/BackgroundAnimation';
-import { basePath } from '@/helpers';
+import autoscaleLogo from '@/assets/img/autoscale-original.webp';
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 const AuthLayout = ({
@@ -11,10 +11,7 @@ const AuthLayout = ({
     }}>
         <Container>
           <Link className="navbar-brand" href="/">
-            <img src={`${basePath}/navisoft-logo.png`} alt="Navisoft" style={{
-            height: '2.5rem',
-            width: 'auto'
-          }} />
+            <img className="autoscale-logo" src={autoscaleLogo.src} alt="Autoscale" />
           </Link>
           <div className="ms-auto d-flex gap-2">
             <Link href="/auth/login" className="btn btn-link text-white border-0 text-decoration-none">

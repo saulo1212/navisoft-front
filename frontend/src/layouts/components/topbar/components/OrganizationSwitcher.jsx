@@ -6,12 +6,22 @@ import { fetchMyOrganizations } from '@/lib/api/endpoints/auth';
 import { useSession } from '@/lib/session/SessionContext';
 import { basePath } from '@/helpers';
 
+const nameCollator = new Intl.Collator('pt-BR', { sensitivity: 'base' });
+
 const OrganizationSwitcher = () => {
-  const { token, areaAccess, selectedOrganizationUid, selectOrganization, clearOrganization } = useSession();
+  const { account, token, areaAccess, selectedOrganizationUid, selectOrganization, clearOrganization } = useSession();
   const enabled = Boolean(token && areaAccess?.status === 'evaluated');
   const { data, loading } = useKnowledgeQuery(fetchMyOrganizations, { token, areaAccess, limit: 50 }, enabled);
   if (!enabled) return null;
   const organizations = data?.items ?? [];
+  const accountName = account?.name?.trim();
+  const organizationLabel = org => {
+    const name = org.name?.trim();
+    if (!name || (accountName && nameCollator.compare(name, accountName) === 0)) {
+      return 'Organização';
+    }
+    return name;
+  };
 
   const current = organizations.find(org => org.uid === selectedOrganizationUid);
 
@@ -33,7 +43,7 @@ const OrganizationSwitcher = () => {
         <span className="org-switcher-text d-none d-md-flex flex-column text-start">
           <span className="org-switcher-label">Organização</span>
           <span className="org-switcher-name text-truncate">
-            {current ? current.name : 'Selecionar organização'}
+            {current ? organizationLabel(current) : 'Selecionar organização'}
           </span>
         </span>
         <svg className="sa-icon org-switcher-caret d-none d-md-block" aria-hidden="true">
@@ -50,7 +60,7 @@ const OrganizationSwitcher = () => {
             onClick={() => selectOrganization(org.uid)}
             className="d-flex justify-content-between"
           >
-            <span>{org.name}</span>
+            <span>{organizationLabel(org)}</span>
             <span className="text-muted small font-monospace">{org.code}</span>
           </DropdownItem>
         ))}
