@@ -33,7 +33,7 @@
 		//border: 1px dotted #9e9e9e;
 		padding: 0.0625rem 0.25rem; //1px 4px
 		border-radius: 0.3125rem; //5px
-		left: 12.75rem;
+		left: 15rem;
 		font-size: 0.6rem;
 		top: 50%;
 		transform: translate(0, -50%);
@@ -44,15 +44,15 @@
 
 .autoscale-logo,
 .app-logo > .autoscale-logo {
-	width: 11rem;
+	width: 13.5rem;
 	height: auto;
-	aspect-ratio: 6 / 1;
+	aspect-ratio: 6.75 / 1;
 	object-fit: cover;
 	border-radius: 0.25rem;
 }
 
 .navbar-brand > .autoscale-logo {
-	width: 13rem;
+	width: clamp(13rem, 50vw, 16rem);
 }
 
 .app-logo:hover>.logo-backdrop {
