@@ -307,9 +307,6 @@ $nav-tabs-link-active-border-color-dark: $border-color-dark;
 	}
 
     .app-logo {
-        &::before {
-            background-color: var(--bs-body-bg);
-        }
         & > svg {
             --logo-color: var(--primary-500);
             color: rgb(225, 227, 229);
@@ -376,4 +373,3 @@ $nav-tabs-link-active-border-color-dark: $border-color-dark;
         --btn-focus-color: rgba(var(--bs-light-rgb), 1);
     }
 }
-  
