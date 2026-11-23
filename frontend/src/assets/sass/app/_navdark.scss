@@ -89,20 +89,17 @@
             }
 
             ul li a {
-                color: rgba(255, 255, 255, 0.6);
-
                 .sa-icon {
                     flex-shrink: 0;
                 }
+            }
+
+            ul li:not(.active) > a {
+                color: rgba(255, 255, 255, 0.6);
 
                 &:hover {
                     color: rgba(255, 255, 255, 0.9);
                 }
-
-            }
-
-            li.active.has-ul:not(.open)>a {
-                color: rgba(255, 255, 255, 0.9);
             }
 
             .nav-show-more .nav-more-link.showing-more,
