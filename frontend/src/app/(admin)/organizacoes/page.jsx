@@ -3,7 +3,7 @@
 import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Alert, Button } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { BillingField, BillingForm, uidPattern, useBillingMutation } from '@/components/admin/BillingUi';
 import { areaAllowed } from '@/components/admin/OperationalUi';
@@ -36,8 +36,13 @@ const OrganizationsPage = () => {
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Organizações" subTitle1="Operação" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome ou código..." />
-      {areaAllowed(areaAccess, 'organizations') && <Button className="mb-3" onClick={() => setCreationScope(scope)}>Nova organização</Button>}
+      <ListToolbar
+        q={q}
+        onChangeQ={setQ}
+        placeholder="Buscar por nome ou código..."
+        actionLabel={areaAllowed(areaAccess, 'organizations') ? 'Nova organização' : undefined}
+        onAction={() => setCreationScope(scope)}
+      />
       {created?.scope === scope && <Alert variant="success">Organização criada.</Alert>}
       {total != null && <p className="text-muted small mb-2">{total} organização(ões) visível(is).</p>}
       <DataTable

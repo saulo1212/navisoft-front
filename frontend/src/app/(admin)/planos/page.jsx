@@ -31,8 +31,14 @@ function Plans() {
   ];
   return <>
     <PageBreadcrumb title="Planos de cobrança" subTitle1="Comercial & Financeiro" />
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome ou código…" />
-    <Button className="mb-3" disabled={list.loading || !!list.error} onClick={() => setCreating(true)}>Novo plano</Button>
+    <ListToolbar
+      q={list.q}
+      onChangeQ={list.setQ}
+      placeholder="Buscar por nome ou código…"
+      actionLabel="Novo plano"
+      actionDisabled={list.loading || !!list.error}
+      onAction={() => setCreating(true)}
+    />
     <DataTable columns={columns} rows={list.items} loading={list.loading} error={list.error}
       hasMore={list.hasMore} onLoadMore={list.loadMore} loadingMore={list.loading && list.items.length > 0} />
     {creating && <PlanEditor onClose={() => setCreating(false)} onSaved={result => {
