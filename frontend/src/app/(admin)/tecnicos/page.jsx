@@ -64,7 +64,7 @@ function Technicians() {
     <p>Cadastre a prestadora em <Link href="/entidades">Entidades</Link> e associe o tipo de prestadora técnica antes de criar seus executores.</p>
     {action.error && <Alert variant="danger">{action.error}</Alert>}
     {catalogError && <Alert variant="warning">Catálogo de capacidades: {catalogError}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} actionLabel="Novo executor" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ name: '', uid_provider_entity: '', active: true }); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} createLabel="Novo executor" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ name: '', uid_provider_entity: '', active: true }); }} />
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => { if (!action.busy) void open(row); }} columns={[
       { key: 'name', label: 'Executor' }, { key: 'provider_name', label: 'Prestadora', render: row => row.provider_name || row.uid_provider_entity },
       { key: 'active', label: 'Situação', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> }

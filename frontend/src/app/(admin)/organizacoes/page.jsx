@@ -40,7 +40,7 @@ const OrganizationsPage = () => {
         q={q}
         onChangeQ={setQ}
         placeholder="Buscar por nome ou código..."
-        actionLabel={areaAllowed(areaAccess, 'organizations') ? 'Nova organização' : undefined}
+        createLabel={areaAllowed(areaAccess, 'organizations') ? 'Nova organização' : undefined}
         onAction={() => setCreationScope(scope)}
       />
       {created?.scope === scope && <Alert variant="success">Organização criada.</Alert>}

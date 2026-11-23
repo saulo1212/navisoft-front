@@ -38,7 +38,7 @@ function Groups() {
   return <>
     <PageBreadcrumb title="Grupos de checklist" subTitle1="Operação" /><ChecklistNavigation />
     {action.error && <Alert variant="danger">{action.error}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} actionLabel="Novo grupo" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ code: '', name: '', description: '', active: true }); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} createLabel="Novo grupo" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ code: '', name: '', description: '', active: true }); }} />
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => { if (!action.busy) void open(row); }} columns={[
       { key: 'code', label: 'Código' }, { key: 'name', label: 'Nome' }, { key: 'active', label: 'Situação', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> }
     ]} />

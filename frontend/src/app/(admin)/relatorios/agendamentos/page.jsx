@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import NewButton from '@/components/admin/NewButton';
 import AgendaNavigation from '@/components/admin/AgendaNavigation';
 import DataTable from '@/components/admin/DataTable';
 import FormModal from '@/components/admin/FormModal';
@@ -54,7 +55,7 @@ function Schedules() {
     <p className="text-muted">Salvar configura o agendamento. A geração e a entrega dos arquivos dependem do serviço de relatórios.</p>
     {action.error && !form && !confirmation && <Alert variant="danger">{action.error}</Alert>}
     {notice && <Alert variant="success">{notice}</Alert>}
-    <div className="d-flex gap-2 mb-3"><Button disabled={action.busy} onClick={() => { action.clearError(); intention.current = null; setCurrent(null); setForm(scheduleForm()); setNotice(null); }}>Novo agendamento</Button><Button variant="outline-secondary" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button></div>
+    <div className="d-flex gap-2 mb-3"><NewButton label="Novo agendamento" disabled={action.busy} onClick={() => { action.clearError(); intention.current = null; setCurrent(null); setForm(scheduleForm()); setNotice(null); }} /><Button variant="outline-secondary" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button></div>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'report_code', label: 'Relatório', render: row => <Button variant="link" disabled={action.busy} onClick={() => edit(row)}>{row.report_code} · v{row.report_version}</Button> },
       { key: 'state', label: 'Situação', render: row => ({ active: 'Ativo', paused: 'Pausado' }[row.state] || row.state) },

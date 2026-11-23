@@ -5,6 +5,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import NewButton from '@/components/admin/NewButton';
 import FormModal from '@/components/admin/FormModal';
 import PlatformLogo from '@/components/admin/PlatformLogo';
 import OrganizationGate from '@/components/admin/OrganizationGate';
@@ -296,7 +297,7 @@ const EntityDetailInner = () => {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Unidades</h5>
-                <Button size="sm" variant="outline-primary" onClick={openUnit}>Nova unidade</Button>
+                <NewButton label="Nova unidade" size="sm" variant="outline-primary" onClick={openUnit} />
               </div>
               {units.length === 0 && <p className="text-muted small mb-0">Nenhuma unidade cadastrada.</p>}
               {units.map(u => (
@@ -312,7 +313,7 @@ const EntityDetailInner = () => {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Endereços</h5>
-                <Button size="sm" variant="outline-primary" onClick={openAddr}>Cadastrar endereço</Button>
+                <NewButton label="Cadastrar endereço" size="sm" variant="outline-primary" onClick={openAddr} />
               </div>
               {addresses.length === 0 && <p className="text-muted small mb-0">Nenhum endereço cadastrado.</p>}
               {addresses.map(a => (

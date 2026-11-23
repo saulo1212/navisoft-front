@@ -80,7 +80,7 @@ const UsersPage = () => {
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Usuários" subTitle1="Pessoas & Acesso" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome, login ou e-mail..." actionLabel="Novo usuário" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome, login ou e-mail..." createLabel="Novo usuário" onAction={openCreate} />
       {total != null && <p className="text-muted small mb-2">{total} usuário(s).</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

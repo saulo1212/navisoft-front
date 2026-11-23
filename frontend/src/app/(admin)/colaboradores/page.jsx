@@ -61,7 +61,7 @@ const CollaboratorsInner = () => {
   return (
     <>
       <PageBreadcrumb title="Colaboradores" subTitle1="Pessoas & Acesso" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome..." actionLabel="Novo colaborador" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome..." createLabel="Novo colaborador" onAction={openCreate} />
       {total != null && <p className="text-muted small mb-2">{total} colaborador(es) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

@@ -58,7 +58,7 @@ const ContactsInner = () => {
   return (
     <>
       <PageBreadcrumb title="Contatos" subTitle1="Pessoas & Acesso" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome..." actionLabel="Novo contato" onAction={() => { setForm(EMPTY); setOpen(true); }} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por nome..." createLabel="Novo contato" onAction={() => { setForm(EMPTY); setOpen(true); }} />
       {total != null && <p className="text-muted small mb-2">{total} contato(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

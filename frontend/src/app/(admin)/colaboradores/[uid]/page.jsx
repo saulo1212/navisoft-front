@@ -4,6 +4,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import NewButton from '@/components/admin/NewButton';
 import FormModal from '@/components/admin/FormModal';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
@@ -225,7 +226,7 @@ const CollaboratorDetailPage = () => {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Vínculos (engagements)</h5>
-                <Button size="sm" variant="outline-primary" onClick={openEng}>Novo engagement</Button>
+                <NewButton label="Novo engagement" size="sm" variant="outline-primary" onClick={openEng} />
               </div>
               {engagements.length === 0 && <p className="text-muted small mb-0">Nenhum vínculo registrado.</p>}
               {engagements.map(e => (
@@ -245,10 +246,8 @@ const CollaboratorDetailPage = () => {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Lotações (assignments)</h5>
-                <Button size="sm" variant="outline-primary" onClick={openAsg} disabled={engagements.length === 0}
-                  title={engagements.length === 0 ? 'Crie um engagement antes de lotar o colaborador' : undefined}>
-                  Nova lotação
-                </Button>
+                <NewButton label="Nova lotação" size="sm" variant="outline-primary" onClick={openAsg} disabled={engagements.length === 0}
+                  title={engagements.length === 0 ? 'Crie um engagement antes de lotar o colaborador' : undefined} />
               </div>
               {assignments.length === 0 && <p className="text-muted small mb-0">Nenhuma lotação registrada.</p>}
               {assignments.map(a => (

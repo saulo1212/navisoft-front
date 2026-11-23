@@ -68,7 +68,7 @@ const EntitiesInner = () => {
   return (
     <>
       <PageBreadcrumb title="Entidades" subTitle1="Operação" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar entidade por nome..." actionLabel="Nova entidade" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar entidade por nome..." createLabel="Nova entidade" onAction={openCreate} />
       {total != null && <p className="text-muted small mb-2">{total} entidade(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

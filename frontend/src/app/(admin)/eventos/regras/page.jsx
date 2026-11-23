@@ -49,7 +49,7 @@ function Rules() {
   return <>
     <PageBreadcrumb title="Regras de eventos" subTitle1="Operação" /><EventNotificationNavigation />
     {action.error && !form && !remove && <Alert variant="danger">{action.error}</Alert>}{notice && <Alert variant="success">{notice}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome..." actionLabel="Nova regra" actionDisabled={action.busy} onAction={() => { intention.current = null; action.clearError(); setCurrent(null); setNotice(null); setForm(eventRuleForm()); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome..." createLabel="Nova regra" actionDisabled={action.busy} onAction={() => { intention.current = null; action.clearError(); setCurrent(null); setNotice(null); setForm(eventRuleForm()); }} />
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'name', label: 'Regra', render: row => <Button variant="link" disabled={action.busy} onClick={() => open(row)}>{row.name}</Button> }, { key: 'model_code', label: 'Modelo' }, { key: 'priority', label: 'Prioridade', render: row => EVENT_PRIORITIES[row.priority] || row.priority }, { key: 'active', label: 'Ativa', render: row => row.active ? 'Sim' : 'Não' }, { key: 'actions', label: 'Ações', render: row => <Button variant="outline-danger" size="sm" disabled={action.busy} onClick={() => { action.clearError(); setRemove(row); }}>Excluir</Button> }
     ]} />

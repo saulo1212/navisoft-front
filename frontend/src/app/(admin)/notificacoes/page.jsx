@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import NewButton from '@/components/admin/NewButton';
 import DataTable from '@/components/admin/DataTable';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
 import FormModal from '@/components/admin/FormModal';
@@ -43,7 +44,7 @@ function Recipients() {
     <PageBreadcrumb title="Destinatários de notificações" subTitle1="Operação" /><EventNotificationNavigation notifications />
     <p>Cadastre os destinos de entrega e seus vínculos. Salvar um destinatário não envia uma mensagem.</p>
     {notice && <Alert variant="success">{notice}</Alert>}{action.error && !form && !remove && <Alert variant="danger">{action.error}</Alert>}
-    <div className="d-flex gap-2 mb-3"><Button disabled={action.busy} onClick={() => { action.clearError(); intention.current = null; setCurrent(null); setNotice(null); setForm(notificationRecipientForm({ organization_bindings: [{ uid_organization: selectedOrganizationUid }] })); }}>Novo destinatário externo</Button><Button variant="outline-secondary" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button></div>
+    <div className="d-flex gap-2 mb-3"><NewButton label="Novo destinatário externo" disabled={action.busy} onClick={() => { action.clearError(); intention.current = null; setCurrent(null); setNotice(null); setForm(notificationRecipientForm({ organization_bindings: [{ uid_organization: selectedOrganizationUid }] })); }} /><Button variant="outline-secondary" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button></div>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'name', label: 'Nome', render: row => <Button variant="link" disabled={action.busy} onClick={() => open(row)}>{row.name || row.uid}</Button> }, { key: 'kind', label: 'Tipo' }, { key: 'active', label: 'Ativo', render: row => row.active ? 'Sim' : 'Não' }, { key: 'actions', label: 'Ações', render: row => <Button size="sm" variant="outline-danger" disabled={action.busy} onClick={() => { action.clearError(); setRemove(row); }}>Desativar</Button> }
     ]} />

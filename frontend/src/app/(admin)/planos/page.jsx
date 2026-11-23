@@ -35,7 +35,7 @@ function Plans() {
       q={list.q}
       onChangeQ={list.setQ}
       placeholder="Buscar por nome ou código…"
-      actionLabel="Novo plano"
+      createLabel="Novo plano"
       actionDisabled={list.loading || !!list.error}
       onAction={() => setCreating(true)}
     />

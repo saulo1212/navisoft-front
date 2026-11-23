@@ -224,7 +224,7 @@ const DevicesTab = ({ canSims }) => {
 
   return (
     <>
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por serial..." actionLabel="Novo device" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por serial..." createLabel="Novo device" onAction={openCreate} />
       <DataTable
         columns={columns} rows={items} loading={loading} error={error} hasMore={hasMore} onLoadMore={loadMore}
         onRowClick={openDetail}
@@ -392,7 +392,7 @@ const SimcardsTab = () => {
   return (
     <>
       {rowError && <p className="text-danger small">{rowError}</p>}
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por ICCID..." actionLabel="Novo SIM" onAction={() => setShowCreate(true)} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por ICCID..." createLabel="Novo SIM" onAction={() => setShowCreate(true)} />
       <DataTable columns={columns} rows={items} loading={loading} error={error} hasMore={hasMore} onLoadMore={loadMore} emptyMessage="Nenhum SIM cadastrado." />
 
       <FormModal show={showCreate} onHide={() => setShowCreate(false)} title="Novo SIM" onSubmit={handleCreate} submitting={submitting} error={formError}>

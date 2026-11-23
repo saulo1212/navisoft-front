@@ -36,7 +36,7 @@ function Items() {
     <PageBreadcrumb title="Base de conhecimento" subTitle1="Conteúdo" /><KnowledgeNavigation />
     <p>Administração editorial global, exclusiva do perfil Primary. Criar e salvar uma revisão mantém o conteúdo em rascunho até a publicação explícita.</p>
     {action.error && slug === null && <Alert variant="danger">{action.error}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar artigos..." actionLabel="Novo artigo" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setSlug(''); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar artigos..." createLabel="Novo artigo" actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setSlug(''); }} />
     <Button variant="outline-secondary" className="mb-3" disabled={list.loading || action.busy} onClick={list.refresh}>Atualizar</Button>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[
       { key: 'title', label: 'Artigo', render: row => <Button variant="link" onClick={() => router.push(detailHref('/knowledge', row.uid))}>{row.title || row.slug}</Button> }, { key: 'slug', label: 'Identificador' }, { key: 'publication_status', label: 'Situação', render: row => KNOWLEDGE_STATUSES[row.publication_status] || row.publication_status }, { key: 'audience_mode', label: 'Audiência', render: row => KNOWLEDGE_AUDIENCES[row.audience_mode] || 'Sem publicação' }

@@ -75,7 +75,7 @@ function Maintenance() {
     <PageBreadcrumb title="Manutenção" subTitle1="Operação" />
     {action.error && <Alert variant="danger">{action.error}</Alert>}
     {!canWrite && <Alert variant="info">Seu contexto permite consultar manutenções. A edição exige administração de frota.</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por descrição..." actionLabel={canWrite ? 'Nova manutenção' : undefined} actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ uid_asset: '', description: '', items: [{ description: '' }], conditions: [] }); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por descrição..." createLabel={canWrite ? 'Nova manutenção' : undefined} actionDisabled={action.busy} onAction={() => { action.clearError(); intention.current = null; setForm({ uid_asset: '', description: '', items: [{ description: '' }], conditions: [] }); }} />
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} onRowClick={row => { if (!action.busy) void open(row); }} columns={[
       { key: 'asset', label: 'Ativo', render: row => row.asset_identification || row.uid_asset }, { key: 'description', label: 'Descrição' }, { key: 'origin_kind', label: 'Origem' }, { key: 'status', label: 'Situação', render: row => <StatusBadge status={row.status} /> }
     ]} />

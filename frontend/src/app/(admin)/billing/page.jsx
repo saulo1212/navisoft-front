@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import NewButton from '@/components/admin/NewButton';
 import DataTable from '@/components/admin/DataTable';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { BillingField, BillingForm, BillingRead, BillingSessionScope, money, uidPattern, useBillingMutation } from '@/components/admin/BillingUi';
@@ -64,9 +65,11 @@ function BillingList({ tab, accountUid }) {
   };
   return <>
     {showingEntries && <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por serviço ou descrição…" />}
-    <div className="mb-3"><Button disabled={list.loading || !!list.error} onClick={() => setCreating(true)}>
-      {showingEntries ? 'Novo lançamento' : 'Fechar competência'}
-    </Button></div>
+    <div className="mb-3">
+      {showingEntries
+        ? <NewButton label="Novo lançamento" disabled={list.loading || !!list.error} onClick={() => setCreating(true)} />
+        : <Button disabled={list.loading || !!list.error} onClick={() => setCreating(true)}>Fechar competência</Button>}
+    </div>
     <DataTable columns={columns} rows={list.items} loading={list.loading} error={list.error}
       hasMore={list.hasMore} onLoadMore={list.loadMore} loadingMore={list.loading && list.items.length > 0} />
     {selected && <BillingDetail key={`${selected}:${revision}`} uid={selected} showingEntries={showingEntries}

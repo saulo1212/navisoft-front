@@ -61,7 +61,7 @@ const SituationsPage = () => {
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Situações" subTitle1="Operação" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar situação..." actionLabel="Nova situação" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar situação..." createLabel="Nova situação" onAction={openCreate} />
       {total != null && <p className="text-muted small mb-2">{total} situação(ões).</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

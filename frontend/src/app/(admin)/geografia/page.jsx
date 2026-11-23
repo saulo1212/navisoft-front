@@ -120,7 +120,7 @@ function ResourceTab({ kind, scope }) {
   ];
   return <>
     {error && !form && <Alert variant="danger">{error}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome..." actionLabel={`Cadastrar ${resource.singular}`} onAction={() => openForm(null)} actionDisabled={busy} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por nome..." createLabel={`Cadastrar ${resource.singular}`} onAction={() => openForm(null)} actionDisabled={busy} />
     {!list.error && <GeographyMap rows={list.items} selectedUid={detail?.uid} onSelect={row => { if (!busy && !form && !pendingDelete) void openDetail(row); }} />}
     <DataTable columns={columns} rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} emptyMessage="Nenhum registro encontrado neste escopo." />
     {form && <FormModal show onHide={() => { if (!busy) setForm(null); }} title={`${form.uid ? 'Editar' : 'Cadastrar'} ${resource.singular}`} onSubmit={save} submitting={busy} error={error}>

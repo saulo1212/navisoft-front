@@ -42,7 +42,7 @@ const FleetGroupsInner = () => {
   return (
     <>
       <PageBreadcrumb title="Grupos de frota" subTitle1="Operação" subTitle2="Frota" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar grupo por nome..." actionLabel="Novo grupo" onAction={() => { setName(''); setOpen(true); }} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar grupo por nome..." createLabel="Novo grupo" onAction={() => { setName(''); setOpen(true); }} />
       {total != null && <p className="text-muted small mb-2">{total} grupo(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}

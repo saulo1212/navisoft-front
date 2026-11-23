@@ -41,7 +41,7 @@ function Documents() {
     <PageBreadcrumb title="Documentos / GED" subTitle1="Conteúdo" /><DocumentsNavigation />
     <p>Consulte documentos próprios e recebidos por distribuição no contexto da organização selecionada.</p>
     {action.error && !form && <Alert variant="danger">{action.error}</Alert>}
-    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por título..." actionLabel="Novo documento" actionDisabled={action.busy || !catalogs.data} onAction={() => { action.clearError(); intention.current = null; setForm({ uid_contract: search.get('contrato') || '', title: '', uid_class: '', origin_code: '', area_code: '', type_code: '', metadata: '{}', target_type: '', target_uid: '' }); }} />
+    <ListToolbar q={list.q} onChangeQ={list.setQ} placeholder="Buscar por título..." createLabel="Novo documento" actionDisabled={action.busy || !catalogs.data} onAction={() => { action.clearError(); intention.current = null; setForm({ uid_contract: search.get('contrato') || '', title: '', uid_class: '', origin_code: '', area_code: '', type_code: '', metadata: '{}', target_type: '', target_uid: '' }); }} />
     {catalogs.error && <Alert variant="danger">{operationError(catalogs.error)}</Alert>}
     <Button variant="outline-secondary" className="mb-3" disabled={list.loading} onClick={list.refresh}>Atualizar</Button>
     <DataTable rows={list.items} loading={list.loading} error={list.error} hasMore={!list.loading && list.hasMore} onLoadMore={list.loadMore} columns={[

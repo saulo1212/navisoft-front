@@ -105,7 +105,7 @@ const FleetInner = () => {
   return (
     <>
       <PageBreadcrumb title="Frota" subTitle1="Operação" subTitle2="Assets" />
-      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por identificação..." actionLabel="Novo asset" onAction={openCreate} />
+      <ListToolbar q={q} onChangeQ={setQ} placeholder="Buscar por identificação..." createLabel="Novo asset" onAction={openCreate} />
       {total != null && <p className="text-muted small mb-2">{total} asset(s) nesta organização.</p>}
       <DataTable
         columns={columns} rows={items} loading={loading} error={error}
