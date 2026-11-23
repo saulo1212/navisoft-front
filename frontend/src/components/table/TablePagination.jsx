@@ -61,14 +61,14 @@ const TablePagination = ({
           <ul className="pagination pagination-sm mb-0">
             <li className="page-item">
               <button className="page-link" onClick={() => setPageIndex(0)} disabled={pageIndex === 0}>
-                <FaAnglesLeft size={8} />
+                <FaAnglesLeft size={8} className="theme-icon" />
               </button>
             </li>
             <li className="page-item">
               <button className="page-link" onClick={previousPage} disabled={!canPreviousPage}>
                 <span className="d-none d-sm-none d-md-inline-block">Prev</span>
                 <span className="d-inline-block d-sm-inline-block d-md-none">
-                  <FaChevronLeft size={8} />
+                  <FaChevronLeft size={8} className="theme-icon" />
                 </span>
               </button>
             </li>
@@ -85,14 +85,14 @@ const TablePagination = ({
               <button className="page-link" onClick={nextPage} disabled={!canNextPage}>
                 <span className="d-none d-sm-none d-md-inline-block">Next</span>
                 <span className="d-inline-block d-sm-inline-block d-md-none">
-                  <FaChevronRight size={8} />
+                  <FaChevronRight size={8} className="theme-icon" />
                 </span>
               </button>
             </li>
 
             <li className="page-item">
               <button className="page-link" onClick={() => setPageIndex(pageCount - 1)} disabled={pageIndex === pageCount - 1}>
-                <FaAnglesRight size={8} />
+                <FaAnglesRight size={8} className="theme-icon" />
               </button>
             </li>
           </ul>

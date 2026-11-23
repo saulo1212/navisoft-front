@@ -97,18 +97,11 @@
                 color: rgba(255, 255, 255, 0.6);
 
                 .sa-icon {
-                    fill: rgba(255, 255, 255, 0.2);
-                    stroke: rgba(255, 255, 255, 0.4);
                     flex-shrink: 0;
                 }
 
                 &:hover {
                     color: rgba(255, 255, 255, 0.9);
-
-                    .sa-icon {
-                        fill: rgba(255, 255, 255, 0.3);
-                        stroke: rgb(229, 232, 252);
-                    }
                 }
 
             }

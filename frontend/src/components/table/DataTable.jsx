@@ -25,8 +25,8 @@ const DataTable = ({
                     <div className="d-flex align-items-center">
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getCanSort() && ({
-                asc: <FaArrowUp size={10} className="ms-1" />,
-                desc: <FaArrowDown size={10} className="ms-1" />
+                asc: <FaArrowUp size={10} className="ms-1 theme-icon" />,
+                desc: <FaArrowDown size={10} className="ms-1 theme-icon" />
               }[header.column.getIsSorted()] ?? null)}
                     </div>
                   </th>)}

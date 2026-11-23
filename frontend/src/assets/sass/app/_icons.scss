@@ -1,6 +1,19 @@
+:root,
+[data-bs-theme="light"] {
+    --app-icon-color: #{$color-primary};
+}
+
+[data-bs-theme="dark"] {
+    --app-icon-color: #f26710;
+}
+
+:where(.sa, .theme-icon) {
+    color: var(--app-icon-color);
+}
+
 // sa icon with sizes
 .sa-icon {
-    --sa-icon-color: rgb(155 155 155);
+    --sa-icon-color: var(--app-icon-color);
     --sa-fill-opacity: 0.3;
     --sa-icon-fill: rgb(219 219 219 / var(--sa-fill-opacity));
     --sa-icon-size: 1.25rem; //20px
@@ -87,8 +100,7 @@
     //icon colors 
     &.sa-icon-primary {
         --sa-fill-opacity: 0.1;
-        fill: rgba(var(--primary), var(--sa-fill-opacity));
-        stroke: rgba(var(--primary), 0.8);
+        fill: color-mix(in srgb, var(--sa-icon-color) 10%, transparent);
     }
     &.sa-icon-success {
         --sa-fill-opacity: 0.1;
@@ -152,7 +164,7 @@
 		transition: all 100ms ease-in-out;
 		
 		polygon {
-			fill:  var(--collapse-icon-border);
+			fill: var(--app-icon-color);
 		}
 	}
 
@@ -178,9 +190,6 @@
 		> svg {
 			//transform: scaleX(-1);
 			margin-left: 0.75rem; //12px
-			polygon {
-				fill: var(--collapse-icon-border-hover);
-			}
 		}
 
 		&::after {
@@ -197,7 +206,7 @@
 
 // ellipsis icon used in toolbar of Panel
 .ellipsis-icon {
-    --ellipsis-icon-color: currentColor;
+    --ellipsis-icon-color: var(--app-icon-color);
     --ellipsis-icon-width: 0.25rem; //4px
     --ellipsis-icon-height: 0.25rem; //4px
     --ellipsis-icon-spacing: 0.5rem; //8px

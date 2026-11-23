@@ -206,11 +206,6 @@
                 // all levels hover
                 &:hover {
                     color: var(--app-nav-link-hover-color);
-
-                    .sa-icon {
-                        fill: var(--app-nav-item-hover-bg);
-                        stroke: var(--app-nav-link-hover-color);
-                    }
                 }
 
                 &[aria-expanded="true"] {
@@ -402,32 +397,22 @@
 
 
 
-/* === Active primary-nav item: blue left bar + tinted pill (design model) === */
-.primary-nav .nav-menu > li.active {
-    /* vertical accent bar flush to the sidebar edge */
-    &::after {
-        content: "";
-        position: absolute;
-        left: -1.5rem; // cancels .primary-nav horizontal padding
-        top: 0.2rem;
-        bottom: 0.2rem;
-        width: 3px;
-        border-radius: 0 4px 4px 0;
-        background: var(--app-nav-item-active-indicator);
-        z-index: 3;
-    }
-
-    /* rounded highlighted pill behind the active link */
+/* Active sidebar links and groups */
+.primary-nav .nav-menu li.active {
     > a {
         background-color: var(--app-nav-item-active-bg);
         color: var(--app-nav-link-active-color);
-        border-radius: 0.5rem;
-        padding-left: 0.75rem;
-        margin-left: -0.75rem;
 
-        .sa-icon {
-            color: var(--app-nav-link-active-color);
-            stroke: currentColor;
+        &::before {
+            content: "";
+            position: absolute;
+            inset-block: 0;
+            inset-inline-start: 0;
+            width: 4px;
+            border-start-start-radius: inherit;
+            border-end-start-radius: inherit;
+            background: var(--app-icon-color);
+            pointer-events: none;
         }
 
         .collapse-sign {
@@ -435,7 +420,7 @@
         }
     }
 
-    /* drop the template's default dot indicators */
+    /* Replace the template's dot indicators with the bar. */
     &::before {
         display: none !important;
     }
@@ -443,6 +428,17 @@
     > a .nav-link-text::before {
         display: none !important;
     }
+}
+
+.primary-nav .nav-menu > li.active > a {
+    border-radius: 0.5rem;
+    padding-inline-start: 0.75rem;
+    margin-inline-start: -0.75rem;
+    width: calc(100% + 0.75rem);
+}
+
+[data-bs-theme="dark"] .primary-nav {
+    --app-nav-item-active-bg: color-mix(in srgb, rgb(var(--primary)) 38%, var(--app-nav-background));
 }
 
 
@@ -467,8 +463,8 @@
     width: 2rem;
     height: 2rem;
     border-radius: 0.5rem;
-    background: rgba(var(--primary), 0.12);
-    color: rgb(var(--primary));
+    background: color-mix(in srgb, var(--app-icon-color) 12%, transparent);
+    color: var(--app-icon-color);
     flex-shrink: 0;
     font-size: 1rem;
 }
@@ -496,7 +492,6 @@
     width: 1rem;
     height: 1rem;
     color: var(--bs-secondary-color);
-    stroke: currentColor;
     fill: none;
     flex-shrink: 0;
 }
@@ -514,7 +509,7 @@
     }
 
     .org-switcher-icon {
-        background: rgb(var(--primary));
+        background: var(--app-icon-color);
         color: #fff;
     }
 }
@@ -525,7 +520,7 @@
     width: 3rem;
     height: 3rem;
     border-radius: 0.75rem;
-    background: rgb(var(--primary));
+    background: var(--app-icon-color);
     color: #fff;
 }
 
@@ -536,8 +531,6 @@
     transform: translateY(-50%);
     width: 1.1rem;
     height: 1.1rem;
-    color: var(--input-placeholder-color);
-    stroke: currentColor;
     fill: none;
     pointer-events: none;
     z-index: 2;

@@ -39,7 +39,7 @@ const MenuItemWithChildren = ({
       setLocalOpen(!isOpen);
     }
   };
-  return <li className={`nav-item has-ul ${!isOpen && isActive ? 'active' : ''}`}>
+  return <li className={`nav-item has-ul ${isActive && (isTopLevel || !isOpen) ? 'active' : ''}`}>
       <a onClick={toggleOpen} aria-expanded={isOpen} role="button">
         {item.icon && <svg className="sa-icon">
             <use href={basePath + item.icon}></use>
@@ -67,7 +67,7 @@ const MenuItem = ({
   const pathname = usePathname();
   const isActive = item.url && pathname.endsWith(item.url);
   return <li className={`${isActive ? 'active' : ''}`}>
-      <Link target={item.target} href={item.url ?? '/'} className={`${isActive ? 'active' : ''}`}>
+      <Link target={item.target} href={item.url ?? '/'} className={`${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
         {item.icon && <svg className="sa-icon">
             <use href={basePath + item.icon}></use>
           </svg>}
@@ -82,7 +82,7 @@ const AppMenu = ({
 }) => {
   const [openMenuKey, setOpenMenuKey] = useState(null);
   const scrollToActiveLink = () => {
-    const activeItem = document.querySelector('li.active');
+    const activeItem = document.querySelector('#sidenav li:has(> a[aria-current="page"])') ?? document.querySelector('#sidenav li.active');
     if (activeItem) {
       const simpleBarContent = document.querySelector('#sidenav .simplebar-content-wrapper');
       if (simpleBarContent) {
