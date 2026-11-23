@@ -52,7 +52,7 @@ const MenuItemWithChildren = ({
       setLocalOpen(!isOpen);
     }
   };
-  return <li className={`nav-item has-ul ${isActive && (isTopLevel || !isOpen) ? 'active' : ''}`}>
+  return <li className={`nav-item has-ul ${isActive && !isOpen ? 'active' : ''}`}>
       <a onClick={toggleOpen} aria-expanded={isOpen} role="button">
         {item.icon && <svg className="sa-icon">
             <use href={basePath + item.icon}></use>
