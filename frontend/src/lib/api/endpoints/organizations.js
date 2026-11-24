@@ -6,13 +6,49 @@ import { requireUid } from '../../domain/technicalOperations';
 // vêm de /v1/users/me/organizations/{uid}/access-context (code_name_update,
 // reseller_enabled_update, session_policy). "allowed" não garante payload válido.
 
-export async function listOrganizations({ token, q, limit, offset, signal }) {
+export async function listOrganizations({ token, q, limit, offset, includeInactive, signal }) {
   // A API retorna todas as organizações visíveis (ignora limit/offset) com `total`.
-  return apiRequest('/v1/admin/organizations', { token, signal, searchParams: { q, limit, offset } });
+  return apiRequest('/v1/admin/organizations', { token, signal, searchParams: { q, limit, offset, include_inactive: includeInactive || undefined } });
 }
 
-export async function getOrganization({ token, uid, signal }) {
-  return apiRequest(`/v1/admin/organizations/${encodeURIComponent(uid)}`, { token, signal });
+export async function getOrganization({ token, uid, includeInactive, signal }) {
+  return apiRequest(`/v1/admin/organizations/${encodeURIComponent(uid)}`, { token, signal, searchParams: { include_inactive: includeInactive || undefined } });
+}
+
+const orgResource = (uid, resource) => `/v1/admin/organizations/${requireUid(uid, 'organização')}/${resource}`;
+
+export async function getOrganizationProvisioningActor({ token, uid, signal }) {
+  const filters = [{ field: 'uid', operator: 'eq', value: requireUid(uid, 'usuário') }];
+  const { items } = await apiRequest('/v1/admin/users', { token, signal, searchParams: { filters: JSON.stringify(filters), limit: 1 } });
+  return items?.find(item => item.uid === uid) ?? null;
+}
+
+export function getOrganizationLifecycle({ token, uid, includeInactive, signal }) {
+  return apiRequest(orgResource(uid, 'lifecycle'), { token, signal, searchParams: { include_inactive: includeInactive || undefined } });
+}
+
+export function patchOrganizationLifecycle({ token, uid, state, reason, signal }) {
+  return apiRequest(orgResource(uid, 'lifecycle'), { token, signal, method: 'PATCH', body: { state, reason } });
+}
+
+export function getOrganizationAccessPeriods({ token, uid, signal }) {
+  return apiRequest(orgResource(uid, 'access-periods'), { token, signal });
+}
+
+export function updateOrganizationAccessPeriods({ token, uid, body, signal }) {
+  return apiRequest(orgResource(uid, 'access-periods'), { token, signal, method: 'PUT', body });
+}
+
+export function listOrganizationTimezones({ token, signal }) {
+  return apiRequest('/v1/admin/common/timezones', { token, signal });
+}
+
+export function getOrganizationBranding({ token, uid, signal }) {
+  return apiRequest(orgResource(uid, 'branding'), { token, signal });
+}
+
+export function patchOrganizationBranding({ token, uid, theme, signal }) {
+  return apiRequest(orgResource(uid, 'branding'), { token, signal, method: 'PATCH', body: { theme } });
 }
 
 export async function createOrganization({ token, body, idempotencyKey, signal }) {

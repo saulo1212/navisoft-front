@@ -3,25 +3,34 @@
 import { detailHref } from '@/lib/navigation/detailRoutes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, Button, Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
-import { BillingField, BillingForm, uidPattern, useBillingMutation } from '@/components/admin/BillingUi';
+import { BillingField, BillingForm, useBillingMutation } from '@/components/admin/BillingUi';
 import { areaAllowed } from '@/components/admin/OperationalUi';
 import DataTable from '@/components/admin/DataTable';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { usePagedList } from '@/hooks/usePagedList';
-import { createOrganization, listOrganizations } from '@/lib/api/endpoints/organizations';
+import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
+import { useOffsetList } from '@/hooks/useOffsetList';
+import { billingPlans } from '@/lib/api/endpoints/billing';
+import { createOrganization, getOrganizationProvisioningActor, listOrganizations } from '@/lib/api/endpoints/organizations';
+import { canProvisionOrganization, organizationProvisioningBody } from '@/lib/domain/organizations';
 import { useSession } from '@/lib/session/SessionContext';
+import { notifySuccess } from '@/lib/ui/toast';
 
 const OrganizationsPage = () => {
   const router = useRouter();
-  const { token, selectedOrganizationUid, areaAccess } = useSession();
+  const { token, account, selectedOrganizationUid, areaAccess } = useSession();
   const scope = `${token}:${selectedOrganizationUid}:${JSON.stringify(areaAccess)}`;
   const [creationScope, setCreationScope] = useState(null);
-  const [created, setCreated] = useState(null);
+  const [includeInactive, setIncludeInactive] = useState(false);
+  const actor = useKnowledgeQuery(getOrganizationProvisioningActor, { token, uid: account?.uid },
+    Boolean(account?.uid && areaAllowed(areaAccess, 'organizations')));
+  const canCreate = canProvisionOrganization(actor.data);
+  const canIncludeInactive = ['primary_admin', 'administrator'].includes(actor.data?.profile_code);
   const { q, setQ, items, total, page, pageCount, goToPage, loading, error, refresh } =
-    usePagedList(args => listOrganizations(args), { pageSize: 20 });
+    usePagedList(listOrganizations, { pageSize: 20, params: { includeInactive: canIncludeInactive && includeInactive } });
 
   const columns = [
     { key: 'name', label: 'Nome' },
@@ -40,20 +49,22 @@ const OrganizationsPage = () => {
         q={q}
         onChangeQ={setQ}
         placeholder="Buscar por nome ou código..."
-        createLabel={areaAllowed(areaAccess, 'organizations') ? 'Nova organização' : undefined}
+        createLabel={canCreate ? 'Nova organização' : undefined}
         onAction={() => setCreationScope(scope)}
       />
-      {created?.scope === scope && <Alert variant="success">Organização criada.</Alert>}
+      {canIncludeInactive && <Form.Check id="organizations-inactive" className="mb-3" label="Incluir organizações inativas"
+        checked={includeInactive} onChange={event => { goToPage(1); setIncludeInactive(event.target.checked); }} />}
       {total != null && <p className="text-muted small mb-2">{total} organização(ões) visível(is).</p>}
       <DataTable
-        columns={columns} rows={items} loading={loading} error={error}
+        columns={columns} rows={loading || error ? [] : items} loading={loading} error={error}
         onRowClick={row => router.push(detailHref('/organizacoes', row.uid))}
         emptyMessage="Nenhuma organização visível para o seu acesso."
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
-      {creationScope === scope && <OrganizationEditor key={scope} onClose={() => setCreationScope(null)} onCreated={result => {
+      {canCreate && creationScope === scope && <OrganizationEditor key={scope} onClose={() => setCreationScope(null)} onCreated={result => {
         setCreationScope(null);
-        setCreated({ scope });
+        notifySuccess(result?.uid_admin && result?.activation_expires_at
+          ? 'Organização criada. O administrador inicial aguarda ativação.' : 'Organização criada.');
         refresh();
         const uid = result?.uid_organization ?? result?.organization?.uid ?? result?.uid;
         if (uid) router.push(detailHref('/organizacoes', uid));
@@ -65,15 +76,22 @@ const OrganizationsPage = () => {
 function OrganizationEditor({ onClose, onCreated }) {
   const { token } = useSession();
   const mutation = useBillingMutation();
+  const plans = useOffsetList(billingPlans.list);
+  const activePlans = plans.items.filter(plan => plan.active === true);
   return <BillingForm title="Nova organização" submitLabel="Criar organização" mutation={mutation} onClose={onClose}
+    submitDisabled={Boolean(plans.error) || !activePlans.length}
     onSubmit={fields => mutation.submit(args => createOrganization({ ...args, token }),
-      Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, value.trim()])), onCreated)}>
+      organizationProvisioningBody(fields), onCreated)}>
     <BillingField label="Código da organização" name="code" />
     <BillingField label="Nome da organização" name="name" />
     <BillingField label="E-mail" type="email" name="email" />
     <BillingField label="Nome do administrador" name="admin_name" />
-    <BillingField label="Login do administrador" name="admin_login" />
-    <BillingField label="Plano de cobrança (UUID)" name="uid_billing_plan" pattern={uidPattern} />
+    <BillingField label="Login do administrador (opcional)" name="admin_login" optional />
+    <BillingField label="Plano de cobrança" name="uid_billing_plan"
+      options={[[ '', plans.loading ? 'Carregando planos…' : 'Selecione um plano' ], ...activePlans.map(plan => [plan.uid, plan.name || plan.code])]} />
+    {plans.error && <Alert variant="danger">{plans.error} <Button type="button" size="sm" variant="link" onClick={plans.refresh}>Tentar novamente</Button></Alert>}
+    {!plans.loading && !plans.error && !activePlans.length && !plans.hasMore && <p className="text-body-secondary">Nenhum plano ativo disponível.</p>}
+    {plans.hasMore && <Button type="button" size="sm" variant="outline-secondary" disabled={plans.loading} onClick={plans.loadMore}>Carregar mais planos</Button>}
   </BillingForm>;
 }
 

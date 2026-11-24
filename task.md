@@ -408,6 +408,90 @@ No Chrome, com login real, passaram o redirecionamento do perfil legado, a ediç
 
 ---
 
+## Próximas implementações — Fases 23 a 31
+
+A ordem sugerida começa pela administração de organizações e pelos cadastros que alimentam a operação. Os exemplos da coleção orientam o escopo. Confirme os métodos, os campos e os gates na API de homologação antes de liberar cada alteração. Use organizações e registros descartáveis nos testes de escrita e registre a limpeza e os cenários aprovados. [Coleção do Insomnia](Insomnia_2026-11-11.json) · [Contratos HTTP](api-contracts/API_CONTRACTS.md)
+
+### Fase 23 — Provisionamento e ciclo de vida das organizações
+
+1. [x] Integrar o provisionamento em `/organizacoes` com código, nome, e-mail, nome do administrador e plano. A API aceitou a omissão do login do administrador inicial. O formulário usa o perfil Primary ou a capacidade `can_create_organizations` para o perfil Administrator.
+2. [x] Selecionar um plano ativo do catálogo acessível, abrir o detalhe após criar e indicar o administrador pendente quando a resposta o informar. O detalhe oferece o fluxo de convite da Fase 21.
+3. [x] Consultar e alterar o ciclo de vida no detalhe. A API confirmou `blocked`, `inactive` e `active`. A listagem e o detalhe consultam organizações inativas com `include_inactive=true`.
+4. [x] Homologar criação (201), replay com o mesmo UID (200), código duplicado (409) e requisição sem sessão (401). Os IDs das requisições de criação e replay foram `16db5273-0ad2-4c19-8459-94db5d94fb39` e `ad80bc80-14ff-4401-a6ea-106c31a960c9`.
+5. [ ] Homologar a permissão de provisionamento com uma conta de revenda, a visibilidade para o administrador inicial após cada transição e a entrega do convite com uma caixa de teste controlada.
+
+**Reteste autenticado no Chrome.** O formulário exibiu os planos ativos e, após o envio sem login inicial, abriu o detalhe com o administrador pendente. A tela também persistiu a inativação e a reativação. Foram usadas organizações descartáveis com endereço reservado `example.test`. Após o teste, a API confirmou a inativação dessas organizações.
+
+**Aceite.** Um operador autorizado provisiona uma organização com um plano selecionado na tela, acompanha o administrador inicial e altera o ciclo de vida conforme seu acesso.
+
+### Fase 24 — Horários de acesso e identidade visual da organização
+
+1. [x] Integrar `GET/PUT /v1/admin/organizations/:uid/access-periods` no detalhe com modo, fuso e intervalos semanais. A API aceita `24:00` como fim do dia e devolve 422 para um único intervalo que atravesse a meia-noite. O editor orienta a divisão em dois dias e envia os intervalos semanais existentes junto com as alterações.
+2. [ ] Validar os modos desativado, aviso e bloqueio com uma conta de teste, dentro e fora do horário configurado. Conferir a atualização do contexto de sessão e a mensagem que aparece para a pessoa afetada.
+3. [x] Integrar leitura e `PATCH /v1/admin/organizations/:uid/branding` no detalhe, junto ao controle existente de logo. A API preservou os demais campos em uma atualização parcial e restaurou os valores herdados quando recebeu `null` para a cor alterada.
+
+**Reteste autenticado.** A API persistiu os modos desativado, aviso e bloqueio. Em aviso, aceitou múltiplos intervalos no mesmo dia. Em bloqueio, aceitou um dia sem intervalos. No Chrome, o formulário rejeitou o intervalo que atravessava a meia-noite, persistiu `22:00–24:00`, salvou uma cor e restaurou a herança. A API confirmou a restauração das configurações ao fim do teste. O reteste do efeito sobre a sessão depende de uma conta ativa na organização de teste. Também passaram 149 testes locais, o lint dos arquivos alterados e o build de produção.
+
+**Aceite.** Um administrador autorizado consulta e altera os horários de acesso e o tema da organização, e a interface mostra o resultado confirmado pela API. [Contrato de períodos de acesso](api-contracts/API_CONTRACTS.md#L3083)
+
+### Fase 25 — Estrutura organizacional e lotação de colaboradores
+
+1. [ ] Adicionar a gestão de cargos e unidades em Colaboradores. Usar `/v1/admin/collaborators/positions`, `/organization-units` e `/organization-unit-types` para seleção de tipos, consulta e cadastro no escopo selecionado. Incluir edição onde a coleção demonstrar o método aceito.
+2. [ ] No detalhe de uma lotação, integrar os modos de trabalho em `/v1/admin/collaborators/:uid/assignments/:uid_assignment/work-modes` e o vínculo de gestor em `/managers` sob a mesma lotação. Preservar as datas de início e fim e exigir uma lotação elegível para o gestor.
+3. [ ] Validar unidade raiz e filha, cargos duplicados, lotação sem vínculo ativo, inclusão e encerramento de modo de trabalho e tentativa de vínculo fora da organização.
+
+**Aceite.** Um operador autorizado mantém a estrutura da organização e consulta onde o colaborador foi lotado, seu modo de trabalho e o gestor associado. [Contratos de modos de trabalho](api-contracts/API_CONTRACTS.md#L5308)
+
+### Fase 26 — Catálogo de contas de cobrança e vínculos financeiros
+
+1. [ ] Retestar `GET /v1/admin/billing/accounts` na API implantada. Confirmar visibilidade, campos do pagador, filtros e paginação. O reteste da Fase 13 retornou 404. Liberar o seletor de contas em `/billing` quando a consulta estiver disponível.
+2. [ ] Integrar vínculo, transferência e remoção por `PUT/DELETE /v1/admin/organizations/:uid/billing-account`. Mostrar pagador e origem comercial, solicitar motivo e confirmação quando exigidos e preservar o escopo financeiro da sessão.
+3. [ ] Homologar vínculo inicial, repetição sem alteração, transferência e remoção de consumidor em uma conta de teste. Conferir a proteção do pagador e a visibilidade de lançamentos e demonstrativos após a mudança.
+
+**Aceite.** Um operador com permissão financeira localiza a conta pelos dados de apresentação e administra o vínculo da organização respeitando as regras do pagador. [Catálogo de contas](api-contracts/API_CONTRACTS.md#L3347) · [Contrato de vínculo financeiro](TESTING_GUIDE.md#L5728)
+
+### Fase 27 — Catálogos da Frota e avaliação FIPE
+
+1. [ ] Adicionar gestão de tipos, fabricantes e modelos em Frota. Reutilizar as consultas existentes de `/v1/admin/assets/types`, `/manufacturers` e `/models`. Liberar somente os métodos de criação e edição confirmados para cada catálogo.
+2. [ ] Integrar a edição de combustíveis conforme os exemplos de `GET/PUT /v1/admin/assets/fuels/:uid`. Confirmar como os catálogos aparecem nos seletores de criação e edição de ativos. Validar duplicatas, referência em uso e perda de acesso.
+3. [ ] Adicionar consulta em `GET /v1/admin/assets/:uid/valuation` no detalhe do ativo. Confirmar a forma da resposta, a referência da avaliação, o tratamento do combustível e os estados de vínculo ausente ou preço indisponível. Reutilizar o contexto de FIPE da Fase 15.
+
+**Aceite.** Um operador autorizado mantém os catálogos usados em Frota e consulta a avaliação do ativo com a referência disponibilizada pela API. O aceite de avaliação depende de um ativo de teste com vínculo FIPE. [Consulta de avaliação](api-contracts/API_CONTRACTS.md#L2282)
+
+### Fase 28 — Preparação de dispositivos e pacotes técnicos
+
+1. [ ] Exibir o estado de inventário e integrar `POST /v1/admin/devices/:uid/prepare` e `POST /v1/admin/devices/:uid/release` em Devices & SIM. Confirmar as origens válidas das transições e os erros para dispositivo vinculado ou em custódia.
+2. [ ] Mapear a criação de pacotes em `POST /v1/admin/devices/technical-packages`, incluindo instruções, requisitos por slot e testes obrigatórios. Confirmar a consulta necessária para selecionar pacotes antes de integrar `PUT /v1/admin/assets/:uid/technical-package` no detalhe do ativo.
+3. [ ] Usar a configuração do pacote no fluxo existente de ordens de serviço. Homologar um ativo com pacote e dispositivo de teste, incluindo preparo, liberação, requisito de slot e conclusão com teste obrigatório.
+
+**Aceite.** Um operador autorizado prepara e libera um dispositivo, vincula um pacote ao ativo e confere na OS os requisitos aplicados. [Inventário e transições](TESTING_GUIDE.md#L4057) · [Corpo do pacote técnico](api-contracts/API_CONTRACTS.md#L1793)
+
+### Fase 29 — Sinais e mapas técnicos de eventos
+
+1. [ ] Adicionar os mapeamentos de sinais no detalhe de um modelo de evento com `GET/PUT /v1/admin/events/models/:uid/signal-mappings`. Confirmar substituição do conjunto, permissão de edição e validação de códigos duplicados.
+2. [ ] Integrar consulta e edição de mapas em `/v1/admin/events/technical-maps`, com rascunho e publicação explícita. Exibir as variantes disponíveis em `/v1/admin/events/protocol-variants` e validar o vínculo da variante ao modelo indicado.
+3. [ ] Homologar publicação com uma fixture isolada, ausência de permissão e rejeição de configuração incompatível. Conferir o estado e a versão que a API retornar após publicar.
+
+**Aceite.** Um administrador autorizado configura sinais de um modelo e publica um mapa técnico compatível com o protocolo do dispositivo. [Contrato de sinais](api-contracts/API_CONTRACTS.md#L1176) · [Contrato de mapas técnicos](api-contracts/API_CONTRACTS.md#L1404)
+
+### Fase 30 — Edição de identidades e mapeamentos de telemetria
+
+1. [ ] Reutilizar as abas da Fase 20. Confirmar as rotas de escrita e gates de `/v1/admin/devices/protocol-identities`, `/v1/admin/devices/telemetry-mappings` e `/v1/admin/devices/:uid/telemetry-mapping`. Usar os exemplos de criação da coleção e o reteste autenticado da Fase 20.
+2. [ ] Adicionar formulários de identidade, perfil e substituição por dispositivo conforme o contrato confirmado. Preservar zeros iniciais, distinguir limpar substituições de alterar regras e recarregar os dados após salvar.
+3. [ ] Homologar criação, replay, conflito, edição e inativação com dispositivos de teste. O aceite do compartilhamento depende do reteste do vínculo ao UID da identidade na API, registrado como SYS-IDEMP-01.
+
+**Aceite.** Um operador autorizado salva e relê identidades e regras de telemetria dentro da organização selecionada. O compartilhamento tem aceite próprio após a validação do backend. [Fase 20](#fase-20--identidades-de-protocolo-e-mapeamentos-de-telemetria) · [Pendência de compartilhamento](TESTING_GUIDE.md#L611)
+
+### Fase 31 — Administração do serviço Geocode
+
+1. [ ] Integrar em `/integracoes` o estado do serviço por organização e a alteração de `desired_status` em `PUT /v1/admin/organizations/:uid/services/geocode`. Confirmar quais estados a API distingue entre configuração solicitada e provisionamento efetivo.
+2. [ ] Mapear listagem, criação, alteração de limite e revogação dos tokens em `/v1/admin/organizations/:uid/services/geocode/tokens`. Confirmar as permissões por ação. Se o backend retornar o segredo na criação, mostrá-lo apenas nessa resposta e mantê-lo em memória durante a exibição.
+3. [ ] Validar na organização de teste a transição do serviço, o limite, a revogação e a negativa fora do escopo. A pesquisa por endereço e coordenadas continua regida pelo contrato de consulta da Fase 22.
+
+**Aceite.** Um administrador autorizado acompanha e modifica o estado solicitado do Geocode e gerencia os tokens da organização. O resultado do provisionamento fica identificado quando a API o disponibilizar. [Contrato de serviços Geocode](api-contracts/API_CONTRACTS.md#L3246)
+
+---
+
 ## Receita padrão por módulo (aplicar em cada fase)
 
 Cada módulo segue o mesmo pipeline:

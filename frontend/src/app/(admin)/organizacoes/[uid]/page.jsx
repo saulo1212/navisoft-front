@@ -6,6 +6,7 @@ import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import ActivationInvitations from '@/components/admin/ActivationInvitations';
 import FormModal from '@/components/admin/FormModal';
+import { OrganizationAccessPeriods, OrganizationBranding, OrganizationLifecycle } from '@/components/admin/OrganizationSettings';
 import PlatformLogo from '@/components/admin/PlatformLogo';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
@@ -19,6 +20,7 @@ import { useSession } from '@/lib/session/SessionContext';
 const OrganizationDetail = ({ uid }) => {
   const { token } = useSession();
   const [org, setOrg] = useState(null);
+  const [historical, setHistorical] = useState(false);
   const [gates, setGates] = useState(null);
   const [policy, setPolicy] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,17 +39,21 @@ const OrganizationDetail = ({ uid }) => {
       setError(null);
     }
     try {
-      const [detail, g] = await Promise.all([
-        getOrganization({ token, uid, signal }),
+      const [record, g] = await Promise.all([
+        getOrganization({ token, uid, signal }).then(detail => ({ detail, historical: false })).catch(async err => {
+          if (err.status !== 404 || signal?.aborted) throw err;
+          return { detail: await getOrganization({ token, uid, signal, includeInactive: true }), historical: true };
+        }),
         getOrganizationGates({ token, uid, signal }).catch(() => null)
       ]);
       if (signal?.aborted) return;
-      setOrg(detail);
+      setOrg(record.detail);
+      setHistorical(record.historical);
       setGates(g);
       if (g?.session_policy?.read === 'allowed') {
         const nextPolicy = await getOrgSessionPolicy({ token, uid, signal }).catch(() => null);
         if (!signal?.aborted) setPolicy(nextPolicy);
-      }
+      } else setPolicy(null);
     } catch (err) {
       if (!signal?.aborted) setError(errorMessage(err));
     } finally {
@@ -64,6 +70,7 @@ const OrganizationDetail = ({ uid }) => {
   const canEditIdentity = gates?.organization?.code_name_update === 'allowed';
   const canEditReseller = gates?.organization?.reseller_enabled_update === 'allowed';
   const canUpdatePolicy = gates?.session_policy?.update === 'allowed';
+  const canManageSettings = canEditIdentity && gates?.uid_organization === uid && org?.uid === uid;
 
   const openEdit = () => { setCode(org.code ?? ''); setName(org.name ?? ''); setEditOpen(true); };
 
@@ -178,7 +185,14 @@ const OrganizationDetail = ({ uid }) => {
         </Col>
       </Row>
 
-      {canEditIdentity && org.uid === gates?.uid_organization && <ActivationInvitations organizationUid={org.uid} />}
+      <Row className="g-3 mt-0">
+        <Col lg={5}><OrganizationLifecycle token={token} uid={uid} includeInactive={historical}
+          editable={canManageSettings} onSaved={load} /></Col>
+        <Col lg={7}><OrganizationAccessPeriods token={token} uid={uid} editable={canManageSettings} /></Col>
+        <Col><OrganizationBranding token={token} uid={uid} editable={canManageSettings} /></Col>
+      </Row>
+
+      {canManageSettings && <ActivationInvitations organizationUid={org.uid} />}
       <PlatformLogo owner="organization" uid={org.uid} imageUid={org.uid_image_logo} editable={canEditIdentity} />
 
       <FormModal
