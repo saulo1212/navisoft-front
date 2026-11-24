@@ -116,3 +116,16 @@ export async function completePasswordRecovery({ token, newPassword, passwordCon
     method: 'POST', body: { token, new_password: newPassword, password_confirmation: passwordConfirmation }
   });
 }
+
+export function validateActivation({ challengeId, token, signal }) {
+  return apiRequest('/v1/users/activation/validate', {
+    method: 'POST', body: { challenge_id: challengeId, token }, signal, notifyUnauthorized: false
+  });
+}
+
+export function completeActivation({ challengeId, token, password, passwordConfirmation, signal }) {
+  return apiRequest('/v1/users/activation/complete', {
+    method: 'POST', body: { challenge_id: challengeId, token, password, password_confirmation: passwordConfirmation },
+    signal, notifyUnauthorized: false
+  });
+}

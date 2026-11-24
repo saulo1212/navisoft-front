@@ -1,5 +1,6 @@
 ﻿import { apiRequest } from '../http';
 import { newIdempotencyKey } from '../idempotency';
+import { scopedFilters } from '../../domain/technicalOperations';
 
 // Administração de usuários de login (/v1/admin/users). Diferente do colaborador
 // (pessoa física), o usuário é a credencial de acesso: tem login, profile_code
@@ -11,8 +12,16 @@ import { newIdempotencyKey } from '../idempotency';
 
 const ROOT = '/v1/admin/users';
 
-export async function listUsers({ token, q, limit = 50, offset = 0, includeInactive, signal }) {
-  return apiRequest(ROOT, { token, signal, searchParams: { q, limit, offset, include_inactive: includeInactive } });
+export async function listUsers({ token, q, limit = 50, offset = 0, includeInactive, filters, signal }) {
+  return apiRequest(ROOT, {
+    token, signal, searchParams: { q, limit, offset, include_inactive: includeInactive, filters: filters && JSON.stringify(filters) }
+  });
+}
+
+export function listDisabledOrganizationUsers({ organizationUid, ...args }) {
+  const filters = scopedFilters(organizationUid);
+  filters.push({ field: 'enabled', operator: 'eq', value: 'false' });
+  return listUsers({ ...args, filters, includeInactive: true });
 }
 
 export async function getUser({ token, uid, includeInactive, signal }) {

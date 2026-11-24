@@ -29,7 +29,7 @@ const areaRoutes = [
 
 const globalRoutes = ['/account/profile', '/access-control/user-profile', '/account/security', '/billing', '/planos', '/platform-capabilities', '/health', '/integracoes', '/dashboards/subscription'];
 const contextualRoutes = [dashboardHome, '/dashboards/project-management', '/situacoes', '/grupos-permissoes', '/relatorios'];
-const publicRoutes = ['/ajuda', '/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/two-factor'];
+const publicRoutes = ['/ajuda', '/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/two-factor', '/auth/activate'];
 const containsPath = (base, path) => path === base || path?.startsWith(`${base}/`);
 
 export const areaAllowed = (context, area) => context?.status === 'evaluated' && context.areas?.[area] === 'allowed';

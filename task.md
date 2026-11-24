@@ -88,7 +88,7 @@
 - [x] Vínculo colaborador ↔ usuário ↔ organização: colaborador nasce ancorado à org selecionada; pessoas conectadas por engagements/assignments; credencial de login administrada no módulo de Usuários (abaixo). `OrganizationGate` garante contexto de org.
 - [x] Administração de usuários (`/v1/admin/users`) — lista (`/usuarios`, offset) + detalhe (`/usuarios/[uid]`): criação provisionada (nasce `enabled:false`), ativação/desativação (PATCH `enabled`), `profile_code` (Primary/Administrator/Secondary/Basic), `organizations_access` + scopes, aplicações (`GET/PUT /applications`). Aviso de revogação de sessão no PUT completo.
 - [x] Contatos (`/v1/admin/contacts`) — página `/contatos` (org-scoped): **lista real paginada + busca por nome** (`GET /v1/admin/contacts` com `filters` = `uid_organization eq` [+ `name contains`]) + criar. **Verificado ao vivo** (busca incremental 200). A listagem existe (o engano inicial foi ver só o `GET /:uid`); o backend confirmou `GET /v1/admin/contacts` + `POST /contacts/search` (org vai dentro do `filters`, não como query param). `usercontact` (template) permanece como está.
-- [~] Convite / primeiro acesso — **adiado**: depende do alinhamento INT-02 (fluxo público). A criação de usuário já deixa o registro provisionado/desabilitado pronto para a ativação; o fluxo público de convite não foi implementado.
+- [~] Convite / primeiro acesso do administrador provisionado pela organização, implementado na Fase 21. A homologação de envio e recebimento real segue em aberto.
 
 **Infra:** `usePagedList` nas listas (users offset; collaborators via `/search` adaptado no endpoint); `OrganizationGate` nas telas que exigem org (colaboradores, contatos); `PROFILE_LABELS` em `lib/domain/users.js` (compartilhado lista/detalhe); toasts (`notifyError/Success`) nas mutações. Menu: `/colaboradores`, `/usuarios` (já existentes) + nova entrada `/contatos`.
 
@@ -375,10 +375,12 @@ Passaram 138 testes locais, o lint dos arquivos alterados e o build do Next.js.
 
 ### Fase 21 — Convite e primeiro acesso
 
-1. [ ] Confirmar com o backend o escopo do INT-02, o deploy das rotas de convite e ativação e a disponibilidade do provedor de notificações no ambiente de teste.
-2. [ ] Integrar o envio do convite ao administrador no detalhe da organização, conforme as permissões e o estado elegível da conta. Usar `POST /v1/admin/organizations/:uid/admins/:uid_admin/activation-invitation`.
-3. [ ] Criar a tela pública de primeiro acesso para validar o token, definir a senha via `/v1/users/activation/complete` e encaminhar para o login. Tratar token inválido, expirado e já utilizado.
-4. [ ] Validar com organização, administrador pendente e caixa de e-mail de teste. Conferir o recebimento, o uso único do link e o primeiro login após ativar. [Rotas e dependências de ativação](DEVELOPER_GUIDE.md#L31)
+1. [x] Confirmar o contrato INT-02 para o administrador provisionado pela organização. Na homologação de 24/11/2026, as duas rotas públicas rejeitaram um convite fictício com `422 activation_invitation_invalid_or_expired`, e o convite para um administrador inexistente retornou `403 activation_invitation_not_allowed`. A delivery histórica do DEP-234 consta como processada pelo provedor, com um destinatário bem-sucedido.
+2. [x] Integrar o envio no detalhe da organização por `POST /v1/admin/organizations/:uid/admins/:uid_admin/activation-invitation`. A tela usa o gate `organization.code_name_update` e oferece o envio para candidatos da organização que estão desabilitados, com e-mail e sem senha inicializada. A API decide a elegibilidade e a autorização finais. Retentar a mesma solicitação reutiliza a chave de idempotência.
+3. [x] Criar a página pública `/auth/activate`. O link do e-mail deve apontar para essa página com `challenge_id` e `token`, preferencialmente no fragmento. A tela remove esses parâmetros da URL, valida o convite, envia a senha e a confirmação pelo endpoint `/v1/users/activation/complete` e encaminha para o login. A API usa o mesmo código para convite inválido, expirado ou consumido.
+4. [~] A homologação de um novo e-mail, do link gerado pelo provedor, do uso único real e do primeiro login exige uma organização e administrador descartáveis com uma caixa controlada. [Rotas e dependências de ativação](DEVELOPER_GUIDE.md#L31)
+
+No Chrome, com envio e ativação simulados, passaram a confirmação do destinatário, o retry com a mesma chave, o reenvio com chave nova, o bloqueio pelo gate, o tratamento de link inválido ou consumido e a abertura de outro convite na mesma aba. A tela retirou as credenciais da URL, recusou senhas divergentes e redirecionou ao login após a ativação simulada. Passaram 142 testes locais, o lint e o build do Next.js.
 
 **Aceite.** Um operador autorizado envia o convite e o administrador convidado ativa a conta pelo link recebido e entra na plataforma.
 

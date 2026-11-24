@@ -4,6 +4,7 @@ import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import ActivationInvitations from '@/components/admin/ActivationInvitations';
 import FormModal from '@/components/admin/FormModal';
 import PlatformLogo from '@/components/admin/PlatformLogo';
 import StatusBadge from '@/components/admin/StatusBadge';
@@ -15,8 +16,7 @@ import { errorMessage } from '@/lib/api/errors';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
 
-const OrganizationDetailPage = () => {
-  const uid = useDetailParam('uid');
+const OrganizationDetail = ({ uid }) => {
   const { token } = useSession();
   const [org, setOrg] = useState(null);
   const [gates, setGates] = useState(null);
@@ -31,27 +31,35 @@ const OrganizationDetailPage = () => {
   const [savingReseller, setSavingReseller] = useState(false);
   const [savingPolicy, setSavingPolicy] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const load = useCallback(async (signal) => {
+    if (!signal) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const [detail, g] = await Promise.all([
-        getOrganization({ token, uid }),
-        getOrganizationGates({ token, uid }).catch(() => null)
+        getOrganization({ token, uid, signal }),
+        getOrganizationGates({ token, uid, signal }).catch(() => null)
       ]);
+      if (signal?.aborted) return;
       setOrg(detail);
       setGates(g);
       if (g?.session_policy?.read === 'allowed') {
-        try { setPolicy(await getOrgSessionPolicy({ token, uid })); } catch { setPolicy(null); }
+        const nextPolicy = await getOrgSessionPolicy({ token, uid, signal }).catch(() => null);
+        if (!signal?.aborted) setPolicy(nextPolicy);
       }
     } catch (err) {
-      setError(errorMessage(err));
+      if (!signal?.aborted) setError(errorMessage(err));
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   }, [token, uid]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const controller = new AbortController();
+    queueMicrotask(() => { if (!controller.signal.aborted) void load(controller.signal); });
+    return () => controller.abort();
+  }, [load]);
 
   const canEditIdentity = gates?.organization?.code_name_update === 'allowed';
   const canEditReseller = gates?.organization?.reseller_enabled_update === 'allowed';
@@ -170,6 +178,7 @@ const OrganizationDetailPage = () => {
         </Col>
       </Row>
 
+      {canEditIdentity && org.uid === gates?.uid_organization && <ActivationInvitations organizationUid={org.uid} />}
       <PlatformLogo owner="organization" uid={org.uid} imageUid={org.uid_image_logo} editable={canEditIdentity} />
 
       <FormModal
@@ -190,6 +199,11 @@ const OrganizationDetailPage = () => {
       </FormModal>
     </div>
   );
+};
+
+const OrganizationDetailPage = () => {
+  const uid = useDetailParam('uid');
+  return <OrganizationDetail key={uid} uid={uid} />;
 };
 
 export default OrganizationDetailPage;

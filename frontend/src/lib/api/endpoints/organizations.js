@@ -1,5 +1,6 @@
 ﻿import { apiRequest } from '../http';
 import { newIdempotencyKey } from '../idempotency';
+import { requireUid } from '../../domain/technicalOperations';
 
 // Administração de organizações (/v1/admin/organizations). Os gates de edição
 // vêm de /v1/users/me/organizations/{uid}/access-context (code_name_update,
@@ -51,4 +52,12 @@ export async function updateOrgSessionPolicy({ token, uid, allowConcurrentSessio
 // Gates por organização (reusa a rota de contexto do usuário).
 export async function getOrganizationGates({ token, uid, signal }) {
   return apiRequest(`/v1/users/me/organizations/${encodeURIComponent(uid)}/access-context`, { token, signal });
+}
+
+export function sendActivationInvitation({ token, organizationUid, adminUid, idempotencyKey = newIdempotencyKey(), signal }) {
+  const organization = requireUid(organizationUid, 'organização');
+  const admin = requireUid(adminUid, 'administrador');
+  return apiRequest(`/v1/admin/organizations/${organization}/admins/${admin}/activation-invitation`, {
+    method: 'POST', token, body: {}, idempotencyKey, signal
+  });
 }
