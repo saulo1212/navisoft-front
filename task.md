@@ -386,9 +386,11 @@ No Chrome, com envio e ativação simulados, passaram a confirmação do destina
 
 ### Fase 22 — Busca de endereços em Geografia
 
-1. [ ] Obter o contrato das buscas por endereço e por coordenadas, incluindo caminhos, escopo de organização, autorização, formatos de retorno e erros. Confirmar a disponibilidade do serviço em homologação. [Pendências de Geografia](api-contracts/solicitacao-referencias-geografia.md)
-2. [ ] Integrar as duas buscas à aba **Buscar endereço** em `/geografia`. Permitir selecionar um resultado e visualizar a posição no mapa existente.
-3. [ ] Validar as duas direções da busca com endereços e coordenadas conhecidos. Cobrir busca vazia, ausência de resultados e serviço indisponível. Registrar separadamente o reteste do `503 geo_storage_unavailable` na criação de rotas.
+1. [~] O catálogo e a coleção documentam o provisionamento do serviço e a gestão de tokens. As rotas de busca direta e reversa, a autorização e os formatos de retorno seguem sem contrato confirmado. A organização Admin Homolog Client não exibiu vínculo Geocode na consulta de serviços. [Pendências de Geografia](api-contracts/solicitacao-referencias-geografia.md)
+2. [~] A aba **Buscar endereço** em `/geografia` permite plotar no mapa existente uma latitude e longitude digitadas. A prévia funciona localmente com ponto ou vírgula decimal. As duas buscas aguardam o contrato da API.
+3. [~] O Chrome confirmou a prévia com coordenadas de São Paulo e com latitude e longitude zero, além dos avisos para campos vazios e valores fora da faixa. Passaram 144 testes locais, o lint dos arquivos alterados e o build do Next.js. A validação das duas buscas e de seus resultados permanece pendente.
+
+**Reteste de criação de rotas em 24/11/2026.** Um `POST /v1/admin/geo/routes` na organização de homologação, com dois pontos válidos, retornou `503 geo_storage_unavailable` (request ID `93626d50-4c72-4967-af08-3ceb0c8ddb9b`). A primeira conferência também retornou 503. A busca posterior pelo prefixo da fixture retornou 200 sem registros (request ID `cec636b3-8647-4382-9209-8c9124fa4d2a`). [Histórico do defeito em rotas](api-contracts/solicitacao-correcao-geo-routes-2026-11-15.md)
 
 **Aceite.** A pessoa consulta um endereço ou uma coordenada e visualiza o resultado no mapa da Geografia.
 

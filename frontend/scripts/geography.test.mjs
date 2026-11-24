@@ -34,6 +34,15 @@ test('invalid coordinates and radius are rejected before sending a mutation', ()
   assert.equal(domain.pointCoordinates({ latitude: null, longitude: 0 }), null);
 });
 
+test('coordinate preview accepts decimal commas and zeroes and rejects invalid input', () => {
+  assert.deepEqual(domain.previewCoordinates(' -23,5505 ', '-46.6333'), { latitude: -23.5505, longitude: -46.6333 });
+  assert.deepEqual(domain.previewCoordinates('0', '0'), { latitude: 0, longitude: 0 });
+  assert.throws(() => domain.previewCoordinates('', '0'), /Informe a latitude e a longitude/);
+  for (const pair of [['91', '0'], ['0', '-181'], ['0x20', '0'], ['1,2.3', '0']]) {
+    assert.throws(() => domain.previewCoordinates(...pair), /latitude entre -90 e 90/);
+  }
+});
+
 test('scope hierarchy requires organization, entity and asset and drops unrelated UIDs', () => {
   assert.throws(() => domain.pointBody(form, null));
   assert.throws(() => domain.pointBody({ ...form, scope_level: 'asset', uid_asset: asset }, org));

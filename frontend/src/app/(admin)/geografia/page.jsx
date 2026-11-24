@@ -5,6 +5,7 @@ import { Alert, Button, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import FormModal from '@/components/admin/FormModal';
+import GeographyAddressLookup from '@/components/admin/GeographyAddressLookup';
 import GeographyMap from '@/components/admin/GeographyMap';
 import RoutePointsEditor from '@/components/admin/RoutePointsEditor';
 import ListToolbar from '@/components/admin/ListToolbar';
@@ -35,7 +36,7 @@ export default function GeographyPage() {
       {Object.entries(RESOURCES).map(([key, resource]) => <Nav.Item key={key}><Nav.Link eventKey={key}>{resource.label}</Nav.Link></Nav.Item>)}
       <Nav.Item><Nav.Link eventKey="geocode">Buscar endereço</Nav.Link></Nav.Item>
     </Nav>
-    {tab === 'geocode' ? <Alert variant="info">A busca de endereços está indisponível neste ambiente.</Alert> : <>
+    {tab === 'geocode' ? <GeographyAddressLookup key={selectedOrganizationUid} /> : <>
       <div className="mb-3" style={{ maxWidth: 300 }}>
         <label htmlFor="list-scope" className="form-label">Escopo da consulta</label>
         <select id="list-scope" className="form-select" value={scope} onChange={e => setScope(e.target.value)}>{SCOPE_LEVELS.map(level => <option key={level} value={level}>{SCOPE_LABELS[level]}</option>)}</select>

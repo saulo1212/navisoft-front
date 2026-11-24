@@ -47,7 +47,20 @@ export default function GeographyMap({ rows, selectedUid, onSelect }) {
         const color = row.uid === selectedUid ? '#b64b16' : '#146c94';
         const [x, y] = project(paths[0][0]);
         const polygon = geometry.type.includes('Polygon');
-        return <g key={row.uid} role="button" tabIndex={0} aria-label={`Selecionar ${row.name || row.uid}`} onClick={() => onSelect(row)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(row); } }} style={{ cursor: 'pointer' }}>
+        const interaction = onSelect ? {
+          role: 'button',
+          tabIndex: 0,
+          'aria-label': `Selecionar ${row.name || row.uid}`,
+          onClick: () => onSelect(row),
+          onKeyDown: event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onSelect(row);
+            }
+          },
+          style: { cursor: 'pointer' }
+        } : {};
+        return <g key={row.uid} {...interaction}>
           <title>{row.name || row.uid}</title>
           {geometry.type === 'Point' ? <>
             {Number(row.radius_meters) > 0 && <circle cx={x} cy={y} r={Number(row.radius_meters) / 111320 * 800 / span} stroke={color} fill={color} fillOpacity="0.12" />}
@@ -58,6 +71,10 @@ export default function GeographyMap({ rows, selectedUid, onSelect }) {
       })}
       <text x="865" y="25" fill="#526675" fontSize="14">N ↑</text>
     </svg>
-    <p className="small text-muted p-3 mb-0">Visualização das geometrias carregadas, sem base de ruas. Clique em um registro para abrir os detalhes. Raios em metros; coordenadas em graus.</p>
+    <p className="small text-muted p-3 mb-0">
+      Visualização das geometrias carregadas, sem base de ruas.
+      {onSelect && ' Clique em um registro para abrir os detalhes. Raios em metros.'}
+      {' Coordenadas em graus.'}
+    </p>
   </div>;
 }

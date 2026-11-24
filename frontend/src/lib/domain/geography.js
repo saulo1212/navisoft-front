@@ -40,6 +40,16 @@ export function pointCoordinates(row) {
     ? [Number(lon), Number(lat)] : null;
 }
 
+export function previewCoordinates(latitude, longitude) {
+  const values = [latitude, longitude].map(value => value.trim().replace(',', '.'));
+  if (values.some(value => !value)) throw new Error('Informe a latitude e a longitude.');
+  const isDecimal = /^[-+]?(?:\d+(?:\.\d+)?|\.\d+)$/;
+  const pair = values.every(value => isDecimal.test(value))
+    ? pointCoordinates({ latitude: values[0], longitude: values[1] }) : null;
+  if (!pair) throw new Error('Informe uma latitude entre -90 e 90 e uma longitude entre -180 e 180.');
+  return { latitude: pair[1], longitude: pair[0] };
+}
+
 export function recordGeometry(row) {
   const geometry = row.geojson?.type === 'Feature' ? row.geojson.geometry : row.geojson;
   if (geometry && ['Point', 'LineString', 'Polygon', 'MultiPolygon'].includes(geometry.type)) return geometry;
