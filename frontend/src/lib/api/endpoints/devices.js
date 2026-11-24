@@ -86,6 +86,45 @@ export async function getDeviceTelemetryOverride({ token, organizationUid, devic
   return result;
 }
 
+function saveResolution(resource, { token, organizationUid, uid, body, idempotencyKey, signal }) {
+  const path = `${DEVICES_ROOT}/${resource}`;
+  return apiRequest(uid ? `${path}/${requireUid(uid, 'registro')}` : path, {
+    method: uid ? 'PUT' : 'POST', token, signal, body: { ...body, uid_organization: requireUid(organizationUid, 'organização') },
+    idempotencyKey: uid ? undefined : idempotencyKey ?? newIdempotencyKey()
+  });
+}
+
+export const saveProtocolIdentity = args => saveResolution('protocol-identities', args);
+export const saveTelemetryMapping = args => saveResolution('telemetry-mappings', args);
+export const createTechnicalPackage = args => saveResolution('technical-packages', args);
+export const listTechnicalPackages = args => listResolutionResources('technical-packages', { ...args, filters: [], search: false });
+
+export async function getTechnicalPackage({ token, uid, organizationUid, signal }) {
+  requireUid(organizationUid, 'organização');
+  const result = await apiRequest(`${DEVICES_ROOT}/technical-packages/${requireUid(uid, 'pacote')}`, { token, signal });
+  if (result?.uid !== uid || result.uid_organization !== organizationUid) throw new ApiError(404, null, null);
+  return result;
+}
+
+export async function getProtocolIdentity({ token, organizationUid, uid, signal }) {
+  requireUid(organizationUid, 'organização');
+  const result = await apiRequest(`${DEVICES_ROOT}/protocol-identities/${requireUid(uid, 'identidade')}`, { token, signal });
+  if (result?.uid !== uid || result.uid_organization !== organizationUid) throw new ApiError(404, null, null);
+  return result;
+}
+
+export function setDeviceTelemetryOverride({ token, deviceUid, body, signal }) {
+  return apiRequest(`${DEVICES_ROOT}/${requireUid(deviceUid, 'dispositivo')}/telemetry-mapping`, {
+    method: 'PUT', token, signal, body
+  });
+}
+
+export function changeDeviceInventory({ token, deviceUid, prepare, signal }) {
+  return apiRequest(`${DEVICES_ROOT}/${requireUid(deviceUid, 'dispositivo')}/${prepare ? 'prepare' : 'release'}`, {
+    method: 'POST', token, signal, body: prepare ? {} : { inventory_status: 'available' }
+  });
+}
+
 export async function getDevice({ token, deviceUid, includeInactive, signal }) {
   return apiRequest(`${DEVICES_ROOT}/${encodeURIComponent(deviceUid)}`, {
     token, signal, searchParams: { include_inactive: includeInactive }

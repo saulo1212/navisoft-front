@@ -5,11 +5,13 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import NewButton from '@/components/admin/NewButton';
 import DataTable from '@/components/admin/DataTable';
+import BillingAccountManagement, { BillingAccountField } from '@/components/admin/BillingAccountManagement';
+import { useAdminProfile } from '@/components/admin/AdminReferenceFields';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { BillingField, BillingForm, BillingRead, BillingSessionScope, money, uidPattern, useBillingMutation } from '@/components/admin/BillingUi';
 import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
 import { useOffsetList } from '@/hooks/useOffsetList';
-import { billingEntries, billingStatements, duplicateEntry, listEntries, listStatements } from '@/lib/api/endpoints/billing';
+import { billingEntries, billingStatements, duplicateEntry, listBillingAccounts, listEntries, listStatements } from '@/lib/api/endpoints/billing';
 import { useSession } from '@/lib/session/SessionContext';
 
 const tabs = [['entries', 'Lançamentos'], ['statements', 'Demonstrativos']];
@@ -24,24 +26,31 @@ export default function BillingPage() {
 function Billing() {
   const [tab, setTab] = useState('entries');
   const [accountUid, setAccountUid] = useState('');
+  const { selectedOrganizationUid } = useSession();
+  const primary = useAdminProfile() === 'primary_admin';
+  const accounts = useOffsetList(listBillingAccounts);
   return <>
     <PageBreadcrumb title="Faturamento" subTitle1="Comercial & Financeiro" />
     <form className="card panel p-3 mb-3" onSubmit={event => {
       event.preventDefault();
       setAccountUid(String(new FormData(event.currentTarget).get('account')).trim());
     }}>
-      <BillingField label="Filtrar pelo identificador da conta de faturamento" name="account" pattern={uidPattern} optional />
+      {!accounts.error && <BillingField label="Buscar conta de faturamento" optional value={accounts.q} onChange={event => accounts.setQ(event.target.value)} />}
+      <BillingAccountField label="Conta de faturamento" list={accounts} name="account" defaultValue={accountUid}
+        placeholder="Todas as contas visíveis" optional />
       <div><Button type="submit" size="sm" variant="outline-primary">Aplicar filtro</Button></div>
     </form>
+    {selectedOrganizationUid && <BillingAccountManagement key={selectedOrganizationUid} organizationUid={selectedOrganizationUid}
+      canManage={primary} accounts={accounts} />}
     <ButtonGroup className="mb-3" aria-label="Seções de faturamento">
       {tabs.map(([key, label]) => <Button key={key} variant={key === tab ? 'primary' : 'outline-primary'}
         aria-pressed={key === tab} onClick={() => setTab(key)}>{label}</Button>)}
     </ButtonGroup>
-    <BillingList key={`${tab}:${accountUid}`} tab={tab} accountUid={accountUid} />
+    <BillingList key={`${tab}:${accountUid}`} tab={tab} accountUid={accountUid} accounts={accounts} />
   </>;
 }
 
-function BillingList({ tab, accountUid }) {
+function BillingList({ tab, accountUid, accounts }) {
   const showingEntries = tab === 'entries';
   const list = useOffsetList(showingEntries ? listEntries : listStatements, { params: { accountUid } });
   const [selected, setSelected] = useState(null);
@@ -74,14 +83,14 @@ function BillingList({ tab, accountUid }) {
       hasMore={list.hasMore} onLoadMore={list.loadMore} loadingMore={list.loading && list.items.length > 0} />
     {selected && <BillingDetail key={`${selected}:${revision}`} uid={selected} showingEntries={showingEntries}
       onClose={() => setSelected(null)} onChanged={refresh} />}
-    {creating && <NewBillingRecord showingEntries={showingEntries} accountUid={accountUid}
+    {creating && <NewBillingRecord showingEntries={showingEntries} accountUid={accountUid} accounts={accounts}
       onClose={() => setCreating(false)} onSaved={result => {
         setCreating(false); refresh(); setSelected(result?.uid ?? null);
       }} />}
   </>;
 }
 
-function NewBillingRecord({ showingEntries, accountUid, onClose, onSaved }) {
+function NewBillingRecord({ showingEntries, accountUid, accounts, onClose, onSaved }) {
   const { token } = useSession();
   const mutation = useBillingMutation();
   const submit = fields => {
@@ -98,7 +107,7 @@ function NewBillingRecord({ showingEntries, accountUid, onClose, onSaved }) {
   };
   return <BillingForm title={showingEntries ? 'Novo lançamento' : 'Fechar competência'}
     submitLabel={showingEntries ? 'Criar lançamento' : 'Confirmar fechamento'} mutation={mutation} onClose={onClose} onSubmit={submit}>
-    <BillingField label="Conta de faturamento (UUID)" name="uid_billing_account" pattern={uidPattern} defaultValue={accountUid} />
+    <BillingAccountField label="Conta de faturamento" name="uid_billing_account" list={accounts} defaultValue={accountUid} />
     <BillingField label="Competência" name="competence" type="month" />
     {showingEntries ? <>
       <BillingField label="Organização consumidora (UUID)" name="uid_organization" pattern={uidPattern} />

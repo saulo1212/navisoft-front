@@ -1,5 +1,7 @@
 'use client';
 
+import { InstructionList } from './TechnicalPackages';
+
 import { detailHref } from '@/lib/navigation/detailRoutes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -152,7 +154,10 @@ function OrderDetail({ uid, selfService }) {
             <h6>Slot {item.slot_number} · {OPERATIONS[item.operation] || item.operation}</h6>
             {item.slot_name && <p>{item.slot_name}</p>}
             <p>{item.description || item.required_capability?.name || item.capability_code}</p>
-            {typeof item.technical_requirement_snapshot?.instructions === 'string' && <p>{item.technical_requirement_snapshot.instructions}</p>}
+            {item.technical_requirement_snapshot?.requirement_type && <p className="small">
+              {item.technical_requirement_snapshot.requirement_type}{item.technical_requirement_snapshot.required && ' · Requisito obrigatório'}
+            </p>}
+            <InstructionList value={item.technical_requirement_snapshot?.instructions} />
             {(item.technical_requirement_snapshot?.tests || []).map(test => <p className="small" key={test.test_code}>Teste {test.test_code}: {test.name || test.test_code}{test.required ? ' (obrigatório)' : ''}</p>)}
             <p className="small text-muted">Dispositivo atual: {item.uid_device_before || '—'} · Novo: {item.uid_device_after || '—'}</p>
             <StatusBadge status={item.completed || item.status === 'completed' ? 'completed' : item.status || 'pending'} />

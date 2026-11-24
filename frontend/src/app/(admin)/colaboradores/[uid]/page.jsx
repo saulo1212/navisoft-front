@@ -16,6 +16,7 @@ import { errorMessage } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
+import { AssignmentConfiguration } from '@/components/admin/CollaboratorStructure';
 import { DEFAULT_COUNTRY_UID, fmtDate } from '@/lib/domain/collaborators';
 
 const CollaboratorDetailPage = () => {
@@ -25,6 +26,8 @@ const CollaboratorDetailPage = () => {
   const [col, setCol] = useState(null);
   const [engagements, setEngagements] = useState([]);
   const [assignments, setAssignments] = useState([]);
+  const [openAssignment, setOpenAssignment] = useState(null);
+  const openEngagements = engagements.filter(engagement => !engagement.ended_on);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -44,30 +47,36 @@ const CollaboratorDetailPage = () => {
   const [asgForm, setAsgForm] = useState({ uid_engagement: '', uid_position: '', uid_organization_unit: '', started_on: '', is_primary: false });
   const [savingAsg, setSavingAsg] = useState(false);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async signal => {
     setLoading(true);
     setError(null);
     try {
-      const detail = await getCollaborator({ token, uid, organizationUid: orgUid });
+      const detail = await getCollaborator({ token, uid, organizationUid: orgUid, signal });
+      if (signal?.aborted) return;
       setCol(detail);
       const [eng, asg, types] = await Promise.all([
-        searchEngagements({ token, uid, organizationUid: orgUid }).catch(() => null),
-        listAssignments({ token, uid, organizationUid: orgUid }).catch(() => null),
+        searchEngagements({ token, uid, organizationUid: orgUid, signal }).catch(() => null),
+        listAssignments({ token, uid, organizationUid: orgUid, signal }).catch(() => null),
         // Tipos de vínculo são globais/baratos — carregados já no load para
         // exibir o NOME (não o UID) no painel de engagements.
-        listEngagementTypes({ token }).catch(() => null)
+        listEngagementTypes({ token, signal }).catch(() => null)
       ]);
+      if (signal?.aborted) return;
       setEngagements(eng ? normalizeList(eng).items : []);
       setAssignments(asg ? normalizeList(asg).items : []);
       if (types) setRefs(r => ({ ...r, engagementTypes: Array.isArray(types) ? types : normalizeList(types).items }));
     } catch (err) {
-      setError(errorMessage(err));
+      if (!signal?.aborted) setError(errorMessage(err));
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   }, [token, uid, orgUid]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const controller = new AbortController();
+    queueMicrotask(() => { if (!controller.signal.aborted) void load(controller.signal); });
+    return () => controller.abort();
+  }, [load]);
 
   const ensureRefs = useCallback(async () => {
     try {
@@ -157,7 +166,7 @@ const CollaboratorDetailPage = () => {
 
   const openAsg = async () => {
     await ensureRefs();
-    setAsgForm({ uid_engagement: engagements[0]?.uid ?? '', uid_position: '', uid_organization_unit: '', started_on: '', is_primary: false });
+    setAsgForm({ uid_engagement: openEngagements[0]?.uid ?? '', uid_position: '', uid_organization_unit: '', started_on: '', is_primary: false });
     setAsgOpen(true);
   };
   const saveAsg = async event => {
@@ -246,8 +255,8 @@ const CollaboratorDetailPage = () => {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Lotações (assignments)</h5>
-                <NewButton label="Nova lotação" size="sm" variant="outline-primary" onClick={openAsg} disabled={engagements.length === 0}
-                  title={engagements.length === 0 ? 'Crie um engagement antes de lotar o colaborador' : undefined} />
+                <NewButton label="Nova lotação" size="sm" variant="outline-primary" onClick={openAsg} disabled={col.active === false || !openEngagements.length}
+                  title={openEngagements.length === 0 ? 'O colaborador precisa de um vínculo em aberto' : undefined} />
               </div>
               {assignments.length === 0 && <p className="text-muted small mb-0">Nenhuma lotação registrada.</p>}
               {assignments.map(a => (
@@ -256,6 +265,11 @@ const CollaboratorDetailPage = () => {
                   <strong>{posName(a.uid_position)}</strong>
                   <span className="text-muted ms-2">em {unitName(a.uid_organization_unit)}</span>
                   <span className="text-muted ms-2">· desde {fmtDate(a.started_on)}</span>
+                  {a.ended_on && <span className="text-muted ms-2">até {fmtDate(a.ended_on)}</span>}
+                  <Button type="button" size="sm" variant="link" aria-expanded={openAssignment === a.uid}
+                    onClick={() => setOpenAssignment(openAssignment === a.uid ? null : a.uid)}>Detalhes da lotação</Button>
+                  {openAssignment === a.uid && <AssignmentConfiguration key={`${orgUid}:${a.uid}`} uid={uid}
+                    organizationUid={orgUid} assignment={a} canWrite={col.active !== false && openEngagements.some(e => e.uid === a.uid_engagement)} />}
                 </div>
               ))}
             </Card.Body>
@@ -309,21 +323,21 @@ const CollaboratorDetailPage = () => {
           <label className="form-label">Engagement</label>
           <Form.Select value={asgForm.uid_engagement} onChange={e => setAsgForm(f => ({ ...f, uid_engagement: e.target.value }))} required>
             <option value="">Selecione...</option>
-            {engagements.map(e => <option key={e.uid} value={e.uid}>{fmtDate(e.started_on)} {e.is_primary ? '(principal)' : ''}</option>)}
+            {openEngagements.map(e => <option key={e.uid} value={e.uid}>{fmtDate(e.started_on)} {e.is_primary ? '(principal)' : ''}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">
           <label className="form-label">Posição</label>
           <Form.Select value={asgForm.uid_position} onChange={e => setAsgForm(f => ({ ...f, uid_position: e.target.value }))} required>
             <option value="">Selecione...</option>
-            {refs.positions.map(p => <option key={p.uid} value={p.uid}>{p.name}</option>)}
+            {refs.positions.filter(p => p.active !== false).map(p => <option key={p.uid} value={p.uid}>{p.name}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">
           <label className="form-label">Unidade organizacional</label>
           <Form.Select value={asgForm.uid_organization_unit} onChange={e => setAsgForm(f => ({ ...f, uid_organization_unit: e.target.value }))} required>
             <option value="">Selecione...</option>
-            {refs.units.map(u => <option key={u.uid} value={u.uid}>{u.name}</option>)}
+            {refs.units.filter(u => u.active !== false).map(u => <option key={u.uid} value={u.uid}>{u.name}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">

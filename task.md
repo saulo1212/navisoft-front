@@ -436,51 +436,56 @@ A ordem sugerida começa pela administração de organizações e pelos cadastro
 
 ### Fase 25 — Estrutura organizacional e lotação de colaboradores
 
-1. [ ] Adicionar a gestão de cargos e unidades em Colaboradores. Usar `/v1/admin/collaborators/positions`, `/organization-units` e `/organization-unit-types` para seleção de tipos, consulta e cadastro no escopo selecionado. Incluir edição onde a coleção demonstrar o método aceito.
-2. [ ] No detalhe de uma lotação, integrar os modos de trabalho em `/v1/admin/collaborators/:uid/assignments/:uid_assignment/work-modes` e o vínculo de gestor em `/managers` sob a mesma lotação. Preservar as datas de início e fim e exigir uma lotação elegível para o gestor.
-3. [ ] Validar unidade raiz e filha, cargos duplicados, lotação sem vínculo ativo, inclusão e encerramento de modo de trabalho e tentativa de vínculo fora da organização.
+1. [x] Adicionar consulta, cadastro e edição de cargos e unidades na organização selecionada, com seleção de tipo e da unidade superior.
+2. [x] Integrar o histórico de modos de trabalho e de gestores no detalhe da lotação. O formulário de vínculo seleciona uma lotação do gestor vigente na data de início.
+3. [x] Homologar na API unidade raiz e filha, edição, cargo duplicado (409), lotação sem vínculo (422), inclusão e encerramento de modo de trabalho e vínculo de gestor dentro (201) e fora (404) da organização.
 
 **Aceite.** Um operador autorizado mantém a estrutura da organização e consulta onde o colaborador foi lotado, seu modo de trabalho e o gestor associado. [Contratos de modos de trabalho](api-contracts/API_CONTRACTS.md#L5308)
 
 ### Fase 26 — Catálogo de contas de cobrança e vínculos financeiros
 
-1. [ ] Retestar `GET /v1/admin/billing/accounts` na API implantada. Confirmar visibilidade, campos do pagador, filtros e paginação. O reteste da Fase 13 retornou 404. Liberar o seletor de contas em `/billing` quando a consulta estiver disponível.
-2. [ ] Integrar vínculo, transferência e remoção por `PUT/DELETE /v1/admin/organizations/:uid/billing-account`. Mostrar pagador e origem comercial, solicitar motivo e confirmação quando exigidos e preservar o escopo financeiro da sessão.
-3. [ ] Homologar vínculo inicial, repetição sem alteração, transferência e remoção de consumidor em uma conta de teste. Conferir a proteção do pagador e a visibilidade de lançamentos e demonstrativos após a mudança.
+1. [x] Retestar `GET /v1/admin/billing/accounts`. A rota segue retornando 404 (`c10e0478-13b4-48bd-9a00-6f2e2c3b2890`). O filtro e os formulários mantêm a entrada por identificador enquanto o catálogo estiver indisponível.
+2. [x] Integrar vínculo, transferência e remoção por `PUT/DELETE /v1/admin/organizations/:uid/billing-account` para Primary, com motivo e confirmação. O resumo mostra pagador e origem conforme os campos disponíveis na resposta da API.
+3. [ ] Homologar transferência e remoção de um consumidor e a visibilidade dos lançamentos e demonstrativos após a mudança. A API confirmou repetição sem alteração (200, `changed:false`) e proteção da organização pagadora (409). As organizações provisionadas com a conta de teste já eram pagadoras.
 
 **Aceite.** Um operador com permissão financeira localiza a conta pelos dados de apresentação e administra o vínculo da organização respeitando as regras do pagador. [Catálogo de contas](api-contracts/API_CONTRACTS.md#L3347) · [Contrato de vínculo financeiro](TESTING_GUIDE.md#L5728)
 
 ### Fase 27 — Catálogos da Frota e avaliação FIPE
 
-1. [ ] Adicionar gestão de tipos, fabricantes e modelos em Frota. Reutilizar as consultas existentes de `/v1/admin/assets/types`, `/manufacturers` e `/models`. Liberar somente os métodos de criação e edição confirmados para cada catálogo.
-2. [ ] Integrar a edição de combustíveis conforme os exemplos de `GET/PUT /v1/admin/assets/fuels/:uid`. Confirmar como os catálogos aparecem nos seletores de criação e edição de ativos. Validar duplicatas, referência em uso e perda de acesso.
-3. [ ] Adicionar consulta em `GET /v1/admin/assets/:uid/valuation` no detalhe do ativo. Confirmar a forma da resposta, a referência da avaliação, o tratamento do combustível e os estados de vínculo ausente ou preço indisponível. Reutilizar o contexto de FIPE da Fase 15.
+1. [x] Integrar a criação e edição de tipos, fabricantes e modelos em Frota. A API confirmou cadastro (201), edição (200), duplicata (409) e proteção de tipo em uso (409). Os registros descartáveis foram removidos (204).
+2. [x] Integrar consulta e edição de combustíveis conforme `GET/PUT /v1/admin/assets/fuels/:uid`. A consulta do detalhe retornou 200. As operações de escrita no catálogo de combustíveis compartilhado ainda precisam de uma fixture própria.
+3. [x] Adicionar consulta de avaliação FIPE no detalhe do ativo, com estados de ausência, indisponibilidade e atualização enfileirada.
+4. [ ] Homologar preço, referência e combustível no retorno 200 da avaliação. O ativo sem vínculo retornou 404. O ativo com vínculo FIPE retornou 503 `fipe_unavailable` (`5c89bd19-6977-4bb8-af67-22dc5bab721a`).
 
 **Aceite.** Um operador autorizado mantém os catálogos usados em Frota e consulta a avaliação do ativo com a referência disponibilizada pela API. O aceite de avaliação depende de um ativo de teste com vínculo FIPE. [Consulta de avaliação](api-contracts/API_CONTRACTS.md#L2282)
 
 ### Fase 28 — Preparação de dispositivos e pacotes técnicos
 
-1. [ ] Exibir o estado de inventário e integrar `POST /v1/admin/devices/:uid/prepare` e `POST /v1/admin/devices/:uid/release` em Devices & SIM. Confirmar as origens válidas das transições e os erros para dispositivo vinculado ou em custódia.
-2. [ ] Mapear a criação de pacotes em `POST /v1/admin/devices/technical-packages`, incluindo instruções, requisitos por slot e testes obrigatórios. Confirmar a consulta necessária para selecionar pacotes antes de integrar `PUT /v1/admin/assets/:uid/technical-package` no detalhe do ativo.
-3. [ ] Usar a configuração do pacote no fluxo existente de ordens de serviço. Homologar um ativo com pacote e dispositivo de teste, incluindo preparo, liberação, requisito de slot e conclusão com teste obrigatório.
+1. [x] Exibir o inventário em Devices & SIM e integrar as transições de novo para em preparo e de em preparo para disponível. A API retornou 409 ao repetir a transição e ao tentar preparar um dispositivo instalado.
+2. [x] Integrar cadastro e consulta de pacotes, com instruções, requisitos por slot e testes obrigatórios. A API confirmou criação, listagem por organização e vínculo com o ativo.
+3. [x] Exibir as instruções e os testes do requisito congelado na OS. Na fixture, a API bloqueou a conclusão sem o teste obrigatório (`completed:false`) e concluiu com o teste aprovado (`completed:true`, `5ffdfe6c-e94f-401d-b7e7-ffb543017ab7`).
 
 **Aceite.** Um operador autorizado prepara e libera um dispositivo, vincula um pacote ao ativo e confere na OS os requisitos aplicados. [Inventário e transições](TESTING_GUIDE.md#L4057) · [Corpo do pacote técnico](api-contracts/API_CONTRACTS.md#L1793)
 
 ### Fase 29 — Sinais e mapas técnicos de eventos
 
-1. [ ] Adicionar os mapeamentos de sinais no detalhe de um modelo de evento com `GET/PUT /v1/admin/events/models/:uid/signal-mappings`. Confirmar substituição do conjunto, permissão de edição e validação de códigos duplicados.
-2. [ ] Integrar consulta e edição de mapas em `/v1/admin/events/technical-maps`, com rascunho e publicação explícita. Exibir as variantes disponíveis em `/v1/admin/events/protocol-variants` e validar o vínculo da variante ao modelo indicado.
-3. [ ] Homologar publicação com uma fixture isolada, ausência de permissão e rejeição de configuração incompatível. Conferir o estado e a versão que a API retornar após publicar.
+1. [x] Integrar consulta e substituição do conjunto de sinais no detalhe do tipo de evento. O editor de Primary valida códigos duplicados antes de enviar a lista.
+2. [x] Integrar consulta, rascunho e publicação explícita de mapas técnicos, com seleção de uma variante vinculada ao modelo do dispositivo.
+3. [x] Homologar publicação de mapa isolado (200, revisão 1 publicada, `bae40dbf-9f0a-468e-ba39-6336084a23fb`), variante incompatível (422) e ausência de sessão (401). O mapa e o modelo usados no cenário de publicação foram inativados.
+4. [ ] Homologar a substituição de sinais com um tipo de evento descartável e conferir o acesso com um perfil sem autorização administrativa.
 
 **Aceite.** Um administrador autorizado configura sinais de um modelo e publica um mapa técnico compatível com o protocolo do dispositivo. [Contrato de sinais](api-contracts/API_CONTRACTS.md#L1176) · [Contrato de mapas técnicos](api-contracts/API_CONTRACTS.md#L1404)
 
 ### Fase 30 — Edição de identidades e mapeamentos de telemetria
 
-1. [ ] Reutilizar as abas da Fase 20. Confirmar as rotas de escrita e gates de `/v1/admin/devices/protocol-identities`, `/v1/admin/devices/telemetry-mappings` e `/v1/admin/devices/:uid/telemetry-mapping`. Usar os exemplos de criação da coleção e o reteste autenticado da Fase 20.
-2. [ ] Adicionar formulários de identidade, perfil e substituição por dispositivo conforme o contrato confirmado. Preservar zeros iniciais, distinguir limpar substituições de alterar regras e recarregar os dados após salvar.
-3. [ ] Homologar criação, replay, conflito, edição e inativação com dispositivos de teste. O aceite do compartilhamento depende do reteste do vínculo ao UID da identidade na API, registrado como SYS-IDEMP-01.
+1. [x] Reutilizar as abas da Fase 20 com POST de criação e PUT de atualização para identidades e perfis e PUT para substituições por dispositivo.
+2. [x] Preservar os zeros iniciais, manter os campos da chave da identidade fixos após o cadastro e oferecer a limpeza de substituições como ação separada. O contrato de substituição usa regras planas com `replace`, `remove` ou `inherit`.
+3. [x] Homologar criação (201), replay de identidade e perfil (200), conflito idempotente de identidade (409), edição de perfil, inativação e reativação com a chave da identidade original. A API releu as substituições e confirmou a limpeza (200).
+4. [ ] Retestar o compartilhamento de identidade com uma fixture isolada, conforme SYS-IDEMP-01.
 
 **Aceite.** Um operador autorizado salva e relê identidades e regras de telemetria dentro da organização selecionada. O compartilhamento tem aceite próprio após a validação do backend. [Fase 20](#fase-20--identidades-de-protocolo-e-mapeamentos-de-telemetria) · [Pendência de compartilhamento](TESTING_GUIDE.md#L611)
+
+**Validação das fases 25 a 30.** Passaram 153 testes locais, o lint dos arquivos alterados e o build de produção. No Chrome, com login real, foram conferidos os formulários de unidades, vínculo financeiro, combustíveis, pacote técnico, mapa de eventos e identidade de protocolo. Os testes de escrita na API usaram organizações descartáveis, depois inativadas.
 
 ### Fase 31 — Administração do serviço Geocode
 

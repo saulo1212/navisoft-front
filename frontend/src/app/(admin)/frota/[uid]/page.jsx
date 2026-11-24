@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Card, Col, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import AssetLinkHistory from '@/components/admin/AssetLinkHistory';
+import AssetValuation from '@/components/admin/AssetValuation';
+import { AssetPackage } from '@/components/admin/TechnicalPackages';
 import FormModal from '@/components/admin/FormModal';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import { PlatformImage } from '@/components/admin/PlatformLogo';
@@ -269,6 +271,12 @@ const AssetDetailInner = ({ uid }) => {
         <Tab eventKey="device-history" title="Histórico de dispositivos">
           <AssetLinkHistory token={token} assetUid={asset.uid} />
         </Tab>
+        <Tab eventKey="valuation" title="Avaliação FIPE">
+          <AssetValuation key={asset.uid} assetUid={asset.uid} />
+        </Tab>
+        <Tab eventKey="package" title="Pacote técnico">
+          <AssetPackage key={`${orgUid}:${asset.uid}`} assetUid={asset.uid} organizationUid={orgUid} canManage={asset.uid_organization === orgUid} />
+        </Tab>
       </Tabs>
 
       <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar asset" onSubmit={saveEdit} submitting={saving}>
@@ -289,14 +297,14 @@ const AssetDetailInner = ({ uid }) => {
               <label className="form-label">Combustível</label>
               <Form.Select value={form.uid_fuel} onChange={e => setForm(f => ({ ...f, uid_fuel: e.target.value }))}>
                 <option value="">—</option>
-                {fuels.map(f => <option key={f.uid} value={f.uid}>{f.name}</option>)}
+                {fuels.filter(f => f.active !== false || f.uid === asset.uid_fuel).map(f => <option key={f.uid} value={f.uid}>{f.name}</option>)}
               </Form.Select>
             </div>
             <div className="mb-3">
               <label className="form-label">Modelo <span className="text-muted small">(opcional)</span></label>
               <Form.Select value={form.uid_model} onChange={e => setForm(f => ({ ...f, uid_model: e.target.value }))}>
                 <option value="">—</option>
-                {models.map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
+                {models.filter(m => m.active !== false || m.uid === asset.uid_model).map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
               </Form.Select>
             </div>
             <div className="row g-2">

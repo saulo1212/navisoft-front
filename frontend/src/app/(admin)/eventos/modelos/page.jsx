@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Alert, Button, Offcanvas } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
+import { useAdminProfile } from '@/components/admin/AdminReferenceFields';
+import { EventSignalMappings, EventTechnicalMaps } from '@/components/admin/EventTechnicalConfiguration';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { OperationalGate, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -14,6 +16,7 @@ import { useSession } from '@/lib/session/SessionContext';
 export default function Page() { return <OperationalGate area="events"><Models /></OperationalGate>; }
 function Models() {
   const { token } = useSession();
+  const canWriteSignals = useAdminProfile() === 'primary_admin';
   const list = useOffsetList(listEventModels);
   const fields = useOffsetList(listEventFields);
   const action = useOperationalAction();
@@ -28,6 +31,15 @@ function Models() {
     ]} />
     <h5 className="mt-4">Campos disponíveis para condições</h5>
     <DataTable rows={fields.items} rowKey={row => row.code} loading={fields.loading} error={fields.error} hasMore={!fields.loading && fields.hasMore} onLoadMore={fields.loadMore} columns={[{ key: 'name', label: 'Campo' }, { key: 'code', label: 'Código' }, { key: 'value_type', label: 'Tipo' }, { key: 'operators', label: 'Operadores', render: row => row.operators?.join(', ') }, { key: 'units', label: 'Unidades', render: row => row.units?.join(', ') || '—' }]} />
-    <Offcanvas show={!!detail} onHide={() => setDetail(null)} placement="end"><Offcanvas.Header closeButton><Offcanvas.Title>{detail?.name}</Offcanvas.Title></Offcanvas.Header><Offcanvas.Body>{detail && <><p>Código: {detail.code}</p><p>Categoria: {detail.category}</p><h6>Parâmetros permitidos</h6><pre className="text-wrap">{JSON.stringify(detail.allowed_parameters || {}, null, 2)}</pre><h6>Valores padrão</h6><pre className="text-wrap">{JSON.stringify(detail.defaults || {}, null, 2)}</pre></>}</Offcanvas.Body></Offcanvas>
+    <EventTechnicalMaps />
+    <Offcanvas show={!!detail} onHide={() => setDetail(null)} placement="end">
+      <Offcanvas.Header closeButton><Offcanvas.Title>{detail?.name}</Offcanvas.Title></Offcanvas.Header>
+      <Offcanvas.Body>{detail && <>
+        <p>Código {detail.code}</p><p>Categoria {detail.category}</p>
+        <h6>Parâmetros permitidos</h6><pre className="text-wrap">{JSON.stringify(detail.allowed_parameters || {}, null, 2)}</pre>
+        <h6>Valores padrão</h6><pre className="text-wrap">{JSON.stringify(detail.defaults || {}, null, 2)}</pre>
+        <EventSignalMappings key={detail.uid} uid={detail.uid} canWrite={canWriteSignals} />
+      </>}</Offcanvas.Body>
+    </Offcanvas>
   </>;
 }

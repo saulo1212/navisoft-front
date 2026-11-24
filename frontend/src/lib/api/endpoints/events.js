@@ -13,6 +13,25 @@ function list(name, { token, organizationUid, q, limit = 50, offset = 0, signal 
 export const listEventModels = args => list('models', args, true);
 export const listEventFields = args => list('fields', args, true);
 export const listEventRules = args => list('rules', args);
+export const listEventTechnicalMaps = args => list('technical-maps', args, true);
+export const listEventProtocolVariants = args => list('protocol-variants', args, true);
+export function getEventSignalMappings({ token, uid, signal }) {
+  return apiRequest(`${resource('models', uid)}/signal-mappings`, { token, signal });
+}
+export function setEventSignalMappings({ token, uid, body, signal }) {
+  return apiRequest(`${resource('models', uid)}/signal-mappings`, { method: 'PUT', token, signal, body });
+}
+export function getEventTechnicalMap({ token, uid, signal }) {
+  return apiRequest(resource('technical-maps', uid), { token, signal });
+}
+export function saveEventTechnicalMap({ token, uid, body, idempotencyKey, signal }) {
+  return apiRequest(uid ? resource('technical-maps', uid) : `${root}/technical-maps`, {
+    method: uid ? 'PUT' : 'POST', token, signal, body, idempotencyKey: uid ? undefined : idempotencyKey ?? newIdempotencyKey()
+  });
+}
+export function publishEventTechnicalMap({ token, uid, signal }) {
+  return apiRequest(`${resource('technical-maps', uid)}/publish`, { method: 'POST', token, signal, body: {} });
+}
 export function listEventOccurrences({ token, organizationUid, status, limit = 50, offset = 0, signal }) {
   const filters = scopedFilters(organizationUid);
   if (status) filters.push({ field: 'status', operator: 'eq', value: status });

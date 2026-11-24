@@ -4,13 +4,16 @@ import { useEffect, useState } from 'react';
 import { Alert, Badge, Button, FormSelect, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
+import { useAdminProfile } from '@/components/admin/AdminReferenceFields';
 import { ProtocolIdentitiesTab, TelemetryMappingsTab } from '@/components/admin/DeviceResolutionTabs';
+import { TechnicalPackagesTab } from '@/components/admin/TechnicalPackages';
 import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
+import { operationError } from '@/components/admin/OperationalUi';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import {
-  createDevice, createSimcard, deleteSimcard, getDevice, linkSimcard, listDeviceManufacturers, listDeviceModels,
+  changeDeviceInventory, createDevice, createSimcard, deleteSimcard, getDevice, linkSimcard, listDeviceManufacturers, listDeviceModels,
   listDevices, listDeviceTypes, listLinkedSimcards, listSimcards, patchDeviceLifecycle, swapLinkedSimcard, unlinkSimcard
 } from '@/lib/api/endpoints/devices';
 import { isApiError } from '@/lib/api/errors';
@@ -19,11 +22,12 @@ import { areaAllowed } from '@/lib/navigation/access';
 import { useSession } from '@/lib/session/SessionContext';
 
 const DevicesSimPage = () => {
-  const { areaAccess } = useSession();
+  const { areaAccess, token, selectedOrganizationUid } = useSession();
   const canDevices = areaAllowed(areaAccess, 'devices');
   const canSims = areaAllowed(areaAccess, 'simcards');
   const [selectedTab, setTab] = useState('devices');
   const tab = !canDevices ? 'simcards' : selectedTab === 'simcards' && !canSims ? 'devices' : selectedTab;
+  const scope = `${token}:${selectedOrganizationUid}`;
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Devices & SIM" subTitle1="Operação" />
@@ -32,19 +36,24 @@ const DevicesSimPage = () => {
         {canSims && <Nav.Item><Nav.Link eventKey="simcards">SIM cards</Nav.Link></Nav.Item>}
         {canDevices && <Nav.Item><Nav.Link eventKey="identities">Identidades de protocolo</Nav.Link></Nav.Item>}
         {canDevices && <Nav.Item><Nav.Link eventKey="mappings">Mapeamentos de telemetria</Nav.Link></Nav.Item>}
+        {canDevices && <Nav.Item><Nav.Link eventKey="packages">Pacotes técnicos</Nav.Link></Nav.Item>}
       </Nav>
-      {tab === 'devices' && canDevices && <DevicesTab canSims={canSims} />}
-      {tab === 'simcards' && canSims && <SimcardsTab />}
-      {tab === 'identities' && canDevices && <ProtocolIdentitiesTab />}
-      {tab === 'mappings' && canDevices && <TelemetryMappingsTab />}
+      {tab === 'devices' && canDevices && <DevicesTab key={scope} canSims={canSims} />}
+      {tab === 'simcards' && canSims && <SimcardsTab key={scope} />}
+      {tab === 'identities' && canDevices && <ProtocolIdentitiesTab key={scope} />}
+      {tab === 'mappings' && canDevices && <TelemetryMappingsTab key={scope} />}
+      {tab === 'packages' && canDevices && selectedOrganizationUid && <TechnicalPackagesTab key={scope} />}
     </div>
   );
 };
 
 const EMPTY_DEVICE_FORM = { typeUid: '', manufacturerUid: '', modelUid: '', deviceSerial: '', deviceImei: '', devicePwd: '' };
+const inventoryLabels = { new: 'Novo', preparing: 'Em preparo', available: 'Disponível', installed: 'Instalado', in_custody: 'Em custódia' };
+const inventoryLabel = state => inventoryLabels[state] || state || '—';
 
 const DevicesTab = ({ canSims }) => {
   const { token, selectedOrganizationUid } = useSession();
+  const profile = useAdminProfile();
   const { q, setQ, items, hasMore, loadMore, loading, error, refresh } = useOffsetList(listDevices, {
     params: { organizationUid: selectedOrganizationUid, includeInactive: true }
   });
@@ -138,6 +147,21 @@ const DevicesTab = ({ canSims }) => {
     setLifecycleOpen(true);
   };
 
+  async function updateInventory(prepare) {
+    const deviceUid = detail.uid;
+    setDetailBusy(true);
+    setDetailError(null);
+    try {
+      const result = await changeDeviceInventory({ token, deviceUid, prepare });
+      setDetail(current => current?.uid === deviceUid ? { ...current, ...result } : current);
+      refresh();
+    } catch (err) {
+      setDetailError(operationError(err));
+    } finally {
+      setDetailBusy(false);
+    }
+  }
+
   // reason é obrigatório em QUALQUER estado nesta API (inclusive "active").
   const saveLifecycle = async event => {
     event.preventDefault();
@@ -224,6 +248,7 @@ const DevicesTab = ({ canSims }) => {
     { key: 'device_serial', label: 'Serial' },
     { key: 'catalog', label: 'Modelo', render: catalogLabel },
     { key: 'active', label: 'Ativo', render: row => <StatusBadge status={row.active ? 'active' : 'inactive'} /> },
+    { key: 'inventory_status', label: 'Inventário', render: row => inventoryLabel(row.inventory_status) },
     { key: 'sim', label: 'SIM vinculado', render: row => (row.uid_linked_simcard ? simLabel(row.uid_linked_simcard) : '—') }
   ];
 
@@ -284,6 +309,14 @@ const DevicesTab = ({ canSims }) => {
                 <strong>Status:</strong> <StatusBadge status={detail.active ? 'active' : 'inactive'} />
                 <Button size="sm" variant="outline-secondary" disabled={detailBusy} onClick={openLifecycle}>Alterar situação</Button>
               </p>
+              <div className="d-flex align-items-center gap-2 mb-3">
+                <strong>Inventário</strong> {inventoryLabel(detail.inventory_status)}
+                {detail.active && detail.uid_organization === selectedOrganizationUid && ['primary_admin', 'administrator'].includes(profile) &&
+                  ['new', 'preparing'].includes(detail.inventory_status) && <Button size="sm" variant="outline-primary" disabled={detailBusy}
+                    onClick={() => updateInventory(detail.inventory_status === 'new')}>
+                    {detail.inventory_status === 'new' ? 'Preparar dispositivo' : 'Liberar para instalação'}
+                  </Button>}
+              </div>
               {canSims && <>
               <hr />
               <h6>SIM vinculado</h6>

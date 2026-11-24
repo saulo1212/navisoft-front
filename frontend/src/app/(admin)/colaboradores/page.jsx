@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
+import { CollaboratorStructure } from '@/components/admin/CollaboratorStructure';
 import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
@@ -70,6 +71,7 @@ const CollaboratorsInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
+      <CollaboratorStructure />
       <FormModal show={open} onHide={() => setOpen(false)} title="Novo colaborador" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Nome legal</label>

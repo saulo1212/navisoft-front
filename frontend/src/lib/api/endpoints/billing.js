@@ -10,6 +10,15 @@ const resourcePath = (root, uid) => `${root}/${requireUid(uid, 'registro')}`;
 export const billingPlans = createResourceApi({ basePath: plans });
 export const billingEntries = createResourceApi({ basePath: `${billing}/entries` });
 export const billingStatements = createResourceApi({ basePath: `${billing}/statements` });
+export const listBillingAccounts = createResourceApi({ basePath: `${billing}/accounts` }).list;
+
+function writeBillingAccount(method, { token, signal, organizationUid, body }) {
+  return apiRequest(`${resourcePath('/v1/admin/organizations', organizationUid)}/billing-account`, {
+    method, token, signal, body
+  });
+}
+export const setOrganizationBillingAccount = args => writeBillingAccount('PUT', args);
+export const removeOrganizationBillingAccount = args => writeBillingAccount('DELETE', args);
 
 export function listEntries({ token, signal, q, limit, offset, accountUid }) {
   return billingEntries.list({ token, signal, q, limit, offset, uid_billing_account: accountUid });

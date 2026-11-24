@@ -7,6 +7,7 @@ import { Form } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import FormModal from '@/components/admin/FormModal';
+import FleetCatalogs from '@/components/admin/FleetCatalogs';
 import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import { usePagedList } from '@/hooks/usePagedList';
@@ -29,13 +30,14 @@ const FleetInner = () => {
   const [entities, setEntities] = useState([]);
   const [fuels, setFuels] = useState([]);
   const [types, setTypes] = useState([]);
+  const [catalogRevision, setCatalogRevision] = useState(0);
   useEffect(() => {
     if (!token || !orgUid) return;
     searchEntities({ token, organizationUid: orgUid, limit: 100 })
       .then(res => setEntities(normalizeList(res).items)).catch(() => {});
     listFuels({ token }).then(res => setFuels(normalizeList(res).items)).catch(() => {});
     listAssetTypes({ token }).then(res => setTypes(normalizeList(res).items)).catch(() => {});
-  }, [token, orgUid]);
+  }, [token, orgUid, catalogRevision]);
 
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(EMPTY);
@@ -114,6 +116,7 @@ const FleetInner = () => {
         pagination={{ page, pageCount, total, onPage: goToPage }}
       />
 
+      <FleetCatalogs onSaved={() => setCatalogRevision(value => value + 1)} />
       <FormModal show={open} onHide={() => setOpen(false)} title="Novo asset" onSubmit={submit} submitting={saving}>
         <div className="mb-3">
           <label className="form-label">Entidade</label>
@@ -137,28 +140,28 @@ const FleetInner = () => {
           <label className="form-label">Combustível <span className="text-muted small">(opcional)</span></label>
           <Form.Select value={form.fuelUid} onChange={e => setForm(f => ({ ...f, fuelUid: e.target.value }))}>
             <option value="">—</option>
-            {fuels.map(f => <option key={f.uid} value={f.uid}>{f.name}</option>)}
+            {fuels.filter(f => f.active !== false).map(f => <option key={f.uid} value={f.uid}>{f.name}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">
           <label className="form-label">Tipo de asset <span className="text-muted small">(opcional)</span></label>
           <Form.Select value={form.typeUid} onChange={e => onTypeChange(e.target.value)}>
             <option value="">—</option>
-            {types.map(t => <option key={t.uid} value={t.uid}>{t.name}</option>)}
+            {types.filter(t => t.active !== false).map(t => <option key={t.uid} value={t.uid}>{t.name}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">
           <label className="form-label">Fabricante <span className="text-muted small">(opcional)</span></label>
           <Form.Select value={form.manufacturerUid} onChange={e => onManufacturerChange(e.target.value)} disabled={!form.typeUid}>
             <option value="">—</option>
-            {manufacturers.map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
+            {manufacturers.filter(m => m.active !== false).map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">
           <label className="form-label">Modelo <span className="text-muted small">(opcional)</span></label>
           <Form.Select value={form.modelUid} onChange={e => setForm(f => ({ ...f, modelUid: e.target.value }))} disabled={!form.manufacturerUid}>
             <option value="">—</option>
-            {models.map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
+            {models.filter(m => m.active !== false).map(m => <option key={m.uid} value={m.uid}>{m.name}</option>)}
           </Form.Select>
         </div>
         <div className="row g-2">

@@ -95,8 +95,20 @@ export async function removeParticipation({ token, participationUid, groupUid, a
 }
 
 // --- Catálogos (combustíveis / voltagens) ------------------------------------
-export async function listFuels({ token, q, signal }) {
-  return apiRequest(`${ROOT}/fuels`, { token, signal, searchParams: { q } });
+export async function listFuels({ token, q, limit, offset, signal }) {
+  return apiRequest(`${ROOT}/fuels`, { token, signal, searchParams: { q, limit, offset } });
+}
+
+export function getAssetValuation({ token, assetUid, signal }) {
+  return apiRequest(`${ROOT}/${encodeURIComponent(assetUid)}/valuation`, { token, signal, includeStatus: true });
+}
+
+export function getAssetTechnicalPackage({ token, assetUid, signal }) {
+  return apiRequest(`${ROOT}/${encodeURIComponent(assetUid)}/technical-package`, { token, signal });
+}
+
+export function setAssetTechnicalPackage({ token, assetUid, body, signal }) {
+  return apiRequest(`${ROOT}/${encodeURIComponent(assetUid)}/technical-package`, { token, signal, method: 'PUT', body });
 }
 
 export async function listVoltages({ token, q, signal }) {

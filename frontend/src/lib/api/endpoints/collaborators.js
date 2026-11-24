@@ -1,5 +1,6 @@
 ﻿import { apiRequest } from '../http';
 import { newIdempotencyKey } from '../idempotency';
+import { requireUid } from '../../domain/technicalOperations';
 
 // Colaboradores (/v1/admin/collaborators). O recurso é sempre escopado por
 // organização: a maioria das rotas exige `uid_organization` (query ou body) e o
@@ -77,9 +78,9 @@ export async function endEngagement({ token, uid, engagementUid, organizationUid
 }
 
 // --- Assignments (lotação: posição + unidade organizacional) -----------------
-export async function listAssignments({ token, uid, organizationUid, signal }) {
+export async function listAssignments({ token, uid, organizationUid, limit, offset, signal }) {
   return apiRequest(`${ROOT}/${encodeURIComponent(uid)}/assignments`, {
-    token, signal, searchParams: { filters: orgFilters(organizationUid) }
+    token, signal, searchParams: { filters: orgFilters(organizationUid), limit, offset }
   });
 }
 
@@ -95,20 +96,48 @@ export async function listEngagementTypes({ token, signal }) {
   return apiRequest(`${ROOT}/engagement-types`, { token, signal });
 }
 
-export async function listPositions({ token, organizationUid, signal }) {
-  return apiRequest(`${ROOT}/positions`, { token, signal, searchParams: { filters: orgFilters(organizationUid) } });
+export async function listPositions({ token, organizationUid, limit, offset, signal }) {
+  return apiRequest(`${ROOT}/positions`, { token, signal, searchParams: { filters: orgFilters(organizationUid), limit, offset } });
 }
 
-export async function createPosition({ token, organizationUid, body, idempotencyKey }) {
+export async function createPosition({ token, organizationUid, body, idempotencyKey, signal }) {
   return apiRequest(`${ROOT}/positions`, {
-    method: 'POST', token, body, searchParams: { uid_organization: organizationUid },
+    method: 'POST', token, signal, body, searchParams: { uid_organization: organizationUid },
     idempotencyKey: idempotencyKey ?? newIdempotencyKey()
   });
 }
 
-export async function listOrganizationUnits({ token, organizationUid, signal }) {
-  return apiRequest(`${ROOT}/organization-units`, { token, signal, searchParams: { filters: orgFilters(organizationUid) } });
+export async function listOrganizationUnits({ token, organizationUid, limit, offset, signal }) {
+  return apiRequest(`${ROOT}/organization-units`, { token, signal, searchParams: { filters: orgFilters(organizationUid), limit, offset } });
 }
+
+export const listOrganizationUnitTypes = ({ token, signal }) => apiRequest(`${ROOT}/organization-unit-types`, { token, signal });
+export const listWorkModes = ({ token, signal }) => apiRequest(`${ROOT}/work-modes`, { token, signal });
+
+function writeStructure(path, method, { token, signal, organizationUid, body, idempotencyKey }) {
+  return apiRequest(`${ROOT}/${path}`, {
+    method, token, signal, body, searchParams: { uid_organization: requireUid(organizationUid, 'organização') },
+    idempotencyKey: method === 'POST' ? idempotencyKey ?? newIdempotencyKey() : undefined
+  });
+}
+
+export const updatePosition = args => writeStructure(`positions/${requireUid(args.uid, 'cargo')}`, 'PATCH', args);
+export const createOrganizationUnit = args => writeStructure('organization-units', 'POST', args);
+export const updateOrganizationUnit = args => writeStructure(`organization-units/${requireUid(args.uid, 'unidade')}`, 'PATCH', args);
+
+const assignmentPath = ({ uid, assignmentUid }) => `${requireUid(uid, 'colaborador')}/assignments/${requireUid(assignmentUid, 'lotação')}`;
+function listAssignmentHistory(kind, args) {
+  const { token, organizationUid, limit, offset, signal } = args;
+  return apiRequest(`${ROOT}/${assignmentPath(args)}/${kind}`, {
+    token, signal, searchParams: { filters: orgFilters(requireUid(organizationUid, 'organização')), limit, offset }
+  });
+}
+
+export const listAssignmentWorkModes = args => listAssignmentHistory('work-modes', args);
+export const listAssignmentManagers = args => listAssignmentHistory('managers', args);
+export const addAssignmentWorkMode = args => writeStructure(`${assignmentPath(args)}/work-modes`, 'POST', args);
+export const addAssignmentManager = args => writeStructure(`${assignmentPath(args)}/managers`, 'POST', args);
+export const endAssignmentWorkMode = args => writeStructure(`${assignmentPath(args)}/work-modes/${requireUid(args.periodUid, 'período')}`, 'PATCH', args);
 
 // Catálogo GLOBAL de países (não escopado por organização). Fonte do uid_country
 // exigido na criação de engagement. Rota mantida pelo backend por compatibilidade
