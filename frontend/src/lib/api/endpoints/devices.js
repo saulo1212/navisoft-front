@@ -1,4 +1,6 @@
 import { apiRequest } from '../http';
+import { ApiError } from '../errors';
+import { requireUid } from '../../domain/technicalOperations';
 import { newIdempotencyKey } from '../idempotency';
 
 // Devices (/v1/admin/devices) e SIM Cards (/v1/admin/simcards). Contrato
@@ -38,6 +40,50 @@ export async function listDevices({ token, organizationUid, q, includeInactive, 
   return apiRequest(`${DEVICES_ROOT}/search`, {
     method: 'POST', token, signal, body: { filters, limit, offset, include_inactive: includeInactive }
   });
+}
+
+async function listResolutionResources(resource, {
+  token, organizationUid, q, filters, limit = 100, offset = 0, signal, search = true
+}) {
+  const scopedFilters = [eq('uid_organization', requireUid(organizationUid, 'organização')), ...filters];
+  const params = { q: q?.trim() || undefined, limit, offset };
+  const root = `${DEVICES_ROOT}/${resource}`;
+  const result = search
+    ? await apiRequest(`${root}/search`, { method: 'POST', token, signal, body: { ...params, filters: scopedFilters } })
+    : await apiRequest(root, { token, signal, searchParams: { ...params, filters: filtersQuery(scopedFilters) } });
+  if (result?.items?.some(row => row.uid_organization !== organizationUid)) throw new ApiError(403, null, null);
+  return result;
+}
+
+export function listProtocolIdentities({ vendor, model, deviceUid, active, ...args }) {
+  const filters = [];
+  if (vendor?.trim()) filters.push(eq('vendor', vendor.trim()));
+  if (model?.trim()) filters.push(eq('model', model.trim()));
+  if (deviceUid) filters.push(eq('uid_device', requireUid(deviceUid, 'dispositivo')));
+  if (typeof active === 'boolean') filters.push(eq('active', String(active)));
+  return listResolutionResources('protocol-identities', { ...args, filters });
+}
+
+export function listTelemetryMappings({ manufacturerUid, protocolModel, active, ...args }) {
+  const filters = [];
+  if (manufacturerUid) filters.push(eq('uid_manufacturer', requireUid(manufacturerUid, 'fabricante')));
+  if (protocolModel?.trim()) filters.push(eq('protocol_model', protocolModel.trim()));
+  if (typeof active === 'boolean') filters.push(eq('active', String(active)));
+  return listResolutionResources('telemetry-mappings', { ...args, filters });
+}
+
+export async function getTelemetryMapping({ token, organizationUid, uid, signal }) {
+  requireUid(organizationUid, 'organização');
+  const result = await apiRequest(`${DEVICES_ROOT}/telemetry-mappings/${requireUid(uid, 'perfil')}`, { token, signal });
+  if (result?.uid !== uid || result.uid_organization !== organizationUid) throw new ApiError(404, null, null);
+  return result;
+}
+
+export async function getDeviceTelemetryOverride({ token, organizationUid, deviceUid, signal }) {
+  requireUid(organizationUid, 'organização');
+  const result = await apiRequest(`${DEVICES_ROOT}/${requireUid(deviceUid, 'dispositivo')}/telemetry-mapping`, { token, signal });
+  if (result?.uid_device !== deviceUid || result.uid_organization !== organizationUid) throw new ApiError(404, null, null);
+  return result;
 }
 
 export async function getDevice({ token, deviceUid, includeInactive, signal }) {

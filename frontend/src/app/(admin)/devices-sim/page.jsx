@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Badge, Button, FormSelect, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
+import { ProtocolIdentitiesTab, TelemetryMappingsTab } from '@/components/admin/DeviceResolutionTabs';
 import FormModal from '@/components/admin/FormModal';
 import ListToolbar from '@/components/admin/ListToolbar';
 import StatusBadge from '@/components/admin/StatusBadge';
@@ -22,16 +23,20 @@ const DevicesSimPage = () => {
   const canDevices = areaAllowed(areaAccess, 'devices');
   const canSims = areaAllowed(areaAccess, 'simcards');
   const [selectedTab, setTab] = useState('devices');
-  const tab = canDevices && canSims ? selectedTab : canDevices ? 'devices' : 'simcards';
+  const tab = !canDevices ? 'simcards' : selectedTab === 'simcards' && !canSims ? 'devices' : selectedTab;
   return (
     <div className="content-wrapper">
       <PageBreadcrumb title="Devices & SIM" subTitle1="Operação" />
       <Nav variant="tabs" activeKey={tab} onSelect={k => setTab(k)} className="mb-3">
         {canDevices && <Nav.Item><Nav.Link eventKey="devices">Devices</Nav.Link></Nav.Item>}
         {canSims && <Nav.Item><Nav.Link eventKey="simcards">SIM cards</Nav.Link></Nav.Item>}
+        {canDevices && <Nav.Item><Nav.Link eventKey="identities">Identidades de protocolo</Nav.Link></Nav.Item>}
+        {canDevices && <Nav.Item><Nav.Link eventKey="mappings">Mapeamentos de telemetria</Nav.Link></Nav.Item>}
       </Nav>
       {tab === 'devices' && canDevices && <DevicesTab canSims={canSims} />}
       {tab === 'simcards' && canSims && <SimcardsTab />}
+      {tab === 'identities' && canDevices && <ProtocolIdentitiesTab />}
+      {tab === 'mappings' && canDevices && <TelemetryMappingsTab />}
     </div>
   );
 };

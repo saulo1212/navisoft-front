@@ -131,7 +131,7 @@
 - [~] CRUD de devices (`/v1/admin/devices`) — `GET`/`PUT`/`DELETE`/lifecycle implementados contra o contrato confirmado; **criação (`POST`) ainda não homologa** — ver bloqueio abaixo. Situação (ativo/bloqueado/inativo) via `PATCH /devices/:uid/lifecycle` implementada, não testada ao vivo (não há device de teste criado).
 - [x] Senha do device: campo `device_pwd` implementado (omitir preserva, `null` limpa, string troca). **Neste ambiente de homolog retorna `422 device_encryption_not_configured`** — chave AES-256-GCM não configurada no servidor; não é algo para corrigir no frontend.
 - [x] SIM cards (`/v1/admin/simcards`) — CRUD **homologado ao vivo**: `GET` com `filters` (200), `POST` criar (201), `DELETE` (204). Vínculo (`/devices/linked-simcards`, troca via `PUT`, desvínculo via `DELETE`) implementado conforme contrato confirmado, mas não testado ao vivo (depende de ter um device real, ver bloqueio).
-- [ ] Protocol identities / telemetry mappings (`/v1/admin/devices/protocol-identities`, `/telemetry-mappings`) — listagem confirmada (`GET` + `POST /search`), mas **tela não desenhada nesta rodada** (fora do escopo mínimo desta fase) e ainda sujeita a SYS-RES-01 (replay) em aberto no backend.
+- [x] Consulta de identidades de protocolo e mapeamentos de telemetria em Devices & SIM, entregue na Fase 20.
 - [x] Página `devices-sim` integrada à API real — devices e SIM cards (list/create, offset via `useOffsetList`), situação via modal de lifecycle (igual assets/entities), vincular/trocar/desvincular SIM sem precisar desativar o device.
 
 **Iniciado em 2026-11-11, contrato confirmado em 2026-11-12, homologado parcialmente em 2026-11-12.** Levantamento contra `Insomnia_2026-11-11.json`, `API_CONTRACTS.md` e `frontend_05_devices_sim.md` encontrou lacunas — pedido em `api-contracts/solicitacao-referencias-devices-simcards.md`. O backend respondeu com 4 dúvidas (respondidas em `api-contracts/esclarecimento-devices-simcards-2026-11-12.md`) e depois mandou `DEVELOPER_GUIDE.md`/`TESTING_GUIDE.md` atualizados com o contrato completo (vínculo device↔SIM como recurso próprio com UID, lifecycle dedicado, `device_pwd` com semântica omitir/null/troca, `DELETE` físico, listagem de protocol-identities/telemetry-mappings). `devices.js`/`mock/devices.js`/`devices-sim/page.jsx` reescritos de acordo.
@@ -143,7 +143,7 @@
 2. 🟡 Trocar o catálogo estático mockado (`deviceCatalog`, em `mock/devices.js`) pelo catálogo real (`GET /devices/types`, `/manufacturers`, `/models` — já confirmados, mesmo padrão usado em `fleet.js` para assets) no formulário de criação da tela.
 3. 🟡 Depois que (1) resolver: homologar ao vivo criação de device, lifecycle (ativo/bloqueado/inativo com liberação de SIM), vincular/trocar/desvincular SIM no link real.
 4. 🟢 `device_pwd` só pode ser homologado quando o backend configurar a chave de criptografia neste ambiente (`device_encryption_not_configured`) — fora do nosso controle.
-5. 🟢 Protocol identities / telemetry mappings seguem fora do escopo desta fase (tela não desenhada) — decidir em outra rodada se entra como Fase 5b ou fica para depois, e checar status do SYS-RES-01 antes.
+5. 🟢 Identidades de protocolo e mapeamentos de telemetria ficaram fora da Fase 5. A Fase 20 registra a consulta e o reteste de SYS-RES-01.
 
 ---
 
@@ -363,9 +363,13 @@ No Chrome passaram o cadastro, a edição, a inativação, o início de execuç�
 
 ### Fase 20 — Identidades de protocolo e mapeamentos de telemetria
 
-1. [ ] Mapear os filtros, campos e limites de paginação de `GET` e `POST /search` para `/v1/admin/devices/protocol-identities` e `/v1/admin/devices/telemetry-mappings`.
-2. [ ] Adicionar abas de consulta em `/devices-sim` com busca, filtros, paginação e controle de acesso. Exibir identidades como texto para preservar zeros iniciais e distinguir perfis de mapeamento de substituições por dispositivo conforme a resposta da API.
-3. [ ] Conferir as duas listas no navegador com registros de teste, incluindo filtros e troca de contexto. Retestar criação e replay antes de liberar ações de escrita. Registrar o estado de SYS-RES-01 e validar o vínculo ao UID da rota antes de oferecer compartilhamento. [Contrato e testes de consulta](TESTING_GUIDE.md#L29) · [Ocorrência de replay](TESTING_GUIDE.md#L826)
+1. [x] Confirmar `GET` e `POST /search` para `/v1/admin/devices/protocol-identities` e `/v1/admin/devices/telemetry-mappings`. Ambas as rotas retornam `items`, `total`, `limit` e `offset`. O limite padrão é 100, inclusive quando enviado como zero. O máximo é 500, o deslocamento padrão é zero e limites acima de 500 ou valores negativos retornam 422. Em identidades, os filtros `uid`, `uid_organization`, `uid_device`, `vendor`, `model`, `device_number` e `active` aceitaram `eq`. Em perfis, aceitaram `uid`, `uid_organization`, `uid_manufacturer`, `protocol_model` e `active`. Os campos de texto de identidade e modelo também aceitaram `contains`.
+2. [x] Adicionar **Identidades de protocolo** e **Mapeamentos de telemetria** em `/devices-sim` para a área `devices`, com busca, filtros, paginação e organização selecionada. As identidades mantêm os zeros iniciais. A consulta de perfis apresenta as regras por fabricante e modelo. A consulta de substituições usa `GET /v1/admin/devices/:uid/telemetry-mapping` para o dispositivo selecionado pelo serial.
+3. [x] Homologar as consultas no Chrome com uma identidade com zeros iniciais, filtros, perfil com regras, substituição por dispositivo e troca de organização. O Chrome também confirmou a navegação de página com um total simulado e o bloqueio das abas em uma sessão simulada com acesso apenas a SIM cards. A API de homologação confirmou o deslocamento real, os filtros e a equivalência de GET e POST. [Contrato de consulta](TESTING_GUIDE.md#L29)
+
+No reteste HTTP de SYS-RES-01 em 24/11/2026, identidade e perfil retornaram 201 na criação e 200 com o mesmo UID e `replayed:true` no replay. O compartilhamento segue pendente de validação do vínculo ao UID da rota (SYS-IDEMP-01). [Correção do replay](TESTING_GUIDE.md#L764) · [Vínculo do compartilhamento](TESTING_GUIDE.md#L611)
+
+Passaram 138 testes locais, o lint dos arquivos alterados e o build do Next.js.
 
 **Aceite.** Um operador autorizado consegue localizar identidades e mapeamentos com filtros e paginação. A homologação de escrita tem aceite próprio após o reteste da API.
 
