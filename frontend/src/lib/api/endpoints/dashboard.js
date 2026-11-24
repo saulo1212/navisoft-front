@@ -39,3 +39,7 @@ export async function getDashboardTotal({ source, token, organizationUid, signal
   const total = response?.total;
   return Number.isSafeInteger(total) && total >= 0 ? total : null;
 }
+
+export function getDashboardTotals({ sources, token, organizationUid, signal }) {
+  return Promise.allSettled(sources.map(source => getDashboardTotal({ source, token, organizationUid, signal })));
+}

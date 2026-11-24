@@ -4,7 +4,7 @@ import { importBrowserModule } from './import-browser-module.mjs';
 
 process.env.NEXT_PUBLIC_API_BASE_URL = 'https://dashboard.example.test';
 const load = path => importBrowserModule(new URL(`../src/lib/${path}`, import.meta.url));
-const { getDashboardTotal } = await load('api/endpoints/dashboard.js');
+const { getDashboardTotal, getDashboardTotals } = await load('api/endpoints/dashboard.js');
 const { ApiError, isAccessDenied, readErrorMessage } = await load('api/errors.js');
 const { accessibleMenu, canAccessPath, isDemoPath, requiresOrganization } = await load('navigation/access.js');
 const organizationUid = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
@@ -52,6 +52,22 @@ test('financial counts preserve account scope and propagate denial', async t => 
   await assert.rejects(getDashboardTotal({ source: 'statements', token: 'test', organizationUid }), { status: 403 });
   assert.equal(calls[0].pathname, '/v1/admin/billing/statements');
   assert.equal(calls[0].search, '?limit=1&offset=0');
+});
+
+test('chart totals retain zeros and isolate missing totals and denied metrics', async t => {
+  t.mock.method(globalThis, 'fetch', async url => {
+    const path = new URL(url).pathname;
+    if (path.endsWith('/assets/search')) return Response.json({ total: 0 });
+    if (path.endsWith('/entities/search')) return Response.json({ code: 'area_not_allowed' }, { status: 403 });
+    return Response.json({ items: [] });
+  });
+  const [assets, entities, devices] = await getDashboardTotals({
+    sources: ['assets', 'entities', 'devices'], token: 'test', organizationUid
+  });
+  assert.deepEqual(assets, { status: 'fulfilled', value: 0 });
+  assert.equal(entities.status, 'rejected');
+  assert.equal(entities.reason.status, 403);
+  assert.deepEqual(devices, { status: 'fulfilled', value: null });
 });
 
 test('menu and direct paths share area checks, preserve global access and hide demos', () => {
