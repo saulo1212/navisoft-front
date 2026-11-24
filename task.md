@@ -52,7 +52,7 @@
 - [x] Contexto por organização (`GET /v1/users/me/organizations/{uid}/access-context`) → gates. **Verificado ao vivo.**
 - [x] Logout (`POST /v1/users/logout`).
 - [x] Segurança (`GET/PUT /v1/users/security`) — shape real `{require_mfa, effective_require_mfa, organization_require_mfa}`.
-- [x] Perfil (`GET/PUT /v1/users/profile`) — edição em `/account/profile`, com atualização do nome no menu da conta. Ver Fase 17.
+- [x] Perfil (`GET/PATCH /v1/users/profile`) — edição em `/account/profile`, com atualização do nome no menu da conta. Ver Fase 17.
 - [x] Recuperação de senha por e-mail ligada a `/v1/users/password-recovery` nas telas de solicitação e redefinição. A troca autenticada usa `PUT /v1/users/password` com a senha atual.
 - [x] Verificação de e-mail (`/v1/users/contact-verification/request|confirm`) — solicitação e confirmação em `/account/profile`. Ver Fase 17.
 - [x] Guards de rota por área e período (`AuthGuard` + `OrganizationGate` + banner temporal). **Guard verificado ao vivo.**
@@ -333,7 +333,7 @@ Começar pelo Perfil. Motoristas é a primeira tela nova de operação. As Fases
 
 ### Fase 17 — Meu perfil e verificação de contato
 
-1. [x] Mapear os campos de apresentação de `GET/PUT /v1/users/profile` e o contrato de e-mail em `POST /v1/users/contact-verification/request` e `/confirm`. O e-mail é o canal com exemplo na coleção e evidência HTTP no guia de testes.
+1. [x] Mapear os campos de apresentação de `GET/PATCH /v1/users/profile` e o contrato de e-mail em `POST /v1/users/contact-verification/request` e `/confirm`. O e-mail é o canal com exemplo na coleção e evidência HTTP no guia de testes.
 2. [x] Criar `/account/profile` no menu da conta, reutilizar `fetchProfile` e `updateProfile` e recarregar o perfil depois de salvar. Redirecionar a rota legada para a tela de Meu perfil.
 3. [x] Implementar solicitação, confirmação e reenvio de e-mail. Tratar contato ausente, contato já verificado, desafio inválido ou expirado e intervalo de reenvio informado pela API.
 4. [~] Validar no navegador com uma conta de teste e um destino controlado. O lint e 14 testes locais passaram. Os três testes específicos de Perfil rodam com `cd frontend` e `node scripts/account-profile.test.mjs`. Com a API simulada, o Chrome confirmou o redirecionamento da rota legada, o salvamento, a atualização do menu, a persistência após recarregar, a espera para reenvio, a rejeição de token inválido e a confirmação com token válido. A rota de recuperação de senha respondeu 200. A homologação com conta e e-mail reais segue pendente.
@@ -342,7 +342,7 @@ Começar pelo Perfil. Motoristas é a primeira tela nova de operação. As Fases
 
 ### Fase 18 — Motoristas e seleção no Checklist
 
-1. [x] Integrar cadastro, detalhe, edição parcial, inativação e busca em `/v1/admin/entities/drivers`. A API implantada retorna `items`, `total`, `limit` e `offset`. A busca envia a organização selecionada, aplica os escopos da sessão no backend e pode incluir inativos. [Contrato de Motoristas](TESTING_GUIDE.md#L3647)
+1. [x] Integrar cadastro, detalhe, edição parcial, inativação e busca em `/v1/admin/entities/drivers`. A API implantada retorna `items`, `total`, `limit` e `offset`. A busca envia a organização selecionada, aplica os escopos da sessão no backend e pode incluir inativos. No cadastro, data de nascimento e contrato interno são opcionais. [Contrato de Motoristas](TESTING_GUIDE.md#L3647)
 2. [x] Liberar `/motoristas` e o detalhe pela área `drivers`. A troca de organização desmonta a lista e os formulários e cancela as consultas pendentes. O detalhe confere a organização retornada pela API antes de apresentar o registro ou permitir alterações.
 3. [x] Reutilizar a busca em `/checklists/execucoes`. A interface mostra motoristas ativos do contexto selecionado, confirma o registro antes de iniciar e envia `uid_driver` no corpo da execução.
 4. [~] Homologação HTTP em 24/11/2026 no ambiente de teste. Cadastro (201), replay (200), busca por nome e contrato, paginação, edição (200), início (201) e encerramento do checklist (200) passaram. Depois da inativação (200), a busca de ativos ficou vazia e o detalhe com `include_inactive` manteve o histórico. A busca sem sessão retornou 401 e a troca de organização excluiu o registro da busca e bloqueou seu detalhe no cliente. Os tokens disponíveis para perfis restritos retornaram 401, o que deixa a validação de permissões granulares em aberto.
@@ -393,6 +393,18 @@ No Chrome, com envio e ativação simulados, passaram a confirmação do destina
 **Reteste de criação de rotas em 24/11/2026.** Um `POST /v1/admin/geo/routes` na organização de homologação, com dois pontos válidos, retornou `503 geo_storage_unavailable` (request ID `93626d50-4c72-4967-af08-3ceb0c8ddb9b`). A primeira conferência também retornou 503. A busca posterior pelo prefixo da fixture retornou 200 sem registros (request ID `cec636b3-8647-4382-9209-8c9124fa4d2a`). [Histórico do defeito em rotas](api-contracts/solicitacao-correcao-geo-routes-2026-11-15.md)
 
 **Aceite.** A pessoa consulta um endereço ou uma coordenada e visualiza o resultado no mapa da Geografia.
+
+### Reteste autenticado das Fases 17 a 22 em 24/11/2026
+
+O login administrativo, o status da sessão e o contexto de Admin Homolog Client retornaram 200.
+
+- **Fase 17.** `PUT /v1/users/profile` retornou 404. `PATCH /v1/users/profile` retornou 200 e preservou os campos de apresentação omitidos (request ID `b0a841fb-f986-43af-8aac-e5667a50b8fe`). O frontend usa PATCH. O perfil retornado não fornece e-mail nem seu estado de verificação. A confirmação com desafio fictício retornou 422 `verification_token_invalid_or_expired`.
+- **Fase 18.** O backend aceitou o cadastro com nome, organização e escopo (201). Data de nascimento e contrato interno passaram a ser opcionais na tela. Busca por organização, edição, início e encerramento do checklist e inativação da fixture passaram.
+- **Fases 19 e 20.** O histórico da Frota retornou quatro eventos, representados como três movimentações. Passaram as buscas GET e POST de identidades e perfis, o detalhe das regras e a consulta de substituições por dispositivo. A API devolveu identidades com zeros iniciais como texto.
+- **Fase 21.** Passaram a leitura do gate e a localização do administrador pendente. O convite para um administrador inexistente retornou 403. Validação e conclusão com convite fictício retornaram 422. A entrega de um convite real e a confirmação de e-mail da Fase 17 ainda requerem uma caixa de teste controlada.
+- **Fase 22.** Admin Homolog Client continua sem vínculo Geocode, e o contrato das duas buscas segue pendente. A criação isolada de rota retornou 503 `geo_storage_unavailable` (request ID `3b6b948c-3a08-4890-a390-6a6396668314`). A consulta posterior da fixture retornou 200 com total zero (request ID `53d16480-50ac-4ab1-baa7-f27433bf0cf3`).
+
+No Chrome, com login real, passaram o redirecionamento do perfil legado, a edição e a persistência do título do perfil, o cadastro de motorista só com nome e sua seleção no checklist, a troca no histórico da Frota, as consultas de telemetria, a abertura da confirmação de convite e a rejeição de um link inválido, além da prévia de coordenadas. O título original foi restaurado e o motorista de teste foi inativado. Passaram 145 testes locais, o lint dos arquivos alterados e o build do Next.js.
 
 ---
 

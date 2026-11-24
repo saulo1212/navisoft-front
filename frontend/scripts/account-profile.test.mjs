@@ -37,7 +37,7 @@ test('profile and verification use the current session and the challenge assigne
   assert.equal(result.verified, true);
   assert.deepEqual(calls.map(call => [call.method, call.path, call.body && JSON.parse(call.body)]), [
     ['GET', '/v1/users/profile', undefined],
-    ['PUT', '/v1/users/profile', { display_name: 'Nome de teste' }],
+    ['PATCH', '/v1/users/profile', { display_name: 'Nome de teste' }],
     ['POST', '/v1/users/contact-verification/request', { channel: 'email' }],
     ['POST', '/v1/users/contact-verification/confirm', { channel: 'email', challenge_id: 'challenge-test', token: 'proof-test' }]
   ]);

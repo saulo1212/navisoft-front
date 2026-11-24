@@ -49,7 +49,7 @@ export async function fetchProfile({ token, signal }) {
 }
 
 export async function updateProfile({ token, patch, signal }) {
-  return apiRequest('/v1/users/profile', { method: 'PUT', token, body: patch, signal });
+  return apiRequest('/v1/users/profile', { method: 'PATCH', token, body: patch, signal });
 }
 
 // Troca de senha autenticada com a senha atual.

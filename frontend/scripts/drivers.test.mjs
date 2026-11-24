@@ -80,3 +80,12 @@ test('creation uses idempotency and preserves leading zeros; inactivation is a p
     assert.deepEqual(calls[2].body, { active: false });
   }, driver);
 });
+
+test('creation only requires the name and omits blank optional fields', async () => {
+  await capture(async calls => {
+    const fields = { name: ' Ana ', birth_date: '', internal_contract_number: ' ' };
+    await api.createDriver({ ...args, fields, idempotencyKey: uid });
+    assert.deepEqual(calls[0].body, { name: 'Ana', uid_organization: organizationUid, scopes: [{}] });
+    assert.throws(() => api.driverFields({ name: ' ' }), /nome/);
+  }, driver);
+});

@@ -71,7 +71,7 @@ function Drivers() {
       pagination={{ page: list.page, pageCount: list.pageCount, total: list.total, onPage: list.goToPage }} />
     {form && <FormModal show onHide={() => setForm(null)} title="Novo motorista" onSubmit={submit}
       submitting={action.busy} submitDisabled={createDenied} error={action.error} submitLabel="Cadastrar">
-      <DriverFields value={form} onChange={setForm} required />
+      <DriverFields value={form} onChange={setForm} />
     </FormModal>}
   </>;
 }
