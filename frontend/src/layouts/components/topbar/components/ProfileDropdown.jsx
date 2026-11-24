@@ -41,10 +41,14 @@ const ProfileDropdown = () => {
                         </span>
                         <div className="info-card-text">
                             <div className="fs-lg">Minha conta</div>
+                            {account?.name && <div className="small text-break">{account.name}</div>}
                         </div>
                     </div>
                 </div>
                 <hr className="m-0"></hr>
+                <DropdownItem as={Link} href="/account/profile">
+                    <span>Meu perfil</span>
+                </DropdownItem>
                 <DropdownItem as={Link} href="/account/security">
                     <span>Segurança da conta</span>
                 </DropdownItem>

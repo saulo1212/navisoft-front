@@ -52,9 +52,9 @@
 - [x] Contexto por organização (`GET /v1/users/me/organizations/{uid}/access-context`) → gates. **Verificado ao vivo.**
 - [x] Logout (`POST /v1/users/logout`).
 - [x] Segurança (`GET/PUT /v1/users/security`) — shape real `{require_mfa, effective_require_mfa, organization_require_mfa}`.
-- [x] Perfil (`GET/PUT /v1/users/profile`) — camada de API pronta; `display_name` já alimenta o `account`. UI dedicada de edição: pendente.
-- [N/A] Recuperação de senha por e-mail **não existe na API** (só `PUT /v1/users/password` autenticada, implementada como `changePassword`). `forgot-password`/`reset-password` seguem telas de template não ligadas.
-- [x] Verificação de contato (`/v1/users/contact-verification/request|confirm`) — camada de API pronta; UI dedicada: pendente.
+- [x] Perfil (`GET/PUT /v1/users/profile`) — edição em `/account/profile`, com atualização do nome no menu da conta. Ver Fase 17.
+- [x] Recuperação de senha por e-mail ligada a `/v1/users/password-recovery` nas telas de solicitação e redefinição. A troca autenticada usa `PUT /v1/users/password` com a senha atual.
+- [x] Verificação de e-mail (`/v1/users/contact-verification/request|confirm`) — solicitação e confirmação em `/account/profile`. Ver Fase 17.
 - [x] Guards de rota por área e período (`AuthGuard` + `OrganizationGate` + banner temporal). **Guard verificado ao vivo.**
 
 **Infra adicional (necessária p/ modo real no browser):** a API não envia CORS e exige User-Agent de navegador, então o browser não a chama direto. Criado **proxy same-origin** `src/app/api/navisoft/[...path]/route.js` (server-side, injeta UA, repassa auth); `NEXT_PUBLIC_API_BASE_URL=/api/navisoft` e `NAVISOFT_API_URL` (só servidor) apontam para o upstream.
@@ -72,7 +72,7 @@
 - [x] Grupos de permissões (`/v1/admin/groups-permissions`) — listagem agrupada + contadores + associar (`/grupos-permissoes`). **Verificado ao vivo** (50 associações reais).
 - [x] Situações (`/v1/admin/situations`) — CRUD completo (`/situacoes`), badge "sistema" p/ `locked`. **Listagem verificada ao vivo** (5 situações reais).
 - [~] Controle de acesso / perfis (Primary/Administrator/Secondary/Basic) na UI de usuários — parcial (contadores por grupo em Grupos & Permissões). Gestão por usuário depende do módulo de Usuários (**Fase 3**).
-- [~] Tela `access-control/user-profile` ligada a dados reais — adiada p/ **Fase 3** (requer módulo de Usuários).
+- [x] Tela legada `/access-control/user-profile` redireciona para Meu perfil, conforme a Fase 17.
 
 **Infra:** fábrica `createResourceApi` usada em `situations`/`groups-permissions`; `useOffsetList` nas listagens; toasts (`notifyError/Success`) nas mutações.
 
@@ -324,6 +324,63 @@
 **Validação local:** 124 testes aprovados, lint dos novos painéis e guardas aprovado e exportação para GitHub Pages com 163 páginas geradas. Foram conferidos os recursos estáticos dos três painéis e os redirecionamentos das duas páginas demonstrativas de autenticação. O lint ampliado ainda aponta ocorrências preexistentes nos hooks de paginação e no controle de menu móvel.
 
 **Homologação:** a tentativa adicional de abrir uma sessão com a conta dedicada de teste também retornou 401 (request ID `3d55b460-c204-43f5-9eb1-81a7db47e202`). A rodada autenticada, as escritas e a matriz cross-tenant continuam pendentes.
+
+---
+
+## Próximas integrações — Fases 17 a 22
+
+Começar pelo Perfil. Motoristas é a primeira tela nova de operação. As Fases 17 a 20 podem avançar com os contratos disponíveis, começando pela consulta na Fase 20. As fases de ativação e geocodificação começam pela confirmação das dependências da API. [Coleção do Insomnia de 11/11](Insomnia_2026-11-11.json) · [Guia de testes da API](TESTING_GUIDE.md) · [Pendências do reteste de 19/11](api-contracts/pendencias-homologacao-api-navisoft.md)
+
+### Fase 17 — Meu perfil e verificação de contato
+
+1. [x] Mapear os campos de apresentação de `GET/PUT /v1/users/profile` e o contrato de e-mail em `POST /v1/users/contact-verification/request` e `/confirm`. O e-mail é o canal com exemplo na coleção e evidência HTTP no guia de testes.
+2. [x] Criar `/account/profile` no menu da conta, reutilizar `fetchProfile` e `updateProfile` e recarregar o perfil depois de salvar. Redirecionar a rota legada para a tela de Meu perfil.
+3. [x] Implementar solicitação, confirmação e reenvio de e-mail. Tratar contato ausente, contato já verificado, desafio inválido ou expirado e intervalo de reenvio informado pela API.
+4. [~] Validar no navegador com uma conta de teste e um destino controlado. O lint e 14 testes locais passaram. Os três testes específicos de Perfil rodam com `cd frontend` e `node scripts/account-profile.test.mjs`. Com a API simulada, o Chrome confirmou o redirecionamento da rota legada, o salvamento, a atualização do menu, a persistência após recarregar, a espera para reenvio, a rejeição de token inválido e a confirmação com token válido. A rota de recuperação de senha respondeu 200. A homologação com conta e e-mail reais segue pendente.
+
+**Aceite.** A pessoa autenticada edita o próprio perfil, vê os dados atualizados no menu e consegue verificar um contato de teste.
+
+### Fase 18 — Motoristas e seleção no Checklist
+
+1. [ ] Mapear cadastro, detalhe, atualização e busca em `/v1/admin/entities/drivers`, incluindo filtros, paginação e permissão por organização e escopo. Reusar os padrões de cliente HTTP e listas do front. [Contrato de Motoristas](TESTING_GUIDE.md#L3647)
+2. [ ] Criar `/motoristas` e o detalhe do registro com busca, cadastro, edição e inativação. Condicionar menu, rota e ações ao contexto de acesso. Limpar a lista e o formulário ao trocar de organização.
+3. [ ] Reutilizar a busca de motoristas em `/checklists/execucoes`, para criar uma execução sem digitar o UID do motorista. Usar o mesmo escopo organizacional da tela e enviar `uid_driver` conforme o contrato de execução.
+4. [ ] Homologar cadastro, busca, edição, inativação e início de execução com motorista de teste. Cobrir acesso negado e troca de organização. Grupos, habilitações, credenciais e exames podem entrar após a entrega do cadastro básico. [Evidência de cadastro e inativação](api-contracts/fase8-checklists.md#L42)
+
+**Aceite.** Um operador autorizado gerencia motoristas no escopo selecionado e consegue escolher um motorista elegível para iniciar um Checklist.
+
+### Fase 19 — Histórico de dispositivos na Frota
+
+1. [ ] Confirmar o formato da resposta, a ordenação e a paginação disponível de `GET /v1/admin/assets/:uid/link_history`. Reutilizar `listLinkHistory` de `fleet.js`.
+2. [ ] Adicionar uma aba de leitura no detalhe do ativo. Mostrar data, operação, slot e dispositivo anterior ou atual conforme os dados disponíveis. Tratar carregamento, histórico vazio e falha de consulta.
+3. [ ] Conferir no navegador um ativo de teste com movimentações conhecidas. Validar o acesso a partir de outra organização e a limpeza dos dados ao trocar de ativo. [Contrato de histórico e slots](TESTING_GUIDE.md#L4000)
+
+**Aceite.** Um operador autorizado consegue consultar instalações, trocas e retiradas registradas para o ativo selecionado.
+
+### Fase 20 — Identidades de protocolo e mapeamentos de telemetria
+
+1. [ ] Mapear os filtros, campos e limites de paginação de `GET` e `POST /search` para `/v1/admin/devices/protocol-identities` e `/v1/admin/devices/telemetry-mappings`.
+2. [ ] Adicionar abas de consulta em `/devices-sim` com busca, filtros, paginação e controle de acesso. Exibir identidades como texto para preservar zeros iniciais e distinguir perfis de mapeamento de substituições por dispositivo conforme a resposta da API.
+3. [ ] Conferir as duas listas no navegador com registros de teste, incluindo filtros e troca de contexto. Retestar criação e replay antes de liberar ações de escrita. Registrar o estado de SYS-RES-01 e validar o vínculo ao UID da rota antes de oferecer compartilhamento. [Contrato e testes de consulta](TESTING_GUIDE.md#L29) · [Ocorrência de replay](TESTING_GUIDE.md#L826)
+
+**Aceite.** Um operador autorizado consegue localizar identidades e mapeamentos com filtros e paginação. A homologação de escrita tem aceite próprio após o reteste da API.
+
+### Fase 21 — Convite e primeiro acesso
+
+1. [ ] Confirmar com o backend o escopo do INT-02, o deploy das rotas de convite e ativação e a disponibilidade do provedor de notificações no ambiente de teste.
+2. [ ] Integrar o envio do convite ao administrador no detalhe da organização, conforme as permissões e o estado elegível da conta. Usar `POST /v1/admin/organizations/:uid/admins/:uid_admin/activation-invitation`.
+3. [ ] Criar a tela pública de primeiro acesso para validar o token, definir a senha via `/v1/users/activation/complete` e encaminhar para o login. Tratar token inválido, expirado e já utilizado.
+4. [ ] Validar com organização, administrador pendente e caixa de e-mail de teste. Conferir o recebimento, o uso único do link e o primeiro login após ativar. [Rotas e dependências de ativação](DEVELOPER_GUIDE.md#L31)
+
+**Aceite.** Um operador autorizado envia o convite e o administrador convidado ativa a conta pelo link recebido e entra na plataforma.
+
+### Fase 22 — Busca de endereços em Geografia
+
+1. [ ] Obter o contrato das buscas por endereço e por coordenadas, incluindo caminhos, escopo de organização, autorização, formatos de retorno e erros. Confirmar a disponibilidade do serviço em homologação. [Pendências de Geografia](api-contracts/solicitacao-referencias-geografia.md)
+2. [ ] Integrar as duas buscas à aba **Buscar endereço** em `/geografia`. Permitir selecionar um resultado e visualizar a posição no mapa existente.
+3. [ ] Validar as duas direções da busca com endereços e coordenadas conhecidos. Cobrir busca vazia, ausência de resultados e serviço indisponível. Registrar separadamente o reteste do `503 geo_storage_unavailable` na criação de rotas.
+
+**Aceite.** A pessoa consulta um endereço ou uma coordenada e visualiza o resultado no mapa da Geografia.
 
 ---
 

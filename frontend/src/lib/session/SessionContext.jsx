@@ -50,7 +50,7 @@ export function SessionProvider({ children }) {
       const mode = ctx?.session?.access_period?.mode;
       const temporalMode = mode === 'warn' || mode === 'block' ? mode : 'none';
       setState(prev => ({
-        ...prev, phase: 'authenticated', token, account, areaAccess: ctx.area_access,
+        ...prev, phase: 'authenticated', token, account: account ?? prev.account, areaAccess: ctx.area_access,
         temporalMode, error: null
       }));
     } catch (error) {
@@ -59,7 +59,7 @@ export function SessionProvider({ children }) {
         resetToUnauthenticated('relogin_required');
         return;
       }
-      setState(prev => ({ ...prev, phase: 'authenticated', token, account, areaAccess: null, error: 'access_context_unavailable' }));
+      setState(prev => ({ ...prev, phase: 'authenticated', token, account: account ?? prev.account, areaAccess: null, error: 'access_context_unavailable' }));
     }
   }, [resetToUnauthenticated]);
 
@@ -146,8 +146,23 @@ export function SessionProvider({ children }) {
 
   const refreshAccessContext = useCallback(async () => {
     if (!state.token) return;
-    await loadAccessContext(state.token, state.account);
-  }, [state.token, state.account, loadAccessContext]);
+    await loadAccessContext(state.token);
+  }, [state.token, loadAccessContext]);
+
+  const syncAccountProfile = useCallback((token, profile) => {
+    const name = profile?.display_name;
+    if (typeof name !== 'string') return;
+    setState(prev => {
+      if (prev.phase !== 'authenticated' || prev.token !== token || !prev.account) return prev;
+      const account = {
+        ...prev.account,
+        name: name || prev.account.organizationName || 'Usuário',
+        email: Object.hasOwn(profile, 'email') ? profile.email : prev.account.email
+      };
+      if (account.name === prev.account.name && account.email === prev.account.email) return prev;
+      return { ...prev, account };
+    });
+  }, []);
 
   // Ao focar/reexibir a aba, reavaliar o contexto de acesso: scopes/período
   // podem ter mudado no servidor (docs 01 — não há evento/SSE que cubra tudo).
@@ -214,8 +229,8 @@ export function SessionProvider({ children }) {
     orgGates: currentOrgGates?.data ?? null,
     orgGatesLoading: Boolean(orgContextKey && !currentOrgGates),
     orgGatesError: currentOrgGates?.error ?? null,
-    login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization, retryOrganizationAccess
-  }), [state, selectedOrganizationUid, currentOrgGates, orgContextKey, login, confirmMfa, logout, refreshAccessContext, selectOrganization, clearOrganization, retryOrganizationAccess]);
+    login, confirmMfa, logout, refreshAccessContext, syncAccountProfile, selectOrganization, clearOrganization, retryOrganizationAccess
+  }), [state, selectedOrganizationUid, currentOrgGates, orgContextKey, login, confirmMfa, logout, refreshAccessContext, syncAccountProfile, selectOrganization, clearOrganization, retryOrganizationAccess]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }

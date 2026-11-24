@@ -48,25 +48,24 @@ export async function fetchProfile({ token, signal }) {
   return apiRequest('/v1/users/profile', { token, signal });
 }
 
-export async function updateProfile({ token, patch }) {
-  return apiRequest('/v1/users/profile', { method: 'PUT', token, body: patch });
+export async function updateProfile({ token, patch, signal }) {
+  return apiRequest('/v1/users/profile', { method: 'PUT', token, body: patch, signal });
 }
 
-// Troca de senha autenticada. A API NÃO expõe recuperação por e-mail
-// (forgot/reset) nesta versão — apenas esta troca com a senha atual.
+// Troca de senha autenticada com a senha atual.
 export async function changePassword({ token, currentPassword, newPassword }) {
   return apiRequest('/v1/users/password', {
     method: 'PUT', token, body: { current_password: currentPassword, new_password: newPassword }
   });
 }
 
-export async function requestContactVerification({ token, channel = 'email' }) {
-  return apiRequest('/v1/users/contact-verification/request', { method: 'POST', token, body: { channel } });
+export async function requestContactVerification({ token, channel = 'email', signal }) {
+  return apiRequest('/v1/users/contact-verification/request', { method: 'POST', token, body: { channel }, signal });
 }
 
-export async function confirmContactVerification({ token, channel = 'email', challengeId, verificationToken }) {
+export async function confirmContactVerification({ token, channel = 'email', challengeId, verificationToken, signal }) {
   return apiRequest('/v1/users/contact-verification/confirm', {
-    method: 'POST', token, body: { channel, challenge_id: challengeId, token: verificationToken }
+    method: 'POST', token, body: { channel, challenge_id: challengeId, token: verificationToken }, signal
   });
 }
 

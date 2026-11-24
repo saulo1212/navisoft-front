@@ -242,10 +242,6 @@ export const menuItems = [{
       label: '500 Internal Server',
       url: '/error/500'
     }]
-  }, {
-    key: 'user-profile',
-    label: 'User Profile',
-    url: '/access-control/user-profile'
   }]
 }, {
   icon: '/icons/sprite.svg#message-square',

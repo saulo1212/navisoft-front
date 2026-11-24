@@ -66,6 +66,7 @@ export async function apiRequest(path, { method = 'GET', body, rawBody, headers:
   if (!response.ok) {
     const code = payload?.error ?? payload?.code ?? null;
     const err = new ApiError(response.status, code, payload);
+    if (response.status === 429) err.retryAfter = response.headers.get('Retry-After');
     if (notifyUnauthorized && err.isReloginRequired && unauthorizedHandler) {
       try { unauthorizedHandler(err); } catch { /* não deixar o handler mascarar o erro original */ }
     }
