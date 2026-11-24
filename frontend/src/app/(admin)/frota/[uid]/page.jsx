@@ -3,8 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useDetailParam } from '@/lib/navigation/useDetailParam';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Button, Card, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Form, Row, Spinner, Tab, Tabs } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import AssetLinkHistory from '@/components/admin/AssetLinkHistory';
 import FormModal from '@/components/admin/FormModal';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import { PlatformImage } from '@/components/admin/PlatformLogo';
@@ -15,14 +16,13 @@ import {
   patchAsset, patchAssetLifecycle, removeParticipation
 } from '@/lib/api/endpoints/fleet';
 import { situationsApi } from '@/lib/api/endpoints/situations';
-import { errorMessage } from '@/lib/api/errors';
+import { ApiError, errorMessage } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
 import { ASSET_PROFILE_LABELS, situationBadgeStatus, situationName } from '@/lib/domain/fleet';
 
-const AssetDetailInner = () => {
-  const uid = useDetailParam('uid');
+const AssetDetailInner = ({ uid }) => {
   const router = useRouter();
   const { token, selectedOrganizationUid: orgUid } = useSession();
 
@@ -58,19 +58,24 @@ const AssetDetailInner = () => {
     } catch { setParticipations([]); }
   }, [token, orgUid, uid]);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const load = useCallback(async (signal) => {
+    if (!signal) {
+      setLoading(true);
+      setError(null);
+    }
     try {
-      const detail = await getAsset({ token, assetUid: uid });
+      const detail = await getAsset({ token, assetUid: uid, signal });
+      if (signal?.aborted) return;
+      if (detail?.uid_organization !== orgUid) throw new ApiError(404, null, null);
       setAsset(detail);
       const [sit, fuelRes, grpRes, slotRes, modelRes] = await Promise.all([
         situationsApi.list({ token, limit: 100 }).catch(() => null),
         listFuels({ token }).catch(() => null),
         listGroups({ token, organizationUid: orgUid }).catch(() => null),
-        listDeviceSlots({ token, assetUid: uid }).catch(() => null),
+        listDeviceSlots({ token, assetUid: uid, signal }).catch(() => null),
         listAssetModels({ token }).catch(() => null)
       ]);
+      if (signal?.aborted) return;
       if (sit) { const m = {}; for (const s of normalizeList(sit).items) m[s.uid] = s; setSituations(m); }
       setFuels(fuelRes ? normalizeList(fuelRes).items : []);
       setGroups(grpRes ? normalizeList(grpRes).items : []);
@@ -83,13 +88,17 @@ const AssetDetailInner = () => {
       }
       await loadParticipations();
     } catch (err) {
-      setError(errorMessage(err));
+      if (!signal?.aborted) setError(errorMessage(err));
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   }, [token, uid, orgUid, loadParticipations]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const controller = new AbortController();
+    queueMicrotask(() => { if (!controller.signal.aborted) void load(controller.signal); });
+    return () => controller.abort();
+  }, [load]);
 
   const openEdit = () => {
     setForm({
@@ -172,10 +181,7 @@ const AssetDetailInner = () => {
   const assignedGroupUids = new Set(participations.map(p => p.uid_group));
   const addableGroups = groups.filter(g => !assignedGroupUids.has(g.uid));
 
-  return (
-    <div className="content-wrapper">
-      <PageBreadcrumb title={asset.identification} subTitle1="Operação" subTitle2="Frota" />
-
+  const details = (
       <Row className="g-3">
         <Col lg={6}>
           <Card className="panel">
@@ -250,6 +256,20 @@ const AssetDetailInner = () => {
           </Card>
         </Col>
       </Row>
+  );
+
+  return (
+    <div className="content-wrapper">
+      <PageBreadcrumb title={asset.identification} subTitle1="Operação" subTitle2="Frota" />
+
+      <Tabs id="asset-detail-tabs" defaultActiveKey="details" className="mb-3" mountOnEnter unmountOnExit transition={false}>
+        <Tab eventKey="details" title="Detalhes">
+          {details}
+        </Tab>
+        <Tab eventKey="device-history" title="Histórico de dispositivos">
+          <AssetLinkHistory token={token} assetUid={asset.uid} />
+        </Tab>
+      </Tabs>
 
       <FormModal show={editOpen} onHide={() => setEditOpen(false)} title="Editar asset" onSubmit={saveEdit} submitting={saving}>
         {form && (
@@ -305,10 +325,9 @@ const AssetDetailInner = () => {
   );
 };
 
-const AssetDetailPage = () => (
-  <OrganizationGate>
-    <AssetDetailInner />
-  </OrganizationGate>
-);
+const AssetDetailPage = () => {
+  const uid = useDetailParam('uid');
+  return <OrganizationGate><AssetDetailInner key={uid} uid={uid} /></OrganizationGate>;
+};
 
 export default AssetDetailPage;

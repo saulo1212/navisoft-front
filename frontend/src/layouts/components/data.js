@@ -34,6 +34,11 @@ export const menuItems = [{
   label: 'Entidades',
   url: '/entidades'
 }, {
+  icon: '/icons/sprite.svg#user',
+  key: 'motoristas',
+  label: 'Motoristas',
+  url: '/motoristas'
+}, {
   icon: '/icons/sprite.svg#truck',
   key: 'frota',
   label: 'Frota',

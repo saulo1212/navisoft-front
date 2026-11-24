@@ -118,7 +118,7 @@
 
 **Resolvido nesta rodada (ver `api-contracts/retorno-insomnia-2026-11-10.md` → backend respondeu em `Navisoft_Fase4_Handoff_Frontend.md`, 2026-11-11):** os 4 pontos 🔴/🟡 que travavam a UI — listagem de `group-assets` e `groups` (já estavam certos no palpite anterior, apenas confirmados), lifecycle de entity/asset, e catálogos de `models`/`manufacturers`/`types`. Endereços (listagem/PATCH/DELETE) também confirmados.
 
-**Pendências/limites (fora desta entrega):** FIPE (sync/valuation) não entrou na UI; `technical-package` e `link_history` não entraram na UI.
+**Pendências/limites da Fase 4:** FIPE (sync/valuation) e `technical-package` ficaram fora da entrega. O histórico de vínculos foi tratado na Fase 19.
 
 **Bug do `DELETE /v1/admin/addresses/:uid` (reportado em `api-contracts/retorno-insomnia-2026-11-11.md`) — corrigido.** Confirmado ao vivo em 2026-11-11 (direto no Insomnia, método DELETE em `/v1/admin/addresses/:uid?uid_organization=...`): 204/sucesso, sem o `404 directory_record_not_found` anterior. Fase 4 considerada homologada ponta a ponta (criar/buscar/editar/excluir endereço, lifecycle de entity/asset, delete de entity/asset, catálogos de group-assets/groups/models/manufacturers/types).
 
@@ -342,18 +342,22 @@ Começar pelo Perfil. Motoristas é a primeira tela nova de operação. As Fases
 
 ### Fase 18 — Motoristas e seleção no Checklist
 
-1. [ ] Mapear cadastro, detalhe, atualização e busca em `/v1/admin/entities/drivers`, incluindo filtros, paginação e permissão por organização e escopo. Reusar os padrões de cliente HTTP e listas do front. [Contrato de Motoristas](TESTING_GUIDE.md#L3647)
-2. [ ] Criar `/motoristas` e o detalhe do registro com busca, cadastro, edição e inativação. Condicionar menu, rota e ações ao contexto de acesso. Limpar a lista e o formulário ao trocar de organização.
-3. [ ] Reutilizar a busca de motoristas em `/checklists/execucoes`, para criar uma execução sem digitar o UID do motorista. Usar o mesmo escopo organizacional da tela e enviar `uid_driver` conforme o contrato de execução.
-4. [ ] Homologar cadastro, busca, edição, inativação e início de execução com motorista de teste. Cobrir acesso negado e troca de organização. Grupos, habilitações, credenciais e exames podem entrar após a entrega do cadastro básico. [Evidência de cadastro e inativação](api-contracts/fase8-checklists.md#L42)
+1. [x] Integrar cadastro, detalhe, edição parcial, inativação e busca em `/v1/admin/entities/drivers`. A API implantada retorna `items`, `total`, `limit` e `offset`. A busca envia a organização selecionada, aplica os escopos da sessão no backend e pode incluir inativos. [Contrato de Motoristas](TESTING_GUIDE.md#L3647)
+2. [x] Liberar `/motoristas` e o detalhe pela área `drivers`. A troca de organização desmonta a lista e os formulários e cancela as consultas pendentes. O detalhe confere a organização retornada pela API antes de apresentar o registro ou permitir alterações.
+3. [x] Reutilizar a busca em `/checklists/execucoes`. A interface mostra motoristas ativos do contexto selecionado, confirma o registro antes de iniciar e envia `uid_driver` no corpo da execução.
+4. [~] Homologação HTTP em 24/11/2026 no ambiente de teste. Cadastro (201), replay (200), busca por nome e contrato, paginação, edição (200), início (201) e encerramento do checklist (200) passaram. Depois da inativação (200), a busca de ativos ficou vazia e o detalhe com `include_inactive` manteve o histórico. A busca sem sessão retornou 401 e a troca de organização excluiu o registro da busca e bloqueou seu detalhe no cliente. Os tokens disponíveis para perfis restritos retornaram 401, o que deixa a validação de permissões granulares em aberto.
+
+No Chrome passaram o cadastro, a edição, a inativação, o início de execução, a limpeza da seleção ao trocar de organização e o bloqueio simulado da área `drivers`. A API retornou `404 checklist_run_not_found` ao acessar a execução após inativar o motorista. A reativação temporária permitiu encerrar a execução (request ID `823208e0-9673-4292-8926-b521e40c1e19`). O motorista de teste voltou a ficar inativo.
 
 **Aceite.** Um operador autorizado gerencia motoristas no escopo selecionado e consegue escolher um motorista elegível para iniciar um Checklist.
 
 ### Fase 19 — Histórico de dispositivos na Frota
 
-1. [ ] Confirmar o formato da resposta, a ordenação e a paginação disponível de `GET /v1/admin/assets/:uid/link_history`. Reutilizar `listLinkHistory` de `fleet.js`.
-2. [ ] Adicionar uma aba de leitura no detalhe do ativo. Mostrar data, operação, slot e dispositivo anterior ou atual conforme os dados disponíveis. Tratar carregamento, histórico vazio e falha de consulta.
-3. [ ] Conferir no navegador um ativo de teste com movimentações conhecidas. Validar o acesso a partir de outra organização e a limpeza dos dados ao trocar de ativo. [Contrato de histórico e slots](TESTING_GUIDE.md#L4000)
+1. [x] Reutilizar `listLinkHistory` de `fleet.js`. Na homologação, `GET /v1/admin/assets/:uid/link_history` devolveu `{items,total,elapsed_ms}`, em ordem decrescente de `occurred_at`. Variar `limit` e `offset` devolveu os mesmos quatro eventos do ativo de teste.
+2. [x] Adicionar a aba **Histórico de dispositivos** no detalhe do ativo, com data e hora, operação, slot e os dispositivos anterior e posterior. A interface agrupa a retirada e a instalação de uma troca quando o par é da mesma OS e do mesmo slot. A consulta ocorre ao abrir a aba e tem estados de carregamento, histórico vazio e erro com nova tentativa.
+3. [x] Homologar no Chrome com os ativos de teste. A OS de troca do slot 2 confirmou os dois dispositivos exibidos em uma única linha. Ao trocar de organização, o detalhe anterior ficou indisponível e o cliente deixou de consultar seu histórico. O segundo ativo exibiu o histórico vazio. Uma resposta 503 simulada confirmou o estado de erro e a recuperação ao tentar novamente. [Contrato de histórico e slots](TESTING_GUIDE.md#L4000)
+
+**Validação local.** 135 testes passaram, incluindo três casos de histórico que cobrem retirada independente, troca e mudança de slot. O lint dos arquivos alterados e o build do Next.js também passaram.
 
 **Aceite.** Um operador autorizado consegue consultar instalações, trocas e retiradas registradas para o ativo selecionado.
 

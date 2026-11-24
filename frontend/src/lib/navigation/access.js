@@ -4,6 +4,7 @@ export const templateDemosEnabled = process.env.NODE_ENV === 'development' && pr
 const areaRoutes = [
   ['/organizacoes', 'organizations'],
   ['/entidades', 'entities'],
+  ['/motoristas', 'drivers'],
   ['/frota/grupos', 'assets_groups'],
   ['/frota', 'assets'],
   ['/devices-sim', 'devices', 'simcards'],
