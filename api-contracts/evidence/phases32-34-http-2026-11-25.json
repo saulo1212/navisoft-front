@@ -1,0 +1,1644 @@
+{
+  "testedAt": "2026-11-25T11:02:52.519Z",
+  "base": "https://api.navisoft.app",
+  "checks": [
+    {
+      "name": "Login Primary",
+      "method": "POST",
+      "path": "/v1/users/login",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "05e27a6b-47d2-413c-87c4-1a6fc79fb1cd",
+      "request": [
+        "identifier",
+        "password"
+      ],
+      "responseKeys": [
+        "session",
+        "organization",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Login Secondary",
+      "method": "POST",
+      "path": "/v1/users/login",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2cfd38ce-280c-4573-939a-5427fa3a72da",
+      "request": [
+        "identifier",
+        "password"
+      ],
+      "responseKeys": [
+        "session",
+        "organization",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "List device types",
+      "method": "GET",
+      "path": "/v1/admin/devices/types?limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "dde1e259-b39e-4950-a032-4111110b4ead",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "name",
+        "active",
+        "created_at",
+        "updated_at",
+        "uid_user_created",
+        "uid_user_updated"
+      ]
+    },
+    {
+      "name": "List device manufacturers",
+      "method": "GET",
+      "path": "/v1/admin/devices/manufacturers?limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "1b07c5af-7186-473e-ab69-5d458aed0acd",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "name",
+        "types",
+        "active",
+        "created_at",
+        "updated_at",
+        "uid_user_created",
+        "uid_user_updated"
+      ]
+    },
+    {
+      "name": "List organizations",
+      "method": "GET",
+      "path": "/v1/users/me/organizations?limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6c66061d-a85d-47a3-8b95-b237f66fae64",
+      "responseKeys": [
+        "has_more",
+        "items",
+        "next_after_uid",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "code",
+        "name"
+      ]
+    },
+    {
+      "name": "List billing plans",
+      "method": "GET",
+      "path": "/v1/admin/billing-plans?limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "14a919f7-b242-4646-96b6-f1c3a11fee40",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "code",
+        "name",
+        "tiers",
+        "active",
+        "currency",
+        "created_at",
+        "unit_label",
+        "updated_at",
+        "description",
+        "billing_mode",
+        "uid_user_created",
+        "uid_user_updated",
+        "negative_adjustment_policy"
+      ]
+    },
+    {
+      "name": "List device models",
+      "method": "GET",
+      "path": "/v1/admin/devices/models?limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2031034a-83b7-4a5b-808a-da26625a5aee",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated"
+      ]
+    },
+    {
+      "name": "Read homologation organization plan",
+      "method": "GET",
+      "path": "/v1/admin/organizations/6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e77070ac-f2bb-40e3-833f-3916844125a8",
+      "responseKeys": [
+        "uid_organization_owner",
+        "reseller_enabled",
+        "uid_user_created",
+        "uid_billing_plan",
+        "uid_valuation_currency",
+        "uid_timezone",
+        "uid",
+        "code",
+        "name",
+        "email",
+        "uid_situations",
+        "created_at",
+        "updated_at",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Secondary cannot create device type",
+      "method": "POST",
+      "path": "/v1/admin/devices/types",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "requestId": "40944800-6ed9-4f40-8771-82b68e2543f3",
+      "request": {},
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "device_catalog_not_allowed"
+    },
+    {
+      "name": "Create inactive disposable device type",
+      "method": "POST",
+      "path": "/v1/admin/devices/types",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "a85417d6-b2e0-4286-85c3-b4b3c7c33330",
+      "request": {
+        "name": "Homologa??o 32 hbebef86a",
+        "active": false
+      },
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "replayed",
+        "created_at",
+        "updated_at",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Reject duplicate device type",
+      "method": "POST",
+      "path": "/v1/admin/devices/types",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "ef32b625-18c9-4097-a26b-b926d2bf798b",
+      "request": {
+        "name": "Homologa??o 32 hbebef86a",
+        "active": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "device_catalog_conflict"
+    },
+    {
+      "name": "Create disposable device model",
+      "method": "POST",
+      "path": "/v1/admin/devices/models",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "f692f6ee-cae0-4f4c-b8c9-3781650995e9",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": false
+      },
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "replayed",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Secondary cannot create device model",
+      "method": "POST",
+      "path": "/v1/admin/devices/models",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "requestId": "72e757cd-a650-4035-8a2b-81a3b7d938ef",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "device_catalog_not_allowed"
+    },
+    {
+      "name": "Reject duplicate device model",
+      "method": "POST",
+      "path": "/v1/admin/devices/models",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "ea224168-1ab9-441b-be54-7a4a3bf6a38a",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "device_catalog_conflict"
+    },
+    {
+      "name": "Reject incompatible type and manufacturer",
+      "method": "PUT",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 422,
+      "expected": [
+        409,
+        422
+      ],
+      "requestId": "38f8d67e-e059-4d5c-baeb-2df6ba1b79b1",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "14c309f0-a8c6-4fe1-9e31-7cf2015fa6bb",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "invalid_device_catalog"
+    },
+    {
+      "name": "Read model as Primary",
+      "method": "GET",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "43576650-6567-4afa-99c2-4ac29de8cc06",
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read model as Secondary",
+      "method": "GET",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "3b6c85c4-ed1a-4f1c-b5d9-bce8731cf59c",
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Secondary cannot update device model",
+      "method": "PUT",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "requestId": "81469288-0800-4e4e-a451-1e6df8fc2455",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "device_catalog_not_allowed"
+    },
+    {
+      "name": "Update SIM requirement",
+      "method": "PUT",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "aef5c056-edf5-4d18-9f18-806c4aedea06",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": true,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": true
+      },
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read updated model",
+      "method": "GET",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "35882bc9-5f79-4fdf-994d-4e0b88bf510a",
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Confirm SIM requirement and other model fields",
+      "passed": true
+    },
+    {
+      "name": "List models using device and package selector filters",
+      "method": "GET",
+      "path": "/v1/admin/devices/models?filters=%5B%7B%22field%22%3A%22uid_type%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22426fc714-6265-43bb-afe4-b4c7dcea802c%22%7D%2C%7B%22field%22%3A%22uid_manufacturer%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a96af33c-485e-46df-963a-78a1b8c3446f%22%7D%5D&limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "ca44a129-11b6-4538-a89d-f8a8d45cc930",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated"
+      ]
+    },
+    {
+      "name": "Confirm model is listed",
+      "passed": true
+    },
+    {
+      "name": "Create disposable protocol variant",
+      "method": "POST",
+      "path": "/v1/admin/events/protocol-variants",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "e30a61ab-9abb-493c-8fbf-4ad1e311a706",
+      "request": {
+        "uid_model": "e2f8bedb-8456-4b03-a25a-ff881a77067b",
+        "code": "HOMOLOG_HBEBEF86A",
+        "name": "Homologa??o 33 hbebef86a"
+      },
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "replayed",
+        "uid_model",
+        "created_at",
+        "model_name",
+        "uid_user_created",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Secondary cannot create protocol variant",
+      "method": "POST",
+      "path": "/v1/admin/events/protocol-variants",
+      "status": 403,
+      "expected": [
+        403
+      ],
+      "requestId": "2a5a5d13-8bc7-472f-9d46-4b410cda695c",
+      "request": {
+        "uid_model": "e2f8bedb-8456-4b03-a25a-ff881a77067b",
+        "code": "HOMOLOG_HBEBEF86A",
+        "name": "Homologa??o 33 hbebef86a"
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "event_not_allowed"
+    },
+    {
+      "name": "Replay variant creation",
+      "method": "POST",
+      "path": "/v1/admin/events/protocol-variants",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "62ccedbd-a870-45bc-ac74-73f37e8f2e68",
+      "request": {
+        "uid_model": "e2f8bedb-8456-4b03-a25a-ff881a77067b",
+        "code": "HOMOLOG_HBEBEF86A",
+        "name": "Homologa??o 33 hbebef86a"
+      },
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "replayed",
+        "uid_model",
+        "created_at",
+        "model_name",
+        "uid_user_created",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Confirm replay returns the same variant UID",
+      "passed": true
+    },
+    {
+      "name": "Reject duplicate protocol variant",
+      "method": "POST",
+      "path": "/v1/admin/events/protocol-variants",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "1a54c6f4-1f1b-4895-b340-77de0f9b4efb",
+      "request": {
+        "uid_model": "e2f8bedb-8456-4b03-a25a-ff881a77067b",
+        "code": "HOMOLOG_HBEBEF86A",
+        "name": "Homologa??o 33 hbebef86a"
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "event_conflict"
+    },
+    {
+      "name": "Read variant as Secondary",
+      "method": "GET",
+      "path": "/v1/admin/events/protocol-variants/c63c690f-4f8b-442e-8ff7-d51984e94e33",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "62291459-6609-4b2f-a035-3eefa30adaab",
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "uid_model",
+        "created_at",
+        "model_name",
+        "uid_user_created",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Confirm variant belongs to model",
+      "passed": true
+    },
+    {
+      "name": "List variants as Secondary",
+      "method": "GET",
+      "path": "/v1/admin/events/protocol-variants?filters=%5B%7B%22field%22%3A%22uid_model%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22e2f8bedb-8456-4b03-a25a-ff881a77067b%22%7D%5D&limit=100",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "9cb6fd19-241b-493a-a0bb-dcccc0344bd3",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "code",
+        "name",
+        "uid_model",
+        "created_at",
+        "model_name",
+        "uid_user_created"
+      ]
+    },
+    {
+      "name": "Confirm matching variant is listed",
+      "passed": true
+    },
+    {
+      "name": "Provision disposable organization",
+      "method": "POST",
+      "path": "/v1/admin/organizations",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "af1ccb03-6fc0-40ba-8a4b-1ecfd5d7e2e4",
+      "request": {
+        "code": "homolog34-hbebef86a",
+        "name": "Homologa??o 34 hbebef86a",
+        "email": "homolog34-hbebef86a@example.test",
+        "admin_name": "Homologa??o 34",
+        "admin_login": "h34.hbebef86a",
+        "uid_billing_plan": "c0320000-0000-4000-8000-000000000001"
+      },
+      "responseKeys": [
+        "organization",
+        "uid_admin",
+        "uid_activation_challenge",
+        "uid_activation_delivery",
+        "activation_expires_at",
+        "replayed"
+      ]
+    },
+    {
+      "name": "Create first disposable position",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/positions?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "a5b009f2-24b6-4896-bebd-a06e6df76b09",
+      "request": {
+        "code": "HOMOLOG_1",
+        "name": "Cargo 1",
+        "description": "Homologa??o"
+      },
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "active",
+        "replayed",
+        "created_at",
+        "updated_at",
+        "description",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create disposable collaborator",
+      "method": "POST",
+      "path": "/v1/admin/collaborators",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "e85f8f57-3a30-4267-88ad-c1cb95abf975",
+      "request": {
+        "uid_organization": "a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+        "legal_name": "Homologa??o Fase 34",
+        "active": true
+      },
+      "responseKeys": [
+        "uid",
+        "active",
+        "replayed",
+        "birth_date",
+        "created_at",
+        "legal_name",
+        "updated_at",
+        "preferred_name",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_birth_country",
+        "uid_marital_status",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create second disposable position",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/positions?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "ea5fe6ef-fd3e-4636-9a1e-ca64097ff899",
+      "request": {
+        "code": "HOMOLOG_2",
+        "name": "Cargo 2",
+        "description": "Homologa??o"
+      },
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "active",
+        "replayed",
+        "created_at",
+        "updated_at",
+        "description",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create disposable unit",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/organization-units?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "78eafbfd-858f-4135-8c08-9f10749da9d3",
+      "request": {
+        "uid_unit_type": "91420000-0000-4000-8000-000000000001",
+        "uid_parent": null,
+        "code": "HOMOLOG",
+        "name": "Homologa??o"
+      },
+      "responseKeys": [
+        "uid",
+        "code",
+        "name",
+        "active",
+        "replayed",
+        "created_at",
+        "uid_parent",
+        "updated_at",
+        "uid_unit_type",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create disposable engagement",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/engagements",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "e83cf313-3714-4c1b-b104-70f2e4eb4d78",
+      "request": {
+        "uid_organization": "a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+        "uid_engagement_type": "91410000-0000-4000-8000-000000000001",
+        "uid_country": "c0580000-0000-4000-8000-000000000001",
+        "started_on": "2027-01-01",
+        "is_primary": true
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "replayed",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_country",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_contract_entity",
+        "uid_engagement_type",
+        "uid_country_subdivision",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create primary assignment",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "251a94ce-bdfd-4e17-9024-62c8121395a0",
+      "request": {
+        "uid_engagement": "c7fd9beb-c384-472f-8389-ec0883d43606",
+        "uid_organization_unit": "9e5dd73d-eb05-4370-889f-80d6f2fd736f",
+        "started_on": "2027-02-01",
+        "uid_position": "170d3a37-ac2e-4662-9a87-14f897314345",
+        "is_primary": true
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "replayed",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Create secondary assignment",
+      "method": "POST",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "9b7f1e0b-c9d9-4398-bc58-48119ccc3098",
+      "request": {
+        "uid_engagement": "c7fd9beb-c384-472f-8389-ec0883d43606",
+        "uid_organization_unit": "9e5dd73d-eb05-4370-889f-80d6f2fd736f",
+        "started_on": "2027-02-01",
+        "uid_position": "046edbbb-5133-423a-a8b8-c5b82ba723e9",
+        "is_primary": false
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "replayed",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read assignment within organization",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "8679cdca-460f-423a-bf26-7f17324b4132",
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Reject read through a different organization",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "status": 404,
+      "expected": [
+        404
+      ],
+      "requestId": "e0da88f2-308f-4f33-b861-09d19e78311d",
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "collaborator_structure_not_found"
+    },
+    {
+      "name": "Reject update through a different organization",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=6f68ea93-7ba5-4dae-b764-f4fe076bfbb8",
+      "status": 404,
+      "expected": [
+        404
+      ],
+      "requestId": "507048e2-2cc8-4f09-b3ad-7766277dc523",
+      "request": {
+        "is_primary": false
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "collaborator_structure_not_found"
+    },
+    {
+      "name": "Try promoting a second overlapping assignment",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/55eb587d-e4a2-437d-b1ee-626d348f0144?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        409
+      ],
+      "requestId": "4bb0df91-fea8-4ce8-b954-6d3e24ef799d",
+      "request": {
+        "is_primary": true
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Reject invalid civil date",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 422,
+      "expected": [
+        422
+      ],
+      "requestId": "d0e50197-feb9-4d7d-b9be-bcb6620b83b8",
+      "request": {
+        "ended_on": "2027-02-30"
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "invalid_collaborator_structure"
+    },
+    {
+      "name": "Reject date before start",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 422,
+      "expected": [
+        422
+      ],
+      "requestId": "42dfb896-050c-44a7-8447-b80f9c8bb10e",
+      "request": {
+        "ended_on": "2027-01-31"
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "invalid_collaborator_structure"
+    },
+    {
+      "name": "Try clearing the primary flag",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "8bbc2093-83c8-4b00-83ad-19bc90af2865",
+      "request": {
+        "is_primary": false
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Try promoting a second assignment",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/55eb587d-e4a2-437d-b1ee-626d348f0144?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e30e75f8-1115-42c6-b17a-e09bd250f66f",
+      "request": {
+        "is_primary": true
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Close assignment",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "e3cc50c2-77aa-4f77-9c21-f83cf3dc57e6",
+      "request": {
+        "ended_on": "2027-02-28"
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read closed assignment",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6653de29-b969-440c-8962-d5ec6fcba0fe",
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Confirm close date and primary flag together",
+      "passed": false
+    },
+    {
+      "name": "Reject changes to an existing end date",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 409,
+      "expected": [
+        409,
+        422
+      ],
+      "requestId": "2d2a2d16-b6a9-4621-9709-0a3e28f7ba76",
+      "request": {
+        "ended_on": "2027-03-01"
+      },
+      "responseKeys": [
+        "code",
+        "message",
+        "elapsed_ms"
+      ],
+      "code": "assignment_end_immutable"
+    },
+    {
+      "name": "Try updating primary flag of closed assignment",
+      "method": "PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "status": 200,
+      "expected": [
+        200,
+        409,
+        422
+      ],
+      "requestId": "1e1af977-7903-467d-b80e-230017c67531",
+      "request": {
+        "is_primary": true
+      },
+      "responseKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read assignment list",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a0dfdd5e-f030-46c5-9391-e7e8728c1694%22%7D%5D",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "1a22eaf7-3cc5-4ffa-9df3-3ba7fef1795e",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ],
+      "itemKeys": [
+        "uid",
+        "ended_on",
+        "created_at",
+        "is_primary",
+        "started_on",
+        "updated_at",
+        "uid_position",
+        "uid_engagement",
+        "uid_collaborator",
+        "uid_organization",
+        "uid_user_created",
+        "uid_user_updated",
+        "uid_organization_unit"
+      ]
+    },
+    {
+      "name": "Confirm second assignment is primary",
+      "passed": false
+    },
+    {
+      "name": "Read work mode history after closing",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a/work-modes?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a0dfdd5e-f030-46c5-9391-e7e8728c1694%22%7D%5D",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2b3175c5-e1cd-4fc1-803c-0eac64fe7af0",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Read manager history after closing",
+      "method": "GET",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a/managers?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a0dfdd5e-f030-46c5-9391-e7e8728c1694%22%7D%5D",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "485a2628-b6c3-477c-b8dc-0eb64fc72b94",
+      "responseKeys": [
+        "items",
+        "limit",
+        "total",
+        "offset",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Inactivate disposable organization",
+      "method": "PATCH",
+      "path": "/v1/admin/organizations/a0dfdd5e-f030-46c5-9391-e7e8728c1694/lifecycle",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "5f105273-c86b-491a-9b8a-c83c194bc2d7",
+      "request": {
+        "state": "inactive",
+        "reason": "Fim da homologa??o da fase 34"
+      },
+      "responseKeys": [
+        "uid",
+        "state",
+        "reason",
+        "effective_state",
+        "simcard_unlinked",
+        "ingestion_allowed",
+        "operations_allowed",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Inactivate disposable model",
+      "method": "PUT",
+      "path": "/v1/admin/devices/models/e2f8bedb-8456-4b03-a25a-ff881a77067b",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "7161975f-59b4-4a34-926c-d6a2aad6b866",
+      "request": {
+        "name": "Homologa??o 32 33 hbebef86a",
+        "active": false,
+        "uid_type": "426fc714-6265-43bb-afe4-b4c7dcea802c",
+        "uid_manufacturer": "a96af33c-485e-46df-963a-78a1b8c3446f",
+        "requires_simcard": true
+      },
+      "responseKeys": [
+        "uid",
+        "name",
+        "active",
+        "uid_type",
+        "created_at",
+        "updated_at",
+        "requires_simcard",
+        "uid_manufacturer",
+        "uid_user_created",
+        "uid_user_updated",
+        "elapsed_ms"
+      ]
+    },
+    {
+      "name": "Login for assignment retest",
+      "path": "/v1/users/login",
+      "method": "POST",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "f058c680-86b3-4c16-b4f5-dca2cfa08f98",
+      "request": [
+        "identifier",
+        "password"
+      ]
+    },
+    {
+      "name": "Reactivate disposable organization for retest",
+      "path": "/v1/admin/organizations/a0dfdd5e-f030-46c5-9391-e7e8728c1694/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "986baea0-6707-4ce6-b13f-f49c3979f576",
+      "request": {
+        "state": "active",
+        "reason": "Confirm assignment response fields"
+      }
+    },
+    {
+      "name": "Read original assignment fixture",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a0dfdd5e-f030-46c5-9391-e7e8728c1694%22%7D%5D",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2d758d1b-5be9-4608-a809-22fffdb023ea",
+      "response": [
+        {
+          "uid": "55eb587d-e4a2-437d-b1ee-626d348f0144",
+          "started_on": "2027-02-01",
+          "ended_on": null,
+          "is_primary": false
+        },
+        {
+          "uid": "c561e90c-2c80-4a80-90c6-915c9de2669a",
+          "started_on": "2027-02-01",
+          "ended_on": "2027-02-28",
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "name": "Request primary on open second assignment",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/55eb587d-e4a2-437d-b1ee-626d348f0144?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "2d0e3c20-7395-4330-913b-b05cbf2be0fa",
+      "request": {
+        "is_primary": true
+      },
+      "response": {
+        "uid": "55eb587d-e4a2-437d-b1ee-626d348f0144",
+        "started_on": "2027-02-01",
+        "ended_on": null,
+        "is_primary": false
+      }
+    },
+    {
+      "name": "Read second after primary PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/55eb587d-e4a2-437d-b1ee-626d348f0144?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "590e34cd-33dc-4ce6-95c4-6c2f01aff2e4",
+      "response": {
+        "uid": "55eb587d-e4a2-437d-b1ee-626d348f0144",
+        "started_on": "2027-02-01",
+        "ended_on": null,
+        "is_primary": false
+      }
+    },
+    {
+      "name": "Request clearing primary on closed first assignment",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "80244c4c-7a6c-41e0-a2c7-2aa1948e5e69",
+      "request": {
+        "is_primary": false
+      },
+      "response": {
+        "uid": "c561e90c-2c80-4a80-90c6-915c9de2669a",
+        "started_on": "2027-02-01",
+        "ended_on": "2027-02-28",
+        "is_primary": true
+      }
+    },
+    {
+      "name": "Read first after clearing primary PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/c561e90c-2c80-4a80-90c6-915c9de2669a?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "6d27cd1c-d479-49a6-be1f-0f951abce166",
+      "response": {
+        "uid": "c561e90c-2c80-4a80-90c6-915c9de2669a",
+        "started_on": "2027-02-01",
+        "ended_on": "2027-02-28",
+        "is_primary": true
+      }
+    },
+    {
+      "name": "Create new primary assignment for overlap test",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "POST",
+      "status": 201,
+      "expected": [
+        201
+      ],
+      "requestId": "9f0541ce-a097-4208-9733-f0e3a2cf6e6a",
+      "request": {
+        "uid_engagement": "c7fd9beb-c384-472f-8389-ec0883d43606",
+        "uid_organization_unit": "9e5dd73d-eb05-4370-889f-80d6f2fd736f",
+        "started_on": "2027-04-01",
+        "uid_position": "170d3a37-ac2e-4662-9a87-14f897314345",
+        "is_primary": true
+      },
+      "response": {
+        "uid": "faaa5d7e-c1d5-408e-9948-543df59e2220",
+        "started_on": "2027-04-01",
+        "ended_on": null,
+        "is_primary": true
+      }
+    },
+    {
+      "name": "Create overlapping primary assignment",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "POST",
+      "status": 409,
+      "expected": [
+        409
+      ],
+      "requestId": "8add2d35-01fd-48d2-aba7-f3c19a6195a5",
+      "request": {
+        "uid_engagement": "c7fd9beb-c384-472f-8389-ec0883d43606",
+        "uid_organization_unit": "9e5dd73d-eb05-4370-889f-80d6f2fd736f",
+        "started_on": "2027-04-01",
+        "uid_position": "046edbbb-5133-423a-a8b8-c5b82ba723e9",
+        "is_primary": true
+      },
+      "code": "assignment_primary_period_conflict"
+    },
+    {
+      "name": "End new assignment and clear primary in the same PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/faaa5d7e-c1d5-408e-9948-543df59e2220?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "1b0a0a93-9362-4061-b97e-854c739a366a",
+      "request": {
+        "is_primary": false,
+        "ended_on": "2027-05-01"
+      },
+      "response": {
+        "uid": "faaa5d7e-c1d5-408e-9948-543df59e2220",
+        "started_on": "2027-04-01",
+        "ended_on": "2027-05-01",
+        "is_primary": true
+      }
+    },
+    {
+      "name": "Read ended assignment after combined PATCH",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments/faaa5d7e-c1d5-408e-9948-543df59e2220?uid_organization=a0dfdd5e-f030-46c5-9391-e7e8728c1694",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "bcd7e412-0887-484f-b76d-34886a4f0b88",
+      "response": {
+        "uid": "faaa5d7e-c1d5-408e-9948-543df59e2220",
+        "started_on": "2027-04-01",
+        "ended_on": "2027-05-01",
+        "is_primary": true
+      }
+    },
+    {
+      "name": "Read final assignment list",
+      "path": "/v1/admin/collaborators/fd178178-b5f8-4624-b1c8-1583b095ea5c/assignments?filters=%5B%7B%22field%22%3A%22uid_organization%22%2C%22operator%22%3A%22eq%22%2C%22value%22%3A%22a0dfdd5e-f030-46c5-9391-e7e8728c1694%22%7D%5D",
+      "method": "GET",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "5fb0a812-7983-4dec-b1c1-6109c64034c1",
+      "response": [
+        {
+          "uid": "faaa5d7e-c1d5-408e-9948-543df59e2220",
+          "started_on": "2027-04-01",
+          "ended_on": "2027-05-01",
+          "is_primary": true
+        },
+        {
+          "uid": "55eb587d-e4a2-437d-b1ee-626d348f0144",
+          "started_on": "2027-02-01",
+          "ended_on": null,
+          "is_primary": false
+        },
+        {
+          "uid": "c561e90c-2c80-4a80-90c6-915c9de2669a",
+          "started_on": "2027-02-01",
+          "ended_on": "2027-02-28",
+          "is_primary": true
+        }
+      ]
+    },
+    {
+      "name": "Inactivate disposable organization after retest",
+      "path": "/v1/admin/organizations/a0dfdd5e-f030-46c5-9391-e7e8728c1694/lifecycle",
+      "method": "PATCH",
+      "status": 200,
+      "expected": [
+        200
+      ],
+      "requestId": "9aab5a2e-df52-4a7f-a419-f0b791213d58",
+      "request": {
+        "state": "inactive",
+        "reason": "End of phase 34 homologation"
+      }
+    }
+  ],
+  "findings": [
+    "The authenticated assignment PATCH returned 200 without persisting is_primary; GET and list confirmed the previous flags. PATCH persisted ended_on, including when both fields were sent.",
+    "Create rejects overlapping primary assignments with 409. PATCH to a second assignment returned 200 and left it secondary.",
+    "The organization and model used for testing were inactivated. The type was created inactive. No removal endpoint for variants is documented; the test variant remains attached to the inactive model."
+  ],
+  "browser": {
+    "checkedAt": "2026-11-25T11:18:53.789Z",
+    "checks": [
+      {
+        "name": "Catalog model detail and SIM requirement persisted",
+        "passed": true
+      },
+      {
+        "name": "New catalog type opens and handles duplicate from backend",
+        "passed": true
+      },
+      {
+        "name": "Variant appears for its model in the identity editor",
+        "passed": true
+      },
+      {
+        "name": "Assignment mismatch is visible and close persists with history intact",
+        "passed": true
+      },
+      {
+        "name": "Model appears in device creation and technical package selectors",
+        "passed": true
+      },
+      {
+        "name": "Variant detail, duplicate validation and technical map selector",
+        "passed": true
+      }
+    ]
+  },
+  "cleanupVerification": {
+    "model": {
+      "status": 200,
+      "requestId": "ca580f35-432a-436d-9a64-ad922c7426c2",
+      "active": false
+    },
+    "organization": {
+      "status": 200,
+      "requestId": "15c94943-98a9-45e9-8807-6afd3a07fdab",
+      "state": "inactive",
+      "effective_state": "inactive"
+    },
+    "type": {
+      "status": 200,
+      "requestId": "3768a723-e367-4bb8-9977-062a9b78856c",
+      "active": false
+    }
+  }
+}

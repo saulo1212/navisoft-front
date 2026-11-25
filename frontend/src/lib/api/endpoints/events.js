@@ -15,6 +15,12 @@ export const listEventFields = args => list('fields', args, true);
 export const listEventRules = args => list('rules', args);
 export const listEventTechnicalMaps = args => list('technical-maps', args, true);
 export const listEventProtocolVariants = args => list('protocol-variants', args, true);
+export function getEventProtocolVariant({ token, uid, signal }) {
+  return apiRequest(resource('protocol-variants', uid), { token, signal });
+}
+export function createEventProtocolVariant({ token, body, idempotencyKey = newIdempotencyKey(), signal }) {
+  return apiRequest(`${root}/protocol-variants`, { method: 'POST', token, body, idempotencyKey, signal });
+}
 export function getEventSignalMappings({ token, uid, signal }) {
   return apiRequest(`${resource('models', uid)}/signal-mappings`, { token, signal });
 }

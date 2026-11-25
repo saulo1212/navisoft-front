@@ -1247,6 +1247,7 @@
 ```
 
 ### `POST /v1/admin/events/protocol-variants`
+- **Homologação de 2026-11-25:** Primary recebe 201 com a variante criada. Repetir a mesma chave com o mesmo corpo retorna 200 e o mesmo UID. Código duplicado para o modelo com outra chave retorna 409 `event_conflict`. Secondary consulta lista e detalhe (200) e recebe 403 `event_not_allowed` ao criar. Envie `Idempotency-Key`.
 - **Ex. collection:** EV02-HTTP-03 — Bloquear criação de variante pelo Secondary
 - **Request body:**
 ```json
@@ -1706,6 +1707,7 @@
 ```
 
 ### `POST /v1/admin/devices/models`
+- **Homologação de 2026-11-25:** Primary cadastra com `Idempotency-Key` e recebe 201 com os campos do modelo. Duplicata retorna 409 `device_catalog_conflict`. Secondary pode consultar o detalhe e recebe 403 `device_catalog_not_allowed` ao cadastrar ou editar.
 - **Ex. collection:** EV01-HTTP-25 — Criar modelo físico exclusivo para testar a publicação
 - **Request body:**
 ```json
@@ -1738,6 +1740,7 @@
 ```
 
 ### `PUT /v1/admin/devices/models/:uid`
+- **Homologação de 2026-11-25:** o corpo completo abaixo preserva nome, status, tipo e fabricante ao alterar `requires_simcard`. Retorno 200 com o modelo atualizado. Tipo sem associação ao fabricante retornou 422 `invalid_device_catalog`.
 - **Ex. collection:** 98 — marcar modelo como requires_simcard=true
 - **Request body:**
 ```json
@@ -1891,6 +1894,7 @@
 ```
 
 ### `POST /v1/admin/devices/types`
+- **Homologação de 2026-11-25:** Primary cadastra com `Idempotency-Key` e recebe 201 com o tipo. Duplicata retorna 409 `device_catalog_conflict`. Secondary tem acesso à lista e recebe 403 `device_catalog_not_allowed` ao cadastrar.
 - **Ex. collection:** TC30 — criar device type pela API
 - **Request body:**
 ```json
@@ -5286,13 +5290,15 @@
 
 ### `PATCH /v1/admin/collaborators/:uid/assignments/:uid`
 - **Query:** `uid_organization`
-- **Ex. collection:** S21 — PATCH de assignment com campo proibido
-- **Request body:**
+- **Corpo confirmado para encerramento:**
 ```json
 {
-  "uid_position": "241bf6b9-0884-4e5e-9bc9-afd0381917b6"
+  "ended_on": "2027-02-28"
 }
 ```
+- **Retorno:** 200 com os mesmos campos do detalhe. Data civil inválida ou anterior ao início retorna 422 `invalid_collaborator_structure`. Outra data em uma lotação já encerrada retorna 409 `assignment_end_immutable`. Uma organização diferente retorna 404 `collaborator_structure_not_found`.
+- **Pendente:** `{"is_primary": true}` e `{"is_primary": false}` receberam 200 e preservaram o valor anterior no retorno e na releitura. O mesmo ocorreu quando o campo acompanhou `ended_on`. No POST de criação, duas lotações principais com vigência sobreposta retornaram 409 `assignment_primary_period_conflict`. [Evidência de 2026-11-25](evidence/phases32-34-http-2026-11-25.json)
+- **Ex. collection:** S21 envia o campo proibido `uid_position`.
 
 ### `POST /v1/admin/collaborators/:uid/assignments/:uid/managers`
 - **Query:** `uid_organization`

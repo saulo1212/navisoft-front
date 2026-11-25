@@ -6,6 +6,7 @@ import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import { useAdminProfile } from '@/components/admin/AdminReferenceFields';
 import { EventSignalMappings, EventTechnicalMaps } from '@/components/admin/EventTechnicalConfiguration';
+import EventProtocolVariants from '@/components/admin/EventProtocolVariants';
 import EventNotificationNavigation from '@/components/admin/EventNotificationNavigation';
 import ListToolbar from '@/components/admin/ListToolbar';
 import { OperationalGate, useOperationalAction } from '@/components/admin/OperationalUi';
@@ -32,6 +33,7 @@ function Models() {
     <h5 className="mt-4">Campos disponíveis para condições</h5>
     <DataTable rows={fields.items} rowKey={row => row.code} loading={fields.loading} error={fields.error} hasMore={!fields.loading && fields.hasMore} onLoadMore={fields.loadMore} columns={[{ key: 'name', label: 'Campo' }, { key: 'code', label: 'Código' }, { key: 'value_type', label: 'Tipo' }, { key: 'operators', label: 'Operadores', render: row => row.operators?.join(', ') }, { key: 'units', label: 'Unidades', render: row => row.units?.join(', ') || '—' }]} />
     <EventTechnicalMaps />
+    <EventProtocolVariants />
     <Offcanvas show={!!detail} onHide={() => setDetail(null)} placement="end">
       <Offcanvas.Header closeButton><Offcanvas.Title>{detail?.name}</Offcanvas.Title></Offcanvas.Header>
       <Offcanvas.Body>{detail && <>

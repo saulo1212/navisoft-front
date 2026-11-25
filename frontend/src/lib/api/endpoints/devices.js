@@ -187,6 +187,24 @@ export async function listDeviceModels({ token, typeUid, manufacturerUid, limit 
   });
 }
 
+export function createDeviceType({ token, body, idempotencyKey, signal }) {
+  return apiRequest(`${DEVICES_ROOT}/types`, {
+    method: 'POST', token, body, signal, idempotencyKey: idempotencyKey ?? newIdempotencyKey()
+  });
+}
+
+export function getDeviceModel({ token, uid, signal }) {
+  return apiRequest(`${DEVICES_ROOT}/models/${requireUid(uid, 'modelo')}`, { token, signal });
+}
+
+export function saveDeviceModel({ token, uid, body, idempotencyKey, signal }) {
+  const path = `${DEVICES_ROOT}/models`;
+  return apiRequest(uid ? `${path}/${requireUid(uid, 'modelo')}` : path, {
+    method: uid ? 'PUT' : 'POST', token, body, signal,
+    idempotencyKey: uid ? undefined : idempotencyKey ?? newIdempotencyKey()
+  });
+}
+
 // --- SIM cards ---
 
 export async function listSimcards({ token, organizationUid, q, limit = 50, offset = 0, signal }) {

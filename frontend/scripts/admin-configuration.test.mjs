@@ -84,3 +84,46 @@ test('financial removal keeps the confirmation body and valuation retains the HT
   assert.deepEqual(calls[1].body, { uid_technical_package: assignmentUid });
   assert.equal(valuation.status, 200);
 });
+
+test('device catalog sends the full model on PUT and uses idempotency keys on creation', async t => {
+  const calls = requests(t);
+  const type = { name: 'Rastreador', active: true };
+  const model = { name: 'Modelo A', active: false, uid_type: uid, uid_manufacturer: assignmentUid, requires_simcard: true };
+  await devices.createDeviceType({ token: auth.token, body: type, idempotencyKey: 'type' });
+  await devices.saveDeviceModel({ token: auth.token, body: model, idempotencyKey: 'model' });
+  await devices.getDeviceModel(auth);
+  await devices.saveDeviceModel({ ...auth, body: { ...model, requires_simcard: false } });
+  assert.deepEqual(calls.map(call => [call.method, call.url.pathname, call.headers['Idempotency-Key'], call.body]), [
+    ['POST', '/v1/admin/devices/types', 'type', type],
+    ['POST', '/v1/admin/devices/models', 'model', model],
+    ['GET', `/v1/admin/devices/models/${uid}`, undefined, undefined],
+    ['PUT', `/v1/admin/devices/models/${uid}`, undefined, { ...model, requires_simcard: false }]
+  ]);
+});
+
+test('protocol variants are global and preserve the selected model in the idempotent create', async t => {
+  const calls = requests(t);
+  const body = { uid_model: assignmentUid, code: 'VARIANT', name: 'Variante' };
+  await events.createEventProtocolVariant({ ...auth, body, idempotencyKey: 'variant' });
+  await events.getEventProtocolVariant(auth);
+  assert.deepEqual(calls.map(call => [call.method, call.url.pathname, call.url.search, call.body]), [
+    ['POST', '/v1/admin/events/protocol-variants', '', body],
+    ['GET', `/v1/admin/events/protocol-variants/${uid}`, '', undefined]
+  ]);
+  assert.equal(calls[0].headers['Idempotency-Key'], 'variant');
+});
+
+test('assignment detail and updates are scoped and PATCH retains an explicit false', async t => {
+  const calls = requests(t);
+  await collaborators.getAssignment(auth);
+  await collaborators.updateAssignment({ ...auth, body: { is_primary: false } });
+  await collaborators.updateAssignment({ ...auth, body: { ended_on: '2027-02-28' } });
+  assert.deepEqual(calls.map(call => [call.method, call.body]), [
+    ['GET', undefined], ['PATCH', { is_primary: false }], ['PATCH', { ended_on: '2027-02-28' }]
+  ]);
+  for (const call of calls) {
+    assert.equal(call.url.pathname, `/v1/admin/collaborators/${uid}/assignments/${assignmentUid}`);
+    assert.equal(call.url.searchParams.get('uid_organization'), organizationUid);
+    assert.equal(call.cache, 'no-store');
+  }
+});

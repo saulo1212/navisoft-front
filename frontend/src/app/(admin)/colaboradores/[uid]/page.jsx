@@ -22,7 +22,10 @@ import { DEFAULT_COUNTRY_UID, fmtDate } from '@/lib/domain/collaborators';
 const CollaboratorDetailPage = () => {
   const uid = useDetailParam('uid');
   const { token, selectedOrganizationUid: orgUid } = useSession();
+  return <CollaboratorDetail key={JSON.stringify([token, orgUid, uid])} token={token} orgUid={orgUid} uid={uid} />;
+};
 
+const CollaboratorDetail = ({ token, orgUid, uid }) => {
   const [col, setCol] = useState(null);
   const [engagements, setEngagements] = useState([]);
   const [assignments, setAssignments] = useState([]);
@@ -46,6 +49,11 @@ const CollaboratorDetailPage = () => {
   const [asgOpen, setAsgOpen] = useState(false);
   const [asgForm, setAsgForm] = useState({ uid_engagement: '', uid_position: '', uid_organization_unit: '', started_on: '', is_primary: false });
   const [savingAsg, setSavingAsg] = useState(false);
+
+  const reloadAssignments = async signal => {
+    const result = await listAssignments({ token, uid, organizationUid: orgUid, signal });
+    if (!signal.aborted) setAssignments(normalizeList(result).items);
+  };
 
   const load = useCallback(async signal => {
     setLoading(true);
@@ -269,7 +277,8 @@ const CollaboratorDetailPage = () => {
                   <Button type="button" size="sm" variant="link" aria-expanded={openAssignment === a.uid}
                     onClick={() => setOpenAssignment(openAssignment === a.uid ? null : a.uid)}>Detalhes da lotação</Button>
                   {openAssignment === a.uid && <AssignmentConfiguration key={`${orgUid}:${a.uid}`} uid={uid}
-                    organizationUid={orgUid} assignment={a} canWrite={col.active !== false && openEngagements.some(e => e.uid === a.uid_engagement)} />}
+                    organizationUid={orgUid} assignmentUid={a.uid} reloadAssignments={reloadAssignments}
+                    canWrite={col.active !== false && openEngagements.some(e => e.uid === a.uid_engagement)} />}
                 </div>
               ))}
             </Card.Body>

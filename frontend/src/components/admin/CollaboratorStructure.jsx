@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Nav } from 'react-bootstrap';
+import { Alert, Button, Nav } from 'react-bootstrap';
 import DataTable from './DataTable';
-import { BillingField, BillingForm, useBillingMutation } from './BillingUi';
+import { BillingField, BillingForm, BillingRead, useBillingMutation } from './BillingUi';
 import { ReferenceField } from './AdminReferenceFields';
 import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import {
-  addAssignmentManager, addAssignmentWorkMode, createOrganizationUnit, createPosition, endAssignmentWorkMode,
+  addAssignmentManager, addAssignmentWorkMode, createOrganizationUnit, createPosition, endAssignmentWorkMode, getAssignment,
   listAssignmentManagers, listAssignments, listAssignmentWorkModes, listOrganizationUnits, listOrganizationUnitTypes,
-  listPositions, listWorkModes, searchCollaborators, updateOrganizationUnit, updatePosition
+  listPositions, listWorkModes, searchCollaborators, updateAssignment, updateOrganizationUnit, updatePosition
 } from '@/lib/api/endpoints/collaborators';
 import { normalizeList } from '@/lib/api/http';
 import { datePeriod } from '@/lib/domain/adminConfiguration';
@@ -102,10 +102,19 @@ function StructureEditor({ row, unitTab, units, types, onClose, onSaved }) {
   </BillingForm>;
 }
 
-export function AssignmentConfiguration({ uid, organizationUid, assignment, canWrite = true }) {
+export function AssignmentConfiguration({ uid, organizationUid, assignmentUid, canWrite, reloadAssignments }) {
   const { token } = useSession();
+  const params = { uid, organizationUid, assignmentUid };
+  const detail = useKnowledgeQuery(getAssignment, { token, ...params });
+  return <BillingRead query={detail}>{assignment => <AssignmentDetail params={params} initial={assignment}
+    canWrite={canWrite} reloadAssignments={reloadAssignments} />}</BillingRead>;
+}
+
+function AssignmentDetail({ params, initial, canWrite, reloadAssignments }) {
+  const { token } = useSession();
+  const [assignment, setAssignment] = useState(initial);
   const [editor, setEditor] = useState(null);
-  const params = { uid, organizationUid, assignmentUid: assignment.uid };
+  const [feedback, setFeedback] = useState(null);
   const periods = useOffsetList(listAssignmentWorkModes, { params });
   const managers = useOffsetList(listAssignmentManagers, { params });
   const types = useKnowledgeQuery(listWorkModes, { token });
@@ -118,6 +127,21 @@ export function AssignmentConfiguration({ uid, organizationUid, assignment, canW
       <Button size="sm" variant="link" onClick={() => setEditor({ kind: 'end', row })}>Encerrar</Button> }
   ];
   return <div className="border rounded p-3 mt-2">
+    <h6>Detalhe da lotação</h6>
+    <dl className="d-flex flex-wrap gap-3 mb-2">
+      <div><dt>Início</dt><dd>{fmtDate(assignment.started_on)}</dd></div>
+      <div><dt>Fim</dt><dd>{assignment.ended_on ? fmtDate(assignment.ended_on) : 'Em aberto'}</dd></div>
+      <div><dt>Principal</dt><dd>{assignment.is_primary ? 'Sim' : 'Não'}</dd></div>
+    </dl>
+    {canWrite && <div className="d-flex flex-wrap gap-2 mb-3">
+      <Button size="sm" variant="outline-primary" onClick={() => { setFeedback(null); setEditor({ kind: 'primary' }); }}>
+        {assignment.is_primary ? 'Remover indicação de principal' : 'Definir como principal'}
+      </Button>
+      {writable && <Button size="sm" variant="outline-danger" onClick={() => { setFeedback(null); setEditor({ kind: 'assignmentEnd' }); }}>
+        Encerrar lotação
+      </Button>}
+    </div>}
+    {feedback && <Alert variant="warning">{feedback}</Alert>}
     <div className="d-flex justify-content-between gap-2 align-items-center mb-2">
       <h6 className="mb-0">Histórico de modos de trabalho</h6>
       {writable && <Button size="sm" variant="outline-primary" disabled={!!periods.error || !options.some(option => option.active)}
@@ -133,11 +157,46 @@ export function AssignmentConfiguration({ uid, organizationUid, assignment, canW
       { key: 'uid_manager_assignment', label: 'Gestor', render: row => row.manager_name || row.manager_preferred_name || row.uid_manager_assignment },
       ...colDates
     ]} {...listProps(managers)} emptyMessage="Nenhum gestor vinculado." />
-    {editor && <AssignmentEditor editor={editor} params={params} assignment={assignment} options={options.filter(option => option.active)}
+    {editor && ['primary', 'assignmentEnd'].includes(editor.kind) && <AssignmentChange params={params} assignment={assignment}
+      end={editor.kind === 'assignmentEnd'} onClose={() => setEditor(null)} reloadAssignments={reloadAssignments}
+      onSaved={({ confirmed, warning }) => {
+        if (confirmed) setAssignment(confirmed);
+        setEditor(null);
+        setFeedback(warning);
+        if (!warning) notifySuccess(editor.kind === 'assignmentEnd' ? 'Lotação encerrada.' : 'Indicação de lotação principal atualizada.');
+      }} />}
+    {editor && ['end', 'mode', 'manager'].includes(editor.kind) &&
+      <AssignmentEditor editor={editor} params={params} assignment={assignment} options={options.filter(option => option.active)}
       onClose={() => setEditor(null)} onSaved={() => {
         setEditor(null); (editor.kind === 'manager' ? managers : periods).refresh(); notifySuccess('Lotação atualizada.');
       }} />}
   </div>;
+}
+
+function AssignmentChange({ params, assignment, end, onClose, onSaved, reloadAssignments }) {
+  const { token } = useSession();
+  const mutation = useBillingMutation();
+  const action = end ? 'Encerrar lotação' : assignment.is_primary ? 'Remover indicação de principal' : 'Definir como principal';
+  return <BillingForm title={action} mutation={mutation} onClose={onClose} submitLabel={end ? 'Encerrar' : 'Confirmar'}
+    onSubmit={fields => mutation.submit(async ({ signal }) => {
+      const body = end ? { ended_on: datePeriod(assignment.started_on, fields.ended_on).ended_on }
+        : { is_primary: !assignment.is_primary };
+      await updateAssignment({ ...params, token, signal, body });
+      const [detail, list] = await Promise.allSettled([
+        getAssignment({ ...params, token, signal }), reloadAssignments(signal)
+      ]);
+      if (detail.status === 'rejected') {
+        return { warning: 'A API respondeu ao salvamento, mas não foi possível recarregar o detalhe. Reabra a lotação para conferir o resultado.' };
+      }
+      const confirmed = detail.value;
+      const saved = Object.entries(body).every(([key, value]) => confirmed[key] === value);
+      const warning = !saved ? (end ? 'A API não confirmou o encerramento da lotação.' : 'A API não confirmou a alteração da lotação principal.')
+        : list.status === 'rejected' ? 'O detalhe confirma a alteração. Não foi possível atualizar a lista de lotações.' : null;
+      return { confirmed, warning };
+    }, fields, onSaved)}>
+    {end ? <BillingField name="ended_on" label="Data de encerramento" type="date" min={assignment.started_on} />
+      : <p className="mb-0">{assignment.is_primary ? 'Remover a indicação de lotação principal deste registro?' : 'Definir este registro como a lotação principal?'}</p>}
+  </BillingForm>;
 }
 
 function AssignmentEditor({ editor, params, assignment, options, onClose, onSaved }) {

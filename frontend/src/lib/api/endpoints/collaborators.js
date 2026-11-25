@@ -126,6 +126,13 @@ export const createOrganizationUnit = args => writeStructure('organization-units
 export const updateOrganizationUnit = args => writeStructure(`organization-units/${requireUid(args.uid, 'unidade')}`, 'PATCH', args);
 
 const assignmentPath = ({ uid, assignmentUid }) => `${requireUid(uid, 'colaborador')}/assignments/${requireUid(assignmentUid, 'lotação')}`;
+export function getAssignment({ token, organizationUid, signal, ...args }) {
+  return apiRequest(`${ROOT}/${assignmentPath(args)}`, {
+    token, signal, searchParams: { uid_organization: requireUid(organizationUid, 'organização') }
+  });
+}
+export const updateAssignment = args => writeStructure(assignmentPath(args), 'PATCH', args);
+
 function listAssignmentHistory(kind, args) {
   const { token, organizationUid, limit, offset, signal } = args;
   return apiRequest(`${ROOT}/${assignmentPath(args)}/${kind}`, {

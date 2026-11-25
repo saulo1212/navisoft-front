@@ -5,6 +5,7 @@ import { Alert, Badge, Button, FormSelect, Modal, Nav } from 'react-bootstrap';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 import DataTable from '@/components/admin/DataTable';
 import { useAdminProfile } from '@/components/admin/AdminReferenceFields';
+import DeviceCatalog from '@/components/admin/DeviceCatalog';
 import { ProtocolIdentitiesTab, TelemetryMappingsTab } from '@/components/admin/DeviceResolutionTabs';
 import { TechnicalPackagesTab } from '@/components/admin/TechnicalPackages';
 import FormModal from '@/components/admin/FormModal';
@@ -37,12 +38,14 @@ const DevicesSimPage = () => {
         {canDevices && <Nav.Item><Nav.Link eventKey="identities">Identidades de protocolo</Nav.Link></Nav.Item>}
         {canDevices && <Nav.Item><Nav.Link eventKey="mappings">Mapeamentos de telemetria</Nav.Link></Nav.Item>}
         {canDevices && <Nav.Item><Nav.Link eventKey="packages">Pacotes técnicos</Nav.Link></Nav.Item>}
+        {canDevices && <Nav.Item><Nav.Link eventKey="catalog">Catálogo</Nav.Link></Nav.Item>}
       </Nav>
       {tab === 'devices' && canDevices && <DevicesTab key={scope} canSims={canSims} />}
       {tab === 'simcards' && canSims && <SimcardsTab key={scope} />}
       {tab === 'identities' && canDevices && <ProtocolIdentitiesTab key={scope} />}
       {tab === 'mappings' && canDevices && <TelemetryMappingsTab key={scope} />}
       {tab === 'packages' && canDevices && selectedOrganizationUid && <TechnicalPackagesTab key={scope} />}
+      {tab === 'catalog' && canDevices && <DeviceCatalog key={scope} />}
     </div>
   );
 };

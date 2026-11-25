@@ -502,6 +502,38 @@ A ordem sugerida começa pela administração de organizações e pelos cadastro
 
 ---
 
+## Fases 32 a 34
+
+### Fase 32 — Catálogo de dispositivos
+
+1. [x] Adicionar a gestão do catálogo em `/devices-sim`. Reutilizar a consulta existente de tipos, fabricantes e modelos. Integrar o cadastro de tipos por `POST /v1/admin/devices/types`.
+2. [x] Integrar o cadastro de modelos por `POST /v1/admin/devices/models` e a consulta e edição por `GET/PUT /v1/admin/devices/models/:uid`. Permitir escolher um fabricante compatível com o tipo e configurar a exigência de SIM pelo campo `requires_simcard`. Preservar os demais campos do modelo ao salvar.
+3. [x] Homologar cadastro e edição com registros descartáveis, incluindo duplicata, associação inválida de tipo e fabricante e acesso sem permissão. Conferir se os modelos aparecem nos seletores existentes de cadastro de dispositivos e pacotes técnicos.
+
+**Aceite.** Um operador autorizado cadastra um tipo e um modelo, edita a exigência de SIM e consulta a alteração persistida. [Contratos de modelos](api-contracts/API_CONTRACTS.md#L1684) · [Contrato de tipos](api-contracts/API_CONTRACTS.md#L1872)
+
+### Fase 33 — Cadastro e consulta de variantes de protocolo
+
+1. [x] Adicionar a gestão de variantes em `/eventos/modelos`, junto aos mapas técnicos. Reutilizar `GET /v1/admin/events/protocol-variants` para listar e integrar `GET /v1/admin/events/protocol-variants/:uid` para consultar o detalhe.
+2. [x] Integrar `POST /v1/admin/events/protocol-variants` com seleção do modelo de dispositivo, código e nome. Aplicar as permissões de consulta e cadastro conforme o contrato confirmado.
+3. [x] Homologar o cadastro com um modelo descartável, a consulta do detalhe, o tratamento de código duplicado e a negativa de cadastro para um perfil sem permissão. Conferir se a variante aparece nos seletores existentes de mapas técnicos e identidades de protocolo para o modelo correspondente.
+
+**Aceite.** Um operador autorizado cadastra uma variante para um modelo de dispositivo, consulta o vínculo persistido e localiza a variante nos formulários compatíveis. [Contratos de variantes](api-contracts/API_CONTRACTS.md#L1228)
+
+### Fase 34 — Encerramento e definição de lotação principal
+
+1. [x] Integrar `GET /v1/admin/collaborators/:uid/assignments/:uid_assignment` no detalhe da lotação existente, usando o contexto da organização selecionada. Exibir as datas e a indicação de lotação principal.
+2. [x] Integrar `PATCH` na mesma rota com `ended_on` e `is_primary`. Recarregar o detalhe e a lista após salvar, avisar quando a API não confirmar a alteração e manter o histórico de modos de trabalho e gestores acessível.
+3. [ ] Homologar alteração da lotação principal e encerramento com registros descartáveis. Conferir o tratamento de datas inválidas, conflitos de período e tentativas fora do escopo da organização.
+
+**Aceite.** Um operador autorizado altera a indicação de lotação principal ou encerra uma lotação e consegue consultar o histórico após salvar. [Contratos de lotação](api-contracts/API_CONTRACTS.md#L5264)
+
+**Homologação autenticada.** A API confirmou os cadastros de tipos, modelos e variantes (201), a edição da exigência de SIM (200), duplicatas (409), fabricante incompatível (422) e a negativa de escrita para Secondary (403). Secondary consultou modelos e variantes (200). As consultas usadas pelos seletores incluíram os registros compatíveis. Para lotações, o encerramento persistiu (200), uma data inválida foi rejeitada (422), a data já registrada ficou protegida (409) e as tentativas fora da organização retornaram 404. O PATCH de `is_primary` retornou 200 e preservou o valor anterior, inclusive quando enviado junto com `ended_on`. O aceite da alteração de principal depende da correção ou confirmação do contrato pelo backend. [Evidência HTTP](api-contracts/evidence/phases32-34-http-2026-11-25.json)
+
+**Validação no Chrome.** Com login real, passaram a edição de modelo, os erros de duplicata, os seletores de dispositivos, pacotes, mapas e identidades, e o encerramento de lotação com acesso ao histórico. A interface avisou quando a API manteve o valor de `is_primary`. Também passaram 159 testes locais, o lint dos arquivos de aplicação alterados e o build de produção.
+
+---
+
 ## Receita padrão por módulo (aplicar em cada fase)
 
 Cada módulo segue o mesmo pipeline:
