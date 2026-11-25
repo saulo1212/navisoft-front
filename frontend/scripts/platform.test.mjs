@@ -5,7 +5,8 @@ import { importBrowserModule } from './import-browser-module.mjs';
 process.env.NEXT_PUBLIC_API_BASE_URL = 'https://platform.example.test';
 const api = await importBrowserModule(new URL('../src/lib/api/endpoints/platform.js', import.meta.url));
 const { registerUnauthorizedHandler } = await importBrowserModule(new URL('../src/lib/api/http.js', import.meta.url));
-const { fipeSyncBody, validatePlatformLogo } = await importBrowserModule(new URL('../src/lib/domain/platform.js', import.meta.url));
+const { fipeSyncBody, geocodeDesiredStatus, geocodeRateLimit, geocodeTokenBody, validatePlatformLogo } =
+  await importBrowserModule(new URL('../src/lib/domain/platform.js', import.meta.url));
 const organizationUid = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 const uid = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 const token = 'test-bearer';
@@ -45,6 +46,52 @@ test('credential replacement sends the credential only in the scoped PUT body', 
   assert.deepEqual(JSON.parse(calls[1].body), { token: 'mock-service-credential' });
   assert.equal(calls[0].body, undefined);
   assert.equal(calls[2].body, undefined);
+});
+
+test('Geocode reads the filtered organization binding and rejects foreign bindings', async t => {
+  let row = { code: 'geocode', uid_organization: organizationUid, desired_status: 'active', version: 1 };
+  const calls = capture(t, () => Response.json({ items: row ? [row] : [] }));
+  const args = { token, organizationUid };
+  assert.deepEqual(await api.getGeocodeService(args), { service: row });
+  assert.equal(calls[0].url.pathname, `/v1/admin/organizations/${organizationUid}/services`);
+  assert.deepEqual(JSON.parse(calls[0].url.searchParams.get('filters')), [{ field: 'code', operator: 'eq', value: 'geocode' }]);
+  row = { ...row, uid_organization: uid };
+  await assert.rejects(api.getGeocodeService(args), { status: 403 });
+  row = null;
+  assert.deepEqual(await api.getGeocodeService(args), { service: null });
+});
+
+test('Geocode admin operations are scoped and token listings retain only metadata', async t => {
+  const issuedToken = 'test-token-visible-only-on-creation';
+  const calls = capture(t, call => call.method === 'GET'
+    ? Response.json({ items: [{ uid, name: 'QA', token_hint: 'qa…', token: issuedToken }], total: 20, limit: 5, offset: 5 })
+    : Response.json(call.method === 'POST' ? { uid, token: issuedToken } : {}));
+  const args = { token, organizationUid };
+  await api.setGeocodeService({ ...args, desiredStatus: geocodeDesiredStatus('suspended') });
+  const page = await api.listGeocodeTokens({ ...args, limit: 5, offset: 5 });
+  const body = geocodeTokenBody({ name: ' QA ', rate_limit_rps: '25' });
+  assert.equal((await api.createGeocodeToken({ ...args, body, idempotencyKey: uid })).token, issuedToken);
+  await api.updateGeocodeTokenLimit({ ...args, uid, rateLimit: 50 });
+  await api.revokeGeocodeToken({ ...args, uid });
+  const path = `/v1/admin/organizations/${organizationUid}/services/geocode`;
+  assert.deepEqual(calls.map(call => [call.method, call.url.pathname, call.body && JSON.parse(call.body)]), [
+    ['PUT', path, { desired_status: 'suspended' }],
+    ['GET', `${path}/tokens`, undefined],
+    ['POST', `${path}/tokens`, { name: 'QA', rate_limit_rps: 25 }],
+    ['PATCH', `${path}/tokens/${uid}`, { rate_limit_rps: 50 }],
+    ['DELETE', `${path}/tokens/${uid}`, undefined]
+  ]);
+  assert.equal(calls[1].url.search, '?limit=5&offset=5');
+  assert.ok(calls.every(call => call.cache === 'no-store' && call.headers.Authorization === `Bearer ${token}`));
+  assert.equal(calls[2].headers['Idempotency-Key'], uid);
+  assert.equal(page.items[0].token_hint, 'qa…');
+  assert.ok(!JSON.stringify(page).includes(issuedToken));
+});
+
+test('Geocode rejects invalid names, states and request limits', () => {
+  assert.throws(() => geocodeDesiredStatus('applied'));
+  assert.throws(() => geocodeTokenBody({ name: '  ', rate_limit_rps: '10' }));
+  for (const invalid of [0, -1, '2.5', '']) assert.throws(() => geocodeRateLimit(invalid));
 });
 
 test('FIPE validates sync types and preserves the enqueue key and request context', async t => {

@@ -489,11 +489,16 @@ A ordem sugerida começa pela administração de organizações e pelos cadastro
 
 ### Fase 31 — Administração do serviço Geocode
 
-1. [ ] Integrar em `/integracoes` o estado do serviço por organização e a alteração de `desired_status` em `PUT /v1/admin/organizations/:uid/services/geocode`. Confirmar quais estados a API distingue entre configuração solicitada e provisionamento efetivo.
-2. [ ] Mapear listagem, criação, alteração de limite e revogação dos tokens em `/v1/admin/organizations/:uid/services/geocode/tokens`. Confirmar as permissões por ação. Se o backend retornar o segredo na criação, mostrá-lo apenas nessa resposta e mantê-lo em memória durante a exibição.
-3. [ ] Validar na organização de teste a transição do serviço, o limite, a revogação e a negativa fora do escopo. A pesquisa por endereço e coordenadas continua regida pelo contrato de consulta da Fase 22.
+1. [x] Exibir e alterar em `/integracoes` o estado solicitado do Geocode na organização selecionada. A lista de serviços filtrada por código retorna o vínculo e a versão desejada. A API testada não informa o estado efetivamente aplicado ao Geocode.
+2. [x] Integrar a listagem paginada, emissão idempotente, alteração de limite e revogação dos tokens. O segredo retornado na emissão fica em memória no diálogo e é descartado ao fechar ou trocar de organização. A lista usa apenas metadados e identificador parcial.
+3. [x] Homologar ativação, suspensão, reativação e desativação (200), emissão (201), replay com o mesmo UID (200), alteração do limite (200) e revogação (200). A API rejeitou limite zero (422), acesso anônimo (401) e alteração ou revogação de um token pela URL de outra organização (404), preservando o registro original.
+4. [ ] Confirmar a sincronização com o destino Geocode e repetir a matriz de escrita com uma conta administrativa de escopo restrito. O teste com a conta Primary verificou o isolamento do token pela organização. Busca de endereço e coordenadas permanece no escopo da Fase 22.
 
 **Aceite.** Um administrador autorizado acompanha e modifica o estado solicitado do Geocode e gerencia os tokens da organização. O resultado do provisionamento fica identificado quando a API o disponibilizar. [Contrato de serviços Geocode](api-contracts/API_CONTRACTS.md#L3246)
+
+**Reteste autenticado.** A emissão foi confirmada na requisição `f053ed9c-763a-4edf-83c8-ab5594463016` e a revogação na `37bf3c03-bab3-4d2c-9808-d3ad963c1c3a`. Os tokens emitidos nos testes foram revogados, o serviço foi desabilitado e as organizações descartáveis foram inativadas.
+
+**Validação no Chrome.** Com login real, passaram a alteração de estado, a emissão, a remoção do segredo do diálogo, a verificação de ausência no armazenamento do navegador, a alteração de limite, a revogação e a troca de organização. Passaram 156 testes locais, o lint e o build de produção.
 
 ---
 

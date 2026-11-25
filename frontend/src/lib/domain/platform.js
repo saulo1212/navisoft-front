@@ -8,6 +8,23 @@ export const FIPE_SYNC_TYPES = {
 
 export const FIPE_VEHICLE_TYPES = { cars: 'Carros', motorcycles: 'Motos', trucks: 'Caminhões' };
 
+export const SERVICE_STATUSES = { active: 'Ativo', suspended: 'Suspenso', disabled: 'Desabilitado' };
+
+export function geocodeDesiredStatus(value) {
+  if (!Object.hasOwn(SERVICE_STATUSES, value)) throw new Error('Selecione um estado válido para o Geocode.');
+  return value;
+}
+
+export function geocodeRateLimit(value) {
+  const limit = nonnegative(value, 'Limite de requisições por segundo', true);
+  if (!limit) throw new Error('Informe um limite maior que zero.');
+  return limit;
+}
+
+export function geocodeTokenBody(fields) {
+  return { name: requiredText(fields.name, 'o nome do token'), rate_limit_rps: geocodeRateLimit(fields.rate_limit_rps) };
+}
+
 export function fipeSyncBody(form) {
   const jobType = form.job_type;
   if (!Object.hasOwn(FIPE_SYNC_TYPES, jobType)) throw new Error('Selecione um tipo de sincronização FIPE válido.');

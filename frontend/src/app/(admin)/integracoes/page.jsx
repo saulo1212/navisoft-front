@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert, Button, Card } from 'react-bootstrap';
 import DataTable from '@/components/admin/DataTable';
 import FormModal from '@/components/admin/FormModal';
+import GeocodeIntegration from '@/components/admin/GeocodeIntegration';
 import { OperationField, useOperationalAction } from '@/components/admin/OperationalUi';
 import { PlatformPage, PlatformRead } from '@/components/admin/PlatformUi';
 import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
@@ -12,8 +13,8 @@ import {
   getNotifyCredential, listOrganizationServices, listPlatformServices, replaceNotifyCredential, revokeNotifyCredential
 } from '@/lib/api/endpoints/platform';
 import { useSession } from '@/lib/session/SessionContext';
+import { SERVICE_STATUSES } from '@/lib/domain/platform';
 
-const serviceStatuses = { active: 'Ativo', suspended: 'Suspenso', disabled: 'Desabilitado' };
 const serviceColumns = [{ key: 'code', label: 'Código' }, { key: 'name', label: 'Serviço' }];
 
 export default function Page() {
@@ -33,7 +34,7 @@ function Integrations() {
     ]} />
     {selectedOrganizationUid
       ? <OrganizationIntegrations key={selectedOrganizationUid} organizationUid={selectedOrganizationUid} />
-      : <Alert variant="info" className="mt-3">Selecione uma organização para consultar seus serviços e a integração de notificações.</Alert>}
+      : <Alert variant="info" className="mt-3">Selecione uma organização para consultar suas integrações.</Alert>}
   </>;
 }
 
@@ -83,9 +84,10 @@ function OrganizationIntegrations({ organizationUid }) {
     <h2 className="h5 mt-4">Serviços da organização selecionada</h2>
     <ServiceTable list={services} columns={[
       ...serviceColumns,
-      { key: 'desired_status', label: 'Estado solicitado', render: row => serviceStatuses[row.desired_status] || row.desired_status },
+      { key: 'desired_status', label: 'Estado solicitado', render: row => SERVICE_STATUSES[row.desired_status] || row.desired_status },
       { key: 'version', label: 'Versão' }
     ]} />
+    <GeocodeIntegration organizationUid={organizationUid} onServiceChange={services.refresh} />
     <Card className="mt-4">
       <Card.Header as="h2" className="h5">Autoscale Notifications</Card.Header>
       <Card.Body>
