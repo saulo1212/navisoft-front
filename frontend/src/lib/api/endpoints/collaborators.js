@@ -153,3 +153,22 @@ export const endAssignmentWorkMode = args => writeStructure(`${assignmentPath(ar
 export async function listCountries({ token, limit = 300, offset = 0, signal }) {
   return apiRequest('/v1/admin/drivers/countries', { token, signal, searchParams: { limit, offset } });
 }
+
+// Catálogo GLOBAL de estados civis (/v1/admin/common/marital-statuses). Fonte do
+// uid_marital_status opcional do colaborador; suporta busca textual por `q`.
+export async function listMaritalStatuses({ token, q, limit = 50, offset = 0, signal }) {
+  return apiRequest('/v1/admin/common/marital-statuses', { token, signal, searchParams: { q: q?.trim() || undefined, limit, offset } });
+}
+
+// Subdivisões (UF/estado/província) de um país. Sem país informado lista o
+// catálogo completo; com `countryUid` usa o /search filtrado por uid_country —
+// envelope offset `{ items, total, limit, offset }`.
+export async function listCountrySubdivisions({ token, countryUid, limit = 100, offset = 0, signal }) {
+  if (countryUid) {
+    return apiRequest('/v1/admin/common/country-subdivisions/search', {
+      method: 'POST', token, signal,
+      body: { filters: [{ field: 'uid_country', operator: 'eq', value: requireUid(countryUid, 'país') }], limit, offset }
+    });
+  }
+  return apiRequest('/v1/admin/common/country-subdivisions', { token, signal, searchParams: { limit, offset } });
+}

@@ -10,7 +10,7 @@ import { PlatformPage, PlatformRead } from '@/components/admin/PlatformUi';
 import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import {
-  getNotifyCredential, listOrganizationServices, listPlatformServices, replaceNotifyCredential, revokeNotifyCredential
+  getNotifyCredential, listOrganizationServices, listPlatformServices, reloadFilterCache, replaceNotifyCredential, revokeNotifyCredential
 } from '@/lib/api/endpoints/platform';
 import { useSession } from '@/lib/session/SessionContext';
 import { SERVICE_STATUSES } from '@/lib/domain/platform';
@@ -35,7 +35,27 @@ function Integrations() {
     {selectedOrganizationUid
       ? <OrganizationIntegrations key={selectedOrganizationUid} organizationUid={selectedOrganizationUid} />
       : <Alert variant="info" className="mt-3">Selecione uma organização para consultar suas integrações.</Alert>}
+    <FilterCacheMaintenance />
   </>;
+}
+
+function FilterCacheMaintenance() {
+  const { token } = useSession();
+  const action = useOperationalAction();
+  const [notice, setNotice] = useState(null);
+  const reload = () => {
+    setNotice(null);
+    void action.run(signal => reloadFilterCache({ token, signal }), () => setNotice('Cache de filtros recarregado.'));
+  };
+  return <Card className="mt-4">
+    <Card.Header as="h2" className="h5">Manutenção de filtros</Card.Header>
+    <Card.Body>
+      <p className="text-muted">Recarrega o cache de filtros do servidor após mudanças de catálogo. Operação administrativa.</p>
+      {notice && <Alert variant="success">{notice}</Alert>}
+      {action.error && <Alert variant="danger">{action.error}</Alert>}
+      <Button variant="outline-secondary" disabled={action.busy} onClick={reload}>Recarregar cache de filtros</Button>
+    </Card.Body>
+  </Card>;
 }
 
 function ServiceTable({ list, columns }) {

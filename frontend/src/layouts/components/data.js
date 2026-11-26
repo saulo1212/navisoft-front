@@ -167,7 +167,7 @@ export const menuItems = [{
   icon: '/icons/sprite.svg#bar-chart',
   key: 'relatorios',
   label: 'Relatórios',
-  children: [{ key: 'relatorios-geracao', label: 'Relatórios', url: '/relatorios' }, { key: 'relatorios-agendamentos', label: 'Agendamentos', url: '/relatorios/agendamentos' }]
+  children: [{ key: 'relatorios-geracao', label: 'Relatórios', url: '/relatorios' }, { key: 'relatorios-agendamentos', label: 'Agendamentos', url: '/relatorios/agendamentos' }, { key: 'relatorios-autoria', label: 'Autoria', url: '/relatorios/autoria' }]
 }, {
   key: 'sistema',
   label: 'Sistema',

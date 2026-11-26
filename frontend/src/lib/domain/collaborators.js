@@ -13,3 +13,8 @@ export const fmtDate = v => {
   if (m) return `${m[3]}/${m[2]}/${m[1]}`;
   return new Date(v).toLocaleDateString('pt-BR');
 };
+
+// Rótulo legível de um estado civil do catálogo /common/marital-statuses,
+// tolerando as variações de nome de campo que o backend possa devolver.
+export const maritalStatusLabel = status =>
+  status?.name || status?.canonical_name || status?.label || status?.code || status?.uid || '—';

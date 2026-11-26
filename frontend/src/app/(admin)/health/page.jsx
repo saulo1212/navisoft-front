@@ -6,7 +6,7 @@ import FormModal from '@/components/admin/FormModal';
 import { OperationField } from '@/components/admin/OperationalUi';
 import { PlatformPage, PlatformRead } from '@/components/admin/PlatformUi';
 import { useKnowledgeQuery } from '@/hooks/useKnowledgeQuery';
-import { getHealthDetails } from '@/lib/api/endpoints/platform';
+import { getHealthDetails, getHealthReady } from '@/lib/api/endpoints/platform';
 import { useSession } from '@/lib/session/SessionContext';
 
 const healthStatus = {
@@ -50,6 +50,7 @@ function Health() {
   const [diagnosticToken, setDiagnosticToken] = useState(null);
   const fetchDetails = useCallback(args => getHealthDetails({ ...args, diagnosticToken }), [diagnosticToken]);
   const query = useKnowledgeQuery(fetchDetails, { token, revision });
+  const readiness = useKnowledgeQuery(getHealthReady, { token, revision });
   const refresh = () => setRevision(value => value + 1);
 
   return <>
@@ -69,6 +70,10 @@ function Health() {
     }}>
       <OperationField label="Token temporário com permissão health:read" name="diagnostic-token" type="password" autoComplete="off" required />
     </FormModal>}
+    {readiness.data && <Alert variant={readiness.data.status === 200 ? 'success' : 'warning'}>
+      Prontidão (readiness) <HealthBadge status={readiness.data.status === 200 ? 'up' : 'down'} />
+      {readiness.data.body?.status && <span className="ms-2 text-muted small">({readiness.data.body.status})</span>}
+    </Alert>}
     <PlatformRead query={query}>{health => <>
       <Alert variant={health.status === 'down' ? 'danger' : health.status === 'degraded' ? 'warning' : 'secondary'}>
         Estado da plataforma <HealthBadge status={health.status} />

@@ -13,7 +13,8 @@ import { usePagedList } from '@/hooks/usePagedList';
 import { useOffsetList } from '@/hooks/useOffsetList';
 import {
   getDeviceTelemetryOverride, getProtocolIdentity, getTelemetryMapping, listDeviceManufacturers, listDevices,
-  listProtocolIdentities, listTelemetryMappings, saveProtocolIdentity, saveTelemetryMapping, setDeviceTelemetryOverride
+  listProtocolIdentities, listTelemetryMappings, saveProtocolIdentity, saveTelemetryMapping,
+  setDeviceTelemetryOverride, shareProtocolIdentity
 } from '@/lib/api/endpoints/devices';
 import { listEventProtocolVariants } from '@/lib/api/endpoints/events';
 import { telemetryRules } from '@/lib/domain/adminConfiguration';
@@ -201,6 +202,7 @@ function MappingRules({ token, organizationUid, uid, deviceUid, canWrite, versio
 function IdentityDetails({ uid, organizationUid, canWrite, version, onChanged }) {
   const { token } = useSession();
   const [editing, setEditing] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const query = useKnowledgeQuery(getProtocolIdentity, { token, organizationUid, uid, version });
   return <section className="card panel p-3 mt-3">
     <h5>Identidade de protocolo</h5>
@@ -212,11 +214,35 @@ function IdentityDetails({ uid, organizationUid, canWrite, version, onChanged })
         <dt className="col-sm-3">Versão</dt><dd className="col-sm-9">{row.version ?? '—'}</dd>
         <dt className="col-sm-3">Estado</dt><dd className="col-sm-9"><StatusBadge status={row.active ? 'active' : 'inactive'} /></dd>
       </dl>
-      {canWrite && <div><Button size="sm" variant="outline-primary" onClick={() => setEditing(true)}>Editar identidade</Button></div>}
+      {canWrite && <div className="d-flex gap-2">
+        <Button size="sm" variant="outline-primary" onClick={() => setEditing(true)}>Editar identidade</Button>
+        <Button size="sm" variant="outline-secondary" onClick={() => setSharing(true)}>Compartilhar</Button>
+      </div>}
       {editing && canWrite && <ResolutionEditor kind="identities" row={row} organizationUid={organizationUid}
         onClose={() => setEditing(false)} onSaved={() => { setEditing(false); onChanged(); }} />}
+      {sharing && canWrite && <ShareIdentity uid={row.uid} onClose={() => setSharing(false)} onShared={() => setSharing(false)} />}
     </>}</BillingRead>
   </section>;
+}
+
+// Compartilha a identidade com OUTRA organização (resolver 1:N). O dispositivo
+// de destino pertence à organização de destino, então ambos os UIDs são
+// informados manualmente — o escopo do destino não é consultável por esta sessão.
+function ShareIdentity({ uid, onClose, onShared }) {
+  const { token } = useSession();
+  const mutation = useBillingMutation();
+  const submit = fields => mutation.submit(args => shareProtocolIdentity({
+    ...args, token, uid,
+    organizationUid: requireUid(fields.uid_organization?.trim(), 'organização de destino'),
+    deviceUid: requireUid(fields.uid_device?.trim(), 'dispositivo de destino'),
+    reason: fields.reason
+  }), fields, () => { notifySuccess('Identidade compartilhada com a organização de destino.'); onShared(); });
+  return <BillingForm title="Compartilhar identidade de protocolo" submitLabel="Compartilhar" mutation={mutation} onClose={onClose} onSubmit={submit}>
+    <p className="small text-body-secondary">Vincula esta identidade a um dispositivo de outra organização. Informe os UIDs de destino.</p>
+    <BillingField label="UID da organização de destino" name="uid_organization" />
+    <BillingField label="UID do dispositivo de destino" name="uid_device" />
+    <OperationField label="Motivo do compartilhamento" name="reason" multiline />
+  </BillingForm>;
 }
 
 const ruleSample = { source: 'S_ASSIGN1', canonical: 'extBatteryVoltage', group: 'hardware', type: 'number', unit: 'V', scale: 1, offset: 0 };

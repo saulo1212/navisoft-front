@@ -72,6 +72,12 @@ export function revokeNotifyCredential({ token, signal, organizationUid }) {
   return apiRequest(integration(organizationUid), { method: 'DELETE', token, signal });
 }
 
+// Invalida o cache de filtros do servidor (operação administrativa). 202/200
+// sem corpo relevante — o importante é o sucesso da solicitação.
+export function reloadFilterCache({ token, signal }) {
+  return apiRequest(`${admin}/settings/filters/reload`, { method: 'POST', token, signal });
+}
+
 export function listFipeJobs({ token, signal, limit = 25, offset = 0 }) {
   return apiRequest(`${fipe}/jobs`, { token, signal, searchParams: { limit, offset } });
 }
@@ -82,6 +88,18 @@ export function getFipeJob({ token, signal, uid }) {
 
 export function enqueueFipeJob({ token, signal, body, idempotencyKey }) {
   return apiRequest(`${fipe}/sync`, { method: 'POST', token, signal, body, idempotencyKey });
+}
+
+// Readiness probe (/v1/health/ready) — indica se o Core está apto a atender,
+// independentemente do estado de dependências opcionais. 200 = pronto; 503 com
+// `{status:'down'|...}` continua sendo um diagnóstico válido (não é erro de UI).
+export async function getHealthReady({ token, signal }) {
+  try {
+    return await apiRequest('/v1/health/ready', { token, signal, includeStatus: true, notifyUnauthorized: false });
+  } catch (error) {
+    if (error.status === 503 && error.payload) return { status: 503, body: error.payload };
+    throw error;
+  }
 }
 
 export async function getHealthDetails({ token, signal, diagnosticToken }) {

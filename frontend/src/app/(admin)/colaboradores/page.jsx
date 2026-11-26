@@ -11,12 +11,13 @@ import ListToolbar from '@/components/admin/ListToolbar';
 import OrganizationGate from '@/components/admin/OrganizationGate';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { usePagedList } from '@/hooks/usePagedList';
-import { createCollaborator, searchCollaborators } from '@/lib/api/endpoints/collaborators';
+import { createCollaborator, listMaritalStatuses, searchCollaborators } from '@/lib/api/endpoints/collaborators';
+import { normalizeList } from '@/lib/api/http';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
-import { fmtDate } from '@/lib/domain/collaborators';
+import { fmtDate, maritalStatusLabel } from '@/lib/domain/collaborators';
 
-const EMPTY = { legal_name: '', preferred_name: '', birth_date: '' };
+const EMPTY = { legal_name: '', preferred_name: '', birth_date: '', uid_marital_status: '' };
 
 const CollaboratorsInner = () => {
   const router = useRouter();
@@ -29,8 +30,15 @@ const CollaboratorsInner = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [maritalStatuses, setMaritalStatuses] = useState([]);
 
-  const openCreate = () => { setForm(EMPTY); setOpen(true); };
+  const openCreate = async () => {
+    setForm(EMPTY);
+    setOpen(true);
+    if (!maritalStatuses.length) {
+      try { setMaritalStatuses(normalizeList(await listMaritalStatuses({ token })).items); } catch { /* catálogo opcional — segue sem o select */ }
+    }
+  };
 
   const submit = async event => {
     event.preventDefault();
@@ -43,6 +51,7 @@ const CollaboratorsInner = () => {
           legal_name: form.legal_name,
           preferred_name: form.preferred_name || null,
           birth_date: form.birth_date || null,
+          uid_marital_status: form.uid_marital_status || null,
           active: true
         }
       });
@@ -85,6 +94,13 @@ const CollaboratorsInner = () => {
           <label className="form-label">Data de nascimento <span className="text-muted small">(opcional)</span></label>
           <input type="date" className="form-control" value={form.birth_date} onChange={e => setForm(f => ({ ...f, birth_date: e.target.value }))} />
         </div>
+        {maritalStatuses.length > 0 && <div className="mb-3">
+          <label className="form-label">Estado civil <span className="text-muted small">(opcional)</span></label>
+          <select className="form-select" value={form.uid_marital_status} onChange={e => setForm(f => ({ ...f, uid_marital_status: e.target.value }))}>
+            <option value="">Não informado</option>
+            {maritalStatuses.map(s => <option key={s.uid} value={s.uid}>{maritalStatusLabel(s)}</option>)}
+          </select>
+        </div>}
         <p className="text-muted small">O colaborador nasce ativo e vinculado à organização atual. Vínculos de trabalho (engagements) e lotação são definidos na tela de detalhe.</p>
       </FormModal>
     </>

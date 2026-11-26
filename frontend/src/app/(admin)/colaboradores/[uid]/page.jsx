@@ -9,15 +9,15 @@ import FormModal from '@/components/admin/FormModal';
 import StatusBadge from '@/components/admin/StatusBadge';
 import {
   createAssignment, createEngagement, endEngagement, getCollaborator, listAssignments,
-  listCountries, listEngagementTypes, listOrganizationUnits, listPositions, patchCollaborator,
-  searchEngagements, updateCollaborator
+  listCountries, listCountrySubdivisions, listEngagementTypes, listMaritalStatuses, listOrganizationUnits,
+  listPositions, patchCollaborator, searchEngagements, updateCollaborator
 } from '@/lib/api/endpoints/collaborators';
 import { errorMessage } from '@/lib/api/errors';
 import { normalizeList } from '@/lib/api/http';
 import { notifyError, notifySuccess } from '@/lib/ui/toast';
 import { useSession } from '@/lib/session/SessionContext';
 import { AssignmentConfiguration } from '@/components/admin/CollaboratorStructure';
-import { DEFAULT_COUNTRY_UID, fmtDate } from '@/lib/domain/collaborators';
+import { DEFAULT_COUNTRY_UID, fmtDate, maritalStatusLabel } from '@/lib/domain/collaborators';
 
 const CollaboratorDetailPage = () => {
   const uid = useDetailParam('uid');
@@ -35,7 +35,7 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
   const [error, setError] = useState(null);
 
   // Tabelas de referência (carregadas sob demanda ao abrir os formulários).
-  const [refs, setRefs] = useState({ engagementTypes: [], positions: [], units: [], countries: [] });
+  const [refs, setRefs] = useState({ engagementTypes: [], positions: [], units: [], countries: [], subdivisions: [], maritalStatuses: [] });
 
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState(null);
@@ -86,29 +86,44 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
     return () => controller.abort();
   }, [load]);
 
-  const ensureRefs = useCallback(async () => {
+  const ensureRefs = useCallback(async (countryUid = DEFAULT_COUNTRY_UID) => {
     try {
-      const [types, pos, units, countries] = await Promise.all([
+      const [types, pos, units, countries, subdivisions, maritalStatuses] = await Promise.all([
         listEngagementTypes({ token }),
         listPositions({ token, organizationUid: orgUid }),
         listOrganizationUnits({ token, organizationUid: orgUid }),
-        listCountries({ token })
+        listCountries({ token }),
+        listCountrySubdivisions({ token, countryUid }).catch(() => null),
+        listMaritalStatuses({ token }).catch(() => null)
       ]);
       setRefs({
         engagementTypes: Array.isArray(types) ? types : normalizeList(types).items,
         positions: normalizeList(pos).items,
         units: normalizeList(units).items,
-        countries: normalizeList(countries).items.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+        countries: normalizeList(countries).items.slice().sort((a, b) => (a.name || '').localeCompare(b.name || '')),
+        subdivisions: subdivisions ? normalizeList(subdivisions).items : [],
+        maritalStatuses: maritalStatuses ? normalizeList(maritalStatuses).items : []
       });
     } catch (err) { notifyError(err); }
   }, [token, orgUid]);
 
-  const openEdit = () => {
+  // Recarrega apenas as subdivisões quando o país do engagement muda.
+  const reloadSubdivisions = useCallback(async countryUid => {
+    try {
+      const result = await listCountrySubdivisions({ token, countryUid });
+      setRefs(r => ({ ...r, subdivisions: normalizeList(result).items }));
+    } catch { setRefs(r => ({ ...r, subdivisions: [] })); }
+  }, [token]);
+
+  const openEdit = async () => {
     setEditForm({
       legal_name: col.legal_name ?? '', preferred_name: col.preferred_name ?? '',
-      birth_date: col.birth_date ?? ''
+      birth_date: col.birth_date ?? '', uid_marital_status: col.uid_marital_status ?? ''
     });
     setEditOpen(true);
+    if (!refs.maritalStatuses.length) {
+      try { setRefs(r => ({ ...r, maritalStatuses: normalizeList(await listMaritalStatuses({ token })).items })); } catch { /* catálogo opcional */ }
+    }
   };
 
   const saveEdit = async event => {
@@ -121,6 +136,7 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
           legal_name: editForm.legal_name,
           preferred_name: editForm.preferred_name || null,
           birth_date: editForm.birth_date || null,
+          uid_marital_status: editForm.uid_marital_status || null,
           active: col.active
         }
       });
@@ -139,7 +155,7 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
     } catch (err) { notifyError(err); } finally { setTogglingActive(false); }
   };
 
-  const openEng = async () => { await ensureRefs(); setEngForm({ uid_engagement_type: '', uid_country: DEFAULT_COUNTRY_UID, started_on: '', is_primary: false }); setEngOpen(true); };
+  const openEng = async () => { await ensureRefs(); setEngForm({ uid_engagement_type: '', uid_country: DEFAULT_COUNTRY_UID, uid_country_subdivision: '', started_on: '', is_primary: false }); setEngOpen(true); };
   const saveEng = async event => {
     event.preventDefault();
     setSavingEng(true);
@@ -150,7 +166,7 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
           uid_organization: orgUid,
           uid_engagement_type: engForm.uid_engagement_type,
           uid_country: engForm.uid_country,
-          uid_country_subdivision: null,
+          uid_country_subdivision: engForm.uid_country_subdivision || null,
           uid_contract_entity: null,
           started_on: engForm.started_on,
           ended_on: null,
@@ -223,6 +239,7 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
                 <dt className="col-sm-5 text-muted">Nome legal</dt><dd className="col-sm-7">{col.legal_name}</dd>
                 <dt className="col-sm-5 text-muted">Nome preferencial</dt><dd className="col-sm-7">{col.preferred_name || '—'}</dd>
                 <dt className="col-sm-5 text-muted">Nascimento</dt><dd className="col-sm-7">{fmtDate(col.birth_date)}</dd>
+                <dt className="col-sm-5 text-muted">Estado civil</dt><dd className="col-sm-7">{col.marital_status ? maritalStatusLabel(col.marital_status) : (refs.maritalStatuses.find(s => s.uid === col.uid_marital_status) ? maritalStatusLabel(refs.maritalStatuses.find(s => s.uid === col.uid_marital_status)) : (col.uid_marital_status ? '—' : 'Não informado'))}</dd>
                 <dt className="col-sm-5 text-muted">Estado</dt><dd className="col-sm-7"><StatusBadge status={col.active ? 'active' : 'inactive'} /></dd>
                 <dt className="col-sm-5 text-muted">UID</dt><dd className="col-sm-7 font-monospace">{col.uid}</dd>
                 <dt className="col-sm-5 text-muted">Criado em</dt><dd className="col-sm-7">{col.created_at ? new Date(col.created_at).toLocaleString('pt-BR') : '—'}</dd>
@@ -301,6 +318,13 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
               <label className="form-label">Data de nascimento</label>
               <input type="date" className="form-control" value={editForm.birth_date || ''} onChange={e => setEditForm(f => ({ ...f, birth_date: e.target.value }))} />
             </div>
+            {refs.maritalStatuses.length > 0 && <div className="mb-3">
+              <label className="form-label">Estado civil <span className="text-muted small">(opcional)</span></label>
+              <Form.Select value={editForm.uid_marital_status || ''} onChange={e => setEditForm(f => ({ ...f, uid_marital_status: e.target.value }))}>
+                <option value="">Não informado</option>
+                {refs.maritalStatuses.map(s => <option key={s.uid} value={s.uid}>{maritalStatusLabel(s)}</option>)}
+              </Form.Select>
+            </div>}
           </>
         )}
       </FormModal>
@@ -315,9 +339,16 @@ const CollaboratorDetail = ({ token, orgUid, uid }) => {
         </div>
         <div className="mb-3">
           <label className="form-label">País</label>
-          <Form.Select value={engForm.uid_country} onChange={e => setEngForm(f => ({ ...f, uid_country: e.target.value }))} required>
+          <Form.Select value={engForm.uid_country} onChange={e => { const uid_country = e.target.value; setEngForm(f => ({ ...f, uid_country, uid_country_subdivision: '' })); void reloadSubdivisions(uid_country); }} required>
             {refs.countries.length === 0 && <option value={DEFAULT_COUNTRY_UID}>Brasil</option>}
             {refs.countries.map(c => <option key={c.uid} value={c.uid}>{c.name}{c.code ? ` (${c.code})` : ''}</option>)}
+          </Form.Select>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Subdivisão (UF/estado) <span className="text-muted small">(opcional)</span></label>
+          <Form.Select value={engForm.uid_country_subdivision} onChange={e => setEngForm(f => ({ ...f, uid_country_subdivision: e.target.value }))} disabled={refs.subdivisions.length === 0}>
+            <option value="">{refs.subdivisions.length === 0 ? 'Sem subdivisões para o país' : 'Não informada'}</option>
+            {refs.subdivisions.map(s => <option key={s.uid} value={s.uid}>{s.name}{s.code ? ` (${s.code})` : ''}</option>)}
           </Form.Select>
         </div>
         <div className="mb-3">

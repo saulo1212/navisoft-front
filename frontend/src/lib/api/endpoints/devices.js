@@ -95,6 +95,21 @@ function saveResolution(resource, { token, organizationUid, uid, body, idempoten
 }
 
 export const saveProtocolIdentity = args => saveResolution('protocol-identities', args);
+
+// Compartilha uma identidade de protocolo (resolver 1:N) com OUTRA organização,
+// vinculando-a a um dispositivo dela. Corpo: {uid_organization (destino),
+// uid_device (destino), reason}.
+export function shareProtocolIdentity({ token, signal, uid, organizationUid, deviceUid, reason, idempotencyKey }) {
+  return apiRequest(`${DEVICES_ROOT}/protocol-identities/${requireUid(uid, 'identidade')}/shares`, {
+    method: 'POST', token, signal,
+    body: {
+      uid_organization: requireUid(organizationUid, 'organização de destino'),
+      uid_device: requireUid(deviceUid, 'dispositivo de destino'),
+      reason: reason?.trim() || undefined
+    },
+    idempotencyKey: idempotencyKey ?? newIdempotencyKey()
+  });
+}
 export const saveTelemetryMapping = args => saveResolution('telemetry-mappings', args);
 export const createTechnicalPackage = args => saveResolution('technical-packages', args);
 export const listTechnicalPackages = args => listResolutionResources('technical-packages', { ...args, filters: [], search: false });
